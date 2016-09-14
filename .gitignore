@@ -1,0 +1,16 @@
+# Windows
+intermediate
+
+# Linux
+CMakeFiles
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+deploy/*
+
+logs
+
+# moc
+*_automoc.cpp
+moc_*.cpp
