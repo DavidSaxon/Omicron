@@ -1,0 +1,30 @@
+/+++++++\
+| TODO: |
+\+++++++/
+
+- Investigate Bullet Engine
+
+- Read bullet wikis
+{
+    - start from links in the "Hello world example"
+
+    OR: tutorials: http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Tutorials
+
+    OR: tut articles: http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Tutorial_Articles
+}
+
+- Investigate using OpenGL with Qt
+
+- Copy on write for UTF8Strings
+
+- Graphics Math (either ArcaneCore, Omicron, or New Library)
+{
+    - Kahn Academy Linear Algebra Course
+
+    - Vector
+    - Vector Operations <- should be part of Vector?
+    - Matrix
+    - Matrix Operations <- should be part of Matrix
+    - Quaternions
+    ...
+}
