@@ -42,8 +42,7 @@ public:
         METRIC_NANOSECONDS  = 1UL,
         METRIC_MICROSECONDS = 1000UL,
         METRIC_MILLISECONDS = 1000000UL,
-        METRIC_SECONDS      = 1000000000UL,
-        METRIC_MINUTES      = 60000000000UL,
+        METRIC_SECONDS      = 1000000000UL
     };
 
     //--------------------------------------------------------------------------

@@ -6,9 +6,22 @@ set(PROTO_BULLET_HELLOWORLD_SRC
 )
 
 set(OMICRON_SRC
-    src/omicron/runtime/clock/AbstractClock.cpp
-    src/omicron/runtime/clock/GameClock.cpp
-    src/omicron/runtime/clock/WallClock.cpp
+    src/cpp/omicron/Main.cpp
+    src/cpp/omicron/Engine.cpp
+    src/cpp/omicron/private/Logging.cpp
+    src/cpp/omicron/private/boot/BootRoutines.cpp
+    src/cpp/omicron/private/util/MetaUtil.cpp
+    src/cpp/omicron/runtime/clock/AbstractClock.cpp
+    src/cpp/omicron/runtime/clock/GameClock.cpp
+    src/cpp/omicron/runtime/clock/WallClock.cpp
+
+
+
+    src/cpp/omicron/proto/Entity.cpp
+    src/cpp/omicron/proto/Scene.cpp
+
+    src/cpp/omicron/TestEntity.cpp
+    src/cpp/omicron/TestScene.cpp
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86)
@@ -21,9 +34,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++0x -Wall -Wno-varargs -fPIC")
 
 include_directories(
     ${INCLUDE_DIRECTORIES}
-    src
+    src/cpp
     # TODO: eventually replace with proper install paths
     ${CMAKE_BINARY_DIR}/../../ArcaneCore/ArcaneCore/src/cpp
+    ${CMAKE_BINARY_DIR}/../../ArcaneLog/ArcaneLog/src/cpp
+    ${CMAKE_BINARY_DIR}/../../MetaEngine/MetaEngine/src/cpp
     ext/bullet/include
     ext/bullet/include/bullet
 )
@@ -32,6 +47,8 @@ link_directories(
     ${LINK_DIRECTORIES}
     # TODO: eventually replace with proper install paths
     ${CMAKE_BINARY_DIR}/../../ArcaneCore/ArcaneCore/build/linux_x86
+    ${CMAKE_BINARY_DIR}/../../ArcaneLog/ArcaneLog/build/linux_x86
+    ${CMAKE_BINARY_DIR}/../../MetaEngine/MetaEngine/build/linux_x86
     ext/bullet/lib/linux_x86
 )
 
@@ -43,9 +60,12 @@ link_directories(
 #    LinearMath
 #)
 
-add_library(libomicron ${OMICRON_SRC})
+add_executable(omicron ${OMICRON_SRC})
 
-target_link_libraries(libomicron
+target_link_libraries(omicron
+    metaengine
+    arcanelog_shared
+    arcanelog
     arcanecore_io
     arcanecore_base
 )

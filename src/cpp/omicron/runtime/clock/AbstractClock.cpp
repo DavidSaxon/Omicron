@@ -97,7 +97,7 @@ AbstractClock::time_int AbstractClock::get_time(Metric metric)
     if(!m_ticked_once)
     {
         m_last_tick    = tick();
-        m_current_time = m_current_time;
+        m_current_time = m_last_tick;
         m_ticked_once = true;
     }
     // update time if the clock is not paused
@@ -109,7 +109,7 @@ AbstractClock::time_int AbstractClock::get_time(Metric metric)
         // update the last tick
         m_last_tick = this_tick;
         // update the time and take the multiplier into account
-        m_current_time += diff * m_multiplier;
+        m_current_time += static_cast<time_int>(diff * m_multiplier);
     }
     // return converted time
     return static_cast<time_int>(m_current_time / conversion);
@@ -147,7 +147,7 @@ void AbstractClock::step(time_int amount, Metric metric)
         // get the conversion multiplier for the amount
         double conversion = get_native_metric() / metric;
         // step by the amount
-        m_current_time += amount / conversion;
+        m_current_time += static_cast<time_int>(amount / conversion);
     }
 }
 
