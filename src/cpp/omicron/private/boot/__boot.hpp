@@ -1,7 +1,7 @@
 #ifndef OMICRON_PRIVATE_BOOT_HPP_
 #define OMICRON_PRIVATE_BOOT_HPP_
 
-namespace omi
+namespace omi_
 {
 
 /*!
@@ -11,6 +11,6 @@ namespace boot
 {
 } // namespace boot
 
-} // namespace omi
+} // namespace omi_
 
 #endif

@@ -6,7 +6,9 @@
 #ifndef OMICRON_PRIVATE_BOOT_BOOTROUTINES_HPP_
 #define OMICRON_PRIVATE_BOOT_BOOTROUTINES_HPP_
 
-namespace omi
+#include <iostream>
+
+namespace omi_
 {
 namespace boot
 {
@@ -17,15 +19,28 @@ namespace boot
 
 /*!
  * \brief Performs the startup subroutines of Omicron.
+ *
+ * \return Whether startup completed successfully.
  */
-void startup_routine();
+bool startup_routine();
 
 /*!
  * \brief Performs the shutdown subroutines of Omicron.
+ *
+ * \return Whether shutdown completed successfully.
  */
-void shutdown_routine();
+bool shutdown_routine();
+
+/*!
+ * \brief Returns the output stream that should be used to log critical messages
+ *        to.
+ *
+ * This is useful for needing to log critical errors before we know that logging
+ * has been initialised.
+ */
+std::ostream* get_critical_stream();
 
 } // namespace boot
-} // namespace omi
+} // namespace omi_
 
 #endif

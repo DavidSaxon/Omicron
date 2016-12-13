@@ -9,6 +9,7 @@ set(OMICRON_SRC
     src/cpp/omicron/Main.cpp
     src/cpp/omicron/Engine.cpp
     src/cpp/omicron/private/Logging.cpp
+    src/cpp/omicron/private/SubsystemManager.cpp
     src/cpp/omicron/private/boot/BootRoutines.cpp
     src/cpp/omicron/private/util/MetaUtil.cpp
     src/cpp/omicron/runtime/clock/AbstractClock.cpp
@@ -22,6 +23,11 @@ set(OMICRON_SRC
 
     src/cpp/omicron/TestEntity.cpp
     src/cpp/omicron/TestScene.cpp
+)
+
+set(QTO_SRC
+    src/cpp/subsystems/qto/MainWindow.cpp
+    src/cpp/subsystems/qto/QTOSubsystemRegister.cpp
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86)
@@ -61,11 +67,40 @@ link_directories(
 #)
 
 add_executable(omicron ${OMICRON_SRC})
-
 target_link_libraries(omicron
     metaengine
     arcanelog_shared
     arcanelog
     arcanecore_io
     arcanecore_base
+    dl
 )
+
+# set subsystem output directories
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86/subsystems)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86/subsystems)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86/subsystems)
+
+set(CMAKE_AUTOMOC ON)
+
+# TODO:
+# set(AUTOMOC_TARGETS_FOLDER ${CMAKE_BINARY_DIR}/gen/cpp)
+
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+
+add_library(qto SHARED ${QTO_SRC})
+SET_TARGET_PROPERTIES(qto PROPERTIES PREFIX "")
+target_link_libraries(qto
+    metaengine
+    arcanelog_shared
+    arcanelog
+    arcanecore_io
+    arcanecore_base
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+)
+
+set(CMAKE_AUTOMOC OFF)

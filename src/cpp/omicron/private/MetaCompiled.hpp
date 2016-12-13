@@ -9,4 +9,11 @@
 
 #define OMI_METACOMPILED_LOGGING "{}"
 
+#define OMI_METACOMPILED_SUBSYSTEMS                 \
+ "{"                                                \
+ "    \"search_paths\": [[\"build\", \"win_x86\"]]" \
+ "}"
+
+
+
 #endif

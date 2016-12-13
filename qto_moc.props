@@ -2,8 +2,8 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
-        <SourceDir>src/</SourceDir>
-        <GenDir>gen/cpp</GenDir>
+        <SourceDir>src/cpp/subsystems/qto/</SourceDir>
+        <GenDir>gen/cpp/qto</GenDir>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -29,11 +29,21 @@ Engine* Engine::get_instance()
 
 int Engine::execute()
 {
-    boot::startup_routine();
+    if(!omi_::boot::startup_routine())
+    {
+        (*omi_::boot::get_critical_stream())
+            << "Engine startup failed. Aborting." << std::endl;
+        return -1;
+    }
 
     // TODO:
 
-    boot::shutdown_routine();
+    if(!omi_::boot::shutdown_routine())
+    {
+        (*omi_::boot::get_critical_stream())
+            << "Engine startup failed. Aborting." << std::endl;
+        return -1;
+    }
 
     return 0;
 }

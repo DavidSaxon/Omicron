@@ -15,7 +15,7 @@
 #include <metaengine/Document.hpp>
 #include <metaengine/Variant.hpp>
 
-namespace omi
+namespace omi_
 {
 namespace util
 {
@@ -41,6 +41,6 @@ extern const arc::io::sys::Path META_CORE_DIR;
 
 } // namespace meta
 } // namespace util
-} // namespace omi
+} // namespace omi_
 
 #endif

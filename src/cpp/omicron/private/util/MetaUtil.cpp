@@ -1,6 +1,6 @@
 #include "omicron/private/util/MetaUtil.hpp"
 
-namespace omi
+namespace omi_
 {
 namespace util
 {
@@ -17,4 +17,4 @@ const arc::io::sys::Path META_CORE_DIR(
 
 } // namespace meta
 } // namespace util
-} // namespace omi
+} // namespace omi_

@@ -6,7 +6,6 @@
 
 #include <arcanecore/base/Preproc.hpp>
 
-#include <arcanelog/Input.hpp>
 #include <arcanelog/Shared.hpp>
 #include <arcanelog/outputs/FileOutput.hpp>
 #include <arcanelog/outputs/StdOutput.hpp>
@@ -26,7 +25,7 @@
     #pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
 #endif
 
-namespace omi
+namespace omi_
 {
 
 //------------------------------------------------------------------------------
@@ -64,6 +63,22 @@ static void std_get_reporter(
         const arc::str::UTF8String& message);
 
 /*!
+ * \brief Reports when a MetaEngine Document has failed to load, and a fallback
+ *        protocol must be executed.
+ */
+static void load_fallback_reporter(
+        const arc::io::sys::Path& file_path,
+        const arc::str::UTF8String& message);
+
+/*!
+ * \brief Reports when retrieving a value from a MetaEngine Document has failed,
+ *        and a fallback protocol must be executed.
+ */
+static void get_fallback_reporter(
+        const arc::io::sys::Path& file_path,
+        const arc::str::UTF8String& message);
+
+/*!
  * \brief Initialises the StdOutput logging writer.
  */
 static void init_std_output();
@@ -78,7 +93,7 @@ static void init_file_output();
 //                                   FUNCTIONS
 //------------------------------------------------------------------------------
 
-void init_routine()
+void startup_routine()
 {
     // logging MetaEngine data needs to be loaded before all other MetaEngine
     // data since we want to initialise logging as early as possible. Since
@@ -111,11 +126,15 @@ void init_routine()
     ));
 
     // vend the input from the shared handler
-    omi::logger = arclog::shared_handler.vend_input(profile);
+    omi_::logger = arclog::shared_handler.vend_input(profile);
 
     // setup outputs
     init_std_output();
     init_file_output();
+
+    // connect the proper reporters
+    metaengine::Document::set_load_fallback_reporter(load_fallback_reporter);
+    metaengine::Document::set_get_fallback_reporter(get_fallback_reporter);
 }
 
 static void std_load_reporter(
@@ -132,6 +151,23 @@ static void std_get_reporter(
 {
     std::cerr << "MetaEngine error accessing data in \"" << file_path
               << "\": " << message << std::endl;
+}
+
+static void load_fallback_reporter(
+        const arc::io::sys::Path& file_path,
+        const arc::str::UTF8String& message)
+{
+    omi_::logger->error
+        << "MetaEngine error loading data associated with file \""
+        << file_path << "\": " << message << std::endl;
+}
+
+static void get_fallback_reporter(
+        const arc::io::sys::Path& file_path,
+        const arc::str::UTF8String& message)
+{
+    omi_::logger->error << "MetaEngine error accessing data in \"" << file_path
+                  << "\": " << message << std::endl;
 }
 
 static void init_std_output()
@@ -151,7 +187,7 @@ static void init_std_output()
     ));
     // use ansi?
     bool use_ansi_b = *metadata->get(
-        "outputs.StdOutput.enabled",
+        "outputs.StdOutput.use_ansi",
         metaengine::BoolV::instance()
     );
     arclog::StdOutput::UseANSI use_ansi = arclog::StdOutput::USEANSI_NEVER;
@@ -166,7 +202,7 @@ static void init_std_output()
     // if enabled alert that we're writing to std out
     if(enabled)
     {
-        omi::logger->info << "Omicron logging to stdout and stderr"
+        omi_::logger->info << "Omicron logging to stdout and stderr"
                      << std::endl;
     }
 }
@@ -322,4 +358,4 @@ bool ArcLogVerbosityV::retrieve(
 }
 
 } // namespace logging
-} // namespace omi
+} // namespace omi_

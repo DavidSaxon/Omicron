@@ -1,10 +1,16 @@
 #include "omicron/private/boot/BootRoutines.hpp"
 
 #include <arcanecore/base/Exceptions.hpp>
+#include <arcanecore/base/Preproc.hpp>
 
 #include "omicron/private/Logging.hpp"
+#include "omicron/private/SubsystemManager.hpp"
 
-namespace omi
+#ifdef ARC_OS_WINDOWS
+    #include <windows.h>
+#endif
+
+namespace omi_
 {
 namespace boot
 {
@@ -22,42 +28,106 @@ static bool initialised = false;
 //                                   PROTOTYPES
 //------------------------------------------------------------------------------
 
+/*!
+ * \brief Initialises operating system specific functionality.
+ */
+void os_startup_routine();
 
 //------------------------------------------------------------------------------
 //                                   FUNCTIONS
 //------------------------------------------------------------------------------
 
-void startup_routine()
+bool startup_routine()
 {
     // warn and do nothing if Omicron has already been initialised
     if(initialised)
     {
-        // TODO: warn through logger
-        return;
+        omi_::logger->warning
+            << "Attempted to run engine startup routines after the engine has "
+            << "already successfully started." << std::endl;
+        return true;
     }
 
     try
     {
-        logging::init_routine();
+        omi_::logging::startup_routine();
+        os_startup_routine();
+        if(!omi_::SubsystemManager::get_instance()->startup())
+        {
+            return false;
+        }
     }
     catch(const arc::ex::ArcException& exc)
     {
-        // TODO: warn
+        (*get_critical_stream())
+            << "Encountered exception during engine startup routines: ["
+            << exc.get_type() << "] \"" << exc.get_message() << "\""
+            << std::endl;
+        return false;
     }
     catch(const std::exception& exc)
     {
-        // TODO: warn
+        (*get_critical_stream())
+            << "Encountered exception during engine startup routines: \""
+            << exc.what() << "\"" << std::endl;
+        return false;
     }
 
     // Omicron has successfully started up
     initialised = true;
+    return true;
 }
 
-void shutdown_routine()
+bool shutdown_routine()
 {
+    try
+    {
+        omi_::SubsystemManager::get_instance()->shutdown();
+    }
+    catch(const arc::ex::ArcException& exc)
+    {
+        (*get_critical_stream())
+            << "Encountered exception during engine shutdown routines: ["
+            << exc.get_type() << "] \"" << exc.get_message() << "\""
+            << std::endl;
+        return false;
+    }
+    catch(const std::exception& exc)
+    {
+        (*get_critical_stream())
+            << "Encountered exception during engine shutdown routines: \""
+            << exc.what() << "\"" << std::endl;
+        return false;
+    }
+
     // Omicron has successfully shutdown
     initialised = false;
+    return true;
+}
+
+std::ostream* get_critical_stream()
+{
+    // return the from proper logging if input is not null
+    if(omi_::logger != nullptr)
+    {
+        return &omi_::logger->critical;
+    }
+    // return std::cerr
+    std::cerr << "{OMICRON} - [CRITICAL]: ";
+    return &std::cerr;
+}
+
+void os_startup_routine()
+{
+    omi_::logger->debug
+        << "Initialising Operating System specific functionality." << std::endl;
+
+    #ifdef ARC_OS_WINDOWS
+
+        SetErrorMode(SEM_FAILCRITICALERRORS);
+
+    #endif
 }
 
 } // namespace boot
-} // namespace omi
+} // namespace omi_

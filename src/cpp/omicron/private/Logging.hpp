@@ -8,6 +8,8 @@
 
 #include <arcanelog/Verbosity.hpp>
 
+#include <arcanelog/Input.hpp>
+
 #include "omicron/private/util/MetaUtil.hpp"
 
 //------------------------------------------------------------------------------
@@ -18,12 +20,11 @@ namespace arclog
 {
 
 class FileOutput;
-class Input;
 class StdOutput;
 
 } // namespace arclog
 
-namespace omi
+namespace omi_
 {
 
 //------------------------------------------------------------------------------
@@ -63,7 +64,7 @@ extern util::meta::VariantPtr metadata;
 /*!
  * \brief Initialises logging from MetaEngine data.
  */
-void init_routine();
+void startup_routine();
 
 //------------------------------------------------------------------------------
 //                                    CLASSES
@@ -101,6 +102,6 @@ public:
 };
 
 } // namespace logging
-} // namespace omi
+} // namespace omi_
 
 #endif
