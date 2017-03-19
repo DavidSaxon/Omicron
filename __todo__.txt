@@ -2,5 +2,13 @@
 | TODO |
 \++++++/
 
-- build docs
-- new sublime theme
+ - setup recursive CMakeLists.txt
+
+ - window management
+ {
+    - main window type
+    - splash screen window type
+    - error dialog window type
+
+    - how to connect events -- these shouldn't be separate Subsystem...
+ }

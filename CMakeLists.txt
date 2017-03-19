@@ -84,7 +84,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86/subsystem
 set(CMAKE_AUTOMOC ON)
 
 # TODO:
-# set(AUTOMOC_TARGETS_FOLDER ${CMAKE_BINARY_DIR}/gen/cpp)
+#set(AUTOGEN_TARGETS_FOLDER ${CMAKE_BINARY_DIR}/gen/cpp)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)

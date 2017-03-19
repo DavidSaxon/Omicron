@@ -1,13 +1,16 @@
-#ifndef OMICRON_PRIVATE_SUBSYSTEMMANAGER_HPP_
-#define OMICRON_PRIVATE_SUBSYSTEMMANAGER_HPP_
+#ifndef OMICRON_PRIVATE_SUBSYSTEMS_SUBSYSTEMMANAGER_HPP_
+#define OMICRON_PRIVATE_SUBSYSTEMS_SUBSYSTEMMANAGER_HPP_
 
 #include <arcanecore/base/str/UTF8String.hpp>
+#include <arcanecore/io/dl/DLOperations.hpp>
 #include <arcanecore/io/sys/Path.hpp>
 
 #include "omicron/private/util/MetaUtil.hpp"
 #include "omicron/subsystem/SubsystemCommon.h"
 
 namespace omi_
+{
+namespace subsys
 {
 
 class SubsystemManager
@@ -48,8 +51,10 @@ public:
 
     /*!
      * \brief Shuts down the SubsystemManager.
+     *
+     * \return Whether shutdown completed successfully.
      */
-    void shutdown();
+    bool shutdown();
 
 private:
 
@@ -137,8 +142,15 @@ private:
             arc::str::UTF8String& name,
             arc::str::UTF8String& version,
             ossRole& roles);
+
+    // TODO: exceptions?
+    /*!
+     * \brief Attempts to set the given subsystem dynamic for the roles.
+     */
+    void set_subsystem(ossRole roles, arc::io::dl::Handle dl_handle);
 };
 
+} // namespace subsys
 } // namespace omi_
 
 #endif

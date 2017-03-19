@@ -1,9 +1,8 @@
-#include "omicron/private/SubsystemManager.hpp"
+#include "omicron/private/subsystems/SubsystemManager.hpp"
 
 #include <set>
 
 #include <arcanecore/base/os/OSOperations.hpp>
-#include <arcanecore/io/dl/DLOperations.hpp>
 #include <arcanecore/io/sys/FileSystemOperations.hpp>
 
 #include <metaengine/visitors/Path.hpp>
@@ -11,8 +10,11 @@
 
 #include "omicron/private/Logging.hpp"
 #include "omicron/private/MetaCompiled.hpp"
+#include "omicron/private/subsystems/WindowManagerSubsytem.hpp"
 
 namespace omi_
+{
+namespace subsys
 {
 
 //------------------------------------------------------------------------------
@@ -163,9 +165,16 @@ bool SubsystemManager::startup()
     return true;
 }
 
-void SubsystemManager::shutdown()
+bool SubsystemManager::shutdown()
 {
-    // TODO:
+    bool shutdown_success = true;
+    // shutdown the individual subsystems
+    if(!WindowManagerSubsystem::get_instance()->shutdown())
+    {
+        shutdown_success = false;
+    }
+
+    return shutdown_success;
 }
 
 //------------------------------------------------------------------------------
@@ -298,4 +307,22 @@ bool SubsystemManager::bind_subsystem(
     return true;
 }
 
+void SubsystemManager::set_subsystem(
+        ossRole roles,
+        arc::io::dl::Handle dl_handle)
+{
+    // TODO: this needs to use the roles defined by the config file, not the
+    //       roles this subsystem fulfills.
+    //      at some point we need to check if the subsystem can fulfill it's
+    //      given role however
+
+
+    // TODO: need to check if there is already a subsystem for the given roles
+    // if(roles & OSS_ROLE_WINDOW_MANAGER)
+    // {
+    //     // check there isn't already a window manager subsystem
+    // }
+}
+
+} // namespace subsys
 } // namespace omi_

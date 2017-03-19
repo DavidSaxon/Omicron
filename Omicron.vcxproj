@@ -30,8 +30,9 @@
     <ClCompile Include="src\cpp\omicron\Main.cpp" />
     <ClCompile Include="src\cpp\omicron\Engine.cpp" />
     <ClCompile Include="src\cpp\omicron\private\Logging.cpp" />
-    <ClCompile Include="src\cpp\omicron\private\SubsystemManager.cpp" />
     <ClCompile Include="src\cpp\omicron\private\boot\BootRoutines.cpp" />
+    <ClCompile Include="src\cpp\omicron\private\subsystems\SubsystemManager.cpp" />
+    <ClCompile Include="src\cpp\omicron\private\subsystems\WindowManagerSubsytem.cpp" />
     <ClCompile Include="src\cpp\omicron\private\util\MetaUtil.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\clock\AbstractClock.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\clock\GameClock.cpp" />

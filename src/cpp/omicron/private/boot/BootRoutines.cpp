@@ -4,7 +4,7 @@
 #include <arcanecore/base/Preproc.hpp>
 
 #include "omicron/private/Logging.hpp"
-#include "omicron/private/SubsystemManager.hpp"
+#include "omicron/private/subsystems/SubsystemManager.hpp"
 
 #ifdef ARC_OS_WINDOWS
     #include <windows.h>
@@ -52,7 +52,7 @@ bool startup_routine()
     {
         omi_::logging::startup_routine();
         os_startup_routine();
-        if(!omi_::SubsystemManager::get_instance()->startup())
+        if(!omi_::subsys::SubsystemManager::get_instance()->startup())
         {
             return false;
         }
@@ -82,7 +82,7 @@ bool shutdown_routine()
 {
     try
     {
-        omi_::SubsystemManager::get_instance()->shutdown();
+        omi_::subsys::SubsystemManager::get_instance()->shutdown();
     }
     catch(const arc::ex::ArcException& exc)
     {
