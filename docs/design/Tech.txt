@@ -1,9 +1,0 @@
-/+++++++\
-| Tech: |
-\+++++++/
-
-- SSE Math for vectors and matrices (start with Game Engine book)
-- Physically Based Rendering
-- Motion Blur (from velocity map)
-- TAA (Temporal Anti-Aliasing)
-- Tone Mapping
