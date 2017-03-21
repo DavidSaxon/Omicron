@@ -39,4 +39,4 @@ link_directories(
 )
 
 # omicron runtime
-add_subdirectory(src/cpp/omicron/__buildsys)
+add_subdirectory(src/cpp/omicron_runtime/__buildsys)
