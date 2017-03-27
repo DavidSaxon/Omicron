@@ -4,6 +4,7 @@
 #include <arcanecore/base/Preproc.hpp>
 
 #include "omicron_runtime/base/Logging.hpp"
+#include "omicron_runtime/base/SubsystemManager.hpp"
 
 #ifdef ARC_OS_WINDOWS
     #include <windows.h>
@@ -51,7 +52,7 @@ bool startup_routine()
     {
         omi_::logging::startup_routine();
         os_startup_routine();
-        // TODO: subsystem manager
+        omi_::SubsystemManager::get_instance()->startup();
     }
     // TODO: can we abuse the runtime exception and naming trick like Katana...
     catch(const arc::ex::ArcException& exc)
@@ -79,7 +80,7 @@ bool shutdown_routine()
 {
     try
     {
-        // TODO: subsystem manager
+        omi_::SubsystemManager::get_instance()->shutdown();
     }
     // TODO: can we abuse the runtime exception and naming trick like Katana...
     catch(const arc::ex::ArcException& exc)

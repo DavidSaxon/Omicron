@@ -3,6 +3,9 @@ set(OMICRON_RUNTIME_SRC
     ../Main.cpp
     ../Engine.cpp
     ../base/Logging.cpp
+    ../base/SubsystemManager.cpp
+    ../boot/BootRoutines.cpp
+    ../meta/MetaGlobals.cpp
 )
 
 # build the omicron runtime executable
@@ -16,4 +19,5 @@ target_link_libraries(omicron
     arcanelog
     arcanecore_io
     arcanecore_base
+    dl
 )

@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\omicron_runtime\Main.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\qto\QTORegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp\omicron_runtime\Engine.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\qto\QTOWindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

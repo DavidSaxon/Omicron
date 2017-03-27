@@ -1,5 +1,11 @@
+/*!
+ * \file
+ * \author David Saxon
+ */
 #ifndef OMICRON_RUNTIME_ENGINE_HPP_
 #define OMICRON_RUNTIME_ENGINE_HPP_
+
+#include <arcanecore/base/lang/Restrictors.hpp>
 
 namespace omi_
 {
@@ -8,6 +14,9 @@ namespace omi_
  * \brief Singleton object that owns and starts the Omicron runtime.
  */
 class Engine
+    : private arc::lang::Noncopyable
+    , private arc::lang::Nonmovable
+    , private arc::lang::Noncomparable
 {
 public:
 

@@ -19,6 +19,7 @@ find_package(Qt5Widgets REQUIRED)
 include_directories(
     ${INCLUDE_DIRECTORIES}
     src/cpp
+    src/cpp/builtin_subsystems
     /usr/include/python3.5
     # TODO: eventually replace with proper install paths
     ${CMAKE_BINARY_DIR}/../../ArcaneCore/ArcaneCore/src/cpp
@@ -40,3 +41,5 @@ link_directories(
 
 # omicron runtime
 add_subdirectory(src/cpp/omicron_runtime/__buildsys)
+# qto
+add_subdirectory(src/cpp/builtin_subsystems/qto/__buildsys)
