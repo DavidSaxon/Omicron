@@ -7,9 +7,6 @@
 
 #include "oss/Subsystem.hpp"
 
-// TODO: REMOVE ME
-#include <iostream>
-
 namespace oss
 {
 
@@ -30,13 +27,8 @@ public:
     Input()
         : Subsystem()
     {
-        // TODO: REMOVE ME
-        std::cout << "input constructor!" << std::endl;
-
-        // set window manager role
-        m_roles = static_cast<Role>(m_roles | ROLE_INPUT);
-
-        std::cout << "input roles: " << m_roles << std::endl;
+        // set input role
+        m_roles = static_cast<Role>(m_roles | kRoleInput);
     }
 
     //--------------------------------------------------------------------------

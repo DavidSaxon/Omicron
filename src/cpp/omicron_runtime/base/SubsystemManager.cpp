@@ -1,6 +1,7 @@
 #include "omicron_runtime/base/SubsystemManager.hpp"
 
 #include <cassert>
+#include <unordered_set>
 
 #include <arcanecore/base/Preproc.hpp>
 #include <arcanecore/io/sys/FileSystemOperations.hpp>
@@ -138,16 +139,28 @@ void SubsystemManager::startup()
     );
 
     // register the subsystems requested for each role
-    bind_role(oss::Subsystem::ROLE_WINDOW_MANAGER);
-    bind_role(oss::Subsystem::ROLE_INPUT);
-    bind_role(oss::Subsystem::ROLE_UI);
-    // bind_role(oss::Subsystem::ROLE_RENDERER);
-    // bind_role(oss::Subsystem::ROLE_PHYSICS);
-    // bind_role(oss::Subsystem::ROLE_AUDIO);
+    bind_role(oss::Subsystem::kRoleWindowManager);
+    bind_role(oss::Subsystem::kRoleInput);
+    bind_role(oss::Subsystem::kRoleUI);
+    bind_role(oss::Subsystem::kRoleRenderer);
+    bind_role(oss::Subsystem::kRolePhysics);
+    bind_role(oss::Subsystem::kRoleAudio);
 
-
-    // iterate through the roles and register the associated subsystem libraries
-    // TODO:
+    omi_::logger->debug << "Booting subsystems." << std::endl;
+    // iterate through the subsystems and boot them (but only once)
+    std::unordered_set<oss::Subsystem*> booted;
+    for(auto role : m_assigned)
+    {
+        for(oss::Subsystem* subsystem : role.second)
+        {
+            // check if it's been booted already
+            if(booted.find(subsystem) == booted.end())
+            {
+                subsystem->boot();
+                booted.insert(subsystem);
+            }
+        }
+    }
 }
 
 void SubsystemManager::shutdown()
@@ -176,6 +189,19 @@ void SubsystemManager::shutdown()
         arc::io::dl::close_library(library.second);
     }
     m_dl_handles.clear();
+}
+
+oss::Subsystem* SubsystemManager::get_subsystem(oss::Subsystem::Role role)
+{
+    assert(m_assigned.find(role) != m_assigned.end());
+    return m_assigned[role][0];
+}
+
+SubsystemManager::SubsystemArray SubsystemManager::get_subsystems(
+        oss::Subsystem::Role role)
+{
+    assert(m_assigned.find(role) != m_assigned.end());
+    return m_assigned[role];
 }
 
 //------------------------------------------------------------------------------

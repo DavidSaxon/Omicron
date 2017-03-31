@@ -41,5 +41,13 @@ link_directories(
 
 # omicron runtime
 add_subdirectory(src/cpp/omicron_runtime/__buildsys)
-# qto
-add_subdirectory(src/cpp/builtin_subsystems/qto/__buildsys)
+# OpenAL subsystem
+add_subdirectory(src/cpp/builtin_subsystems/omi_al/__buildsys)
+# Bullet subsystem
+add_subdirectory(src/cpp/builtin_subsystems/omi_bullet/__buildsys)
+# OpenGL subsystem
+add_subdirectory(src/cpp/builtin_subsystems/omi_gl/__buildsys)
+# qt subsystem
+add_subdirectory(src/cpp/builtin_subsystems/omi_qt/__buildsys)
+# pxtrace subsystem
+add_subdirectory(src/cpp/builtin_subsystems/pxtrace/__buildsys)

@@ -7,9 +7,6 @@
 
 #include "oss/Subsystem.hpp"
 
-// TODO: REMOVE ME
-#include <iostream>
-
 namespace oss
 {
 
@@ -30,11 +27,8 @@ public:
     WindowManager()
         : Subsystem()
     {
-        // TODO: REMOVE ME
-        std::cout << "window manager constructor!" << std::endl;
-
         // set window manager role
-        m_roles = static_cast<Role>(m_roles | ROLE_WINDOW_MANAGER);
+        m_roles = static_cast<Role>(m_roles | kRoleWindowManager);
     }
 
     //--------------------------------------------------------------------------

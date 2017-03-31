@@ -5,6 +5,7 @@
 #ifndef OMICRON_RUNTIME_BASE_SUBSYSTEMMANAGER_HPP_
 #define OMICRON_RUNTIME_BASE_SUBSYSTEMMANAGER_HPP_
 
+#include <map>
 #include <unordered_map>
 
 #include <arcanecore/base/lang/Restrictors.hpp>
@@ -41,6 +42,12 @@ private:
 public:
 
     //--------------------------------------------------------------------------
+    //                                  TYPEDEFS
+    //--------------------------------------------------------------------------
+
+    typedef std::vector<oss::Subsystem*> SubsystemArray;
+
+    //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
@@ -71,13 +78,17 @@ public:
      */
     void shutdown();
 
+    /*!
+     * \brief Returns the primary subsystem assigned to the given role.
+     */
+    oss::Subsystem* get_subsystem(oss::Subsystem::Role role);
+
+    /*!
+     * \brief Returns the list of subsystems assigned to the given role.
+     */
+    SubsystemArray get_subsystems(oss::Subsystem::Role role);
+
 private:
-
-    //--------------------------------------------------------------------------
-    //                                  TYPEDEFS
-    //--------------------------------------------------------------------------
-
-    typedef std::vector<oss::Subsystem*> SubsystemArray;
 
     //--------------------------------------------------------------------------
     //                             PRIVATE ATTRIBUTES
@@ -131,7 +142,7 @@ private:
      * \brief The assigned subsystems (with the first being the primary) for
      *        the roles.
      */
-    std::unordered_map<oss::Subsystem::Role, SubsystemArray> m_assigned;
+    std::map<oss::Subsystem::Role, SubsystemArray> m_assigned;
 
     //--------------------------------------------------------------------------
     //                             PRIVATE FUNCTIONS

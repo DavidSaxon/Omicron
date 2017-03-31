@@ -11,9 +11,6 @@
 #include <arcanecore/base/str/UTF8String.hpp>
 #include <arcanecore/io/dl/DLOperations.hpp>
 
-// TODO: REMOVE ME
-#include <iostream>
-
 /*!
  * \brief Macro that should be used exactly once in a subsystem DSO in order
  *        to provided the needed symbols for Omicron to register the subsystem.
@@ -58,18 +55,18 @@ public:
     {
         /// The subsystem will provide the window manager functionality, this
         /// includes providing the main window of Omicron, and a GL context.
-        ROLE_WINDOW_MANAGER = 1L << 0,
+        kRoleWindowManager = 1L << 0,
         /// The subsystem will provide functionality for querying user input
         /// from one or more difference devices.
-        ROLE_INPUT          = 1L << 1,
+        kRoleInput          = 1L << 1,
         /// The subsystem will provide UI rendering and functionality.
-        ROLE_UI             = 1L << 2,
+        kRoleUI             = 1L << 2,
         /// The subsystem will provide Omicron's 3D rendering.
-        ROLE_RENDERER       = 1L << 3,
+        kRoleRenderer       = 1L << 3,
         /// The subsystem will provide Omicron's physics simulation systems.
-        ROLE_PHYSICS        = 1L << 4,
+        kRolePhysics        = 1L << 4,
         /// The subsystem will provide audio playback.
-        ROLE_AUDIO          = 1L << 5
+        kRoleAudio          = 1L << 5
     };
 
     //--------------------------------------------------------------------------
@@ -82,7 +79,6 @@ public:
     Subsystem()
         : m_roles(static_cast<Role>(0))
     {
-        std::cout << "subsystem super constructor!" << std::endl;
     }
 
     //--------------------------------------------------------------------------
@@ -103,27 +99,27 @@ public:
     static arc::str::UTF8String role_to_string(Role role)
     {
         std::vector<arc::str::UTF8String> role_strings;
-        if(role & ROLE_WINDOW_MANAGER)
+        if(role & kRoleWindowManager)
         {
             role_strings.push_back("window_manager");
         }
-        if(role & ROLE_INPUT)
+        if(role & kRoleInput)
         {
             role_strings.push_back("input");
         }
-        if(role & ROLE_UI)
+        if(role & kRoleUI)
         {
             role_strings.push_back("ui");
         }
-        if(role & ROLE_RENDERER)
+        if(role & kRoleRenderer)
         {
             role_strings.push_back("renderer");
         }
-        if(role & ROLE_PHYSICS)
+        if(role & kRolePhysics)
         {
             role_strings.push_back("physics");
         }
-        if(role & ROLE_AUDIO)
+        if(role & kRoleAudio)
         {
             role_strings.push_back("audio");
         }

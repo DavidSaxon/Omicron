@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\builtin_subsystems\qto\QTORegister.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\qto\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp\builtin_subsystems\qto\QTOWindowManager.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\qto\QTOSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
