@@ -5,12 +5,12 @@
 #ifndef OMI_BULLET_SUBSYSTEM_HPP_
 #define OMI_BULLET_SUBSYSTEM_HPP_
 
-#include <oss/Physics.hpp>
+#include <omicron/subsystem/Physics.hpp>
 
 /*!
  * \brief TODO
  */
-class BulletSubsystem : public oss::Physics
+class BulletSubsystem : public omi::ss::Physics
 {
 public:
 

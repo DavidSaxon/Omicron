@@ -5,12 +5,12 @@
 #ifndef OMI_GL_SUBSYSTEM_HPP_
 #define OMI_GL_SUBSYSTEM_HPP_
 
-#include <oss/Renderer.hpp>
+#include <omicron/subsystem/Renderer.hpp>
 
 /*!
  * \brief TODO
  */
-class GLSubsystem : public oss::Renderer
+class GLSubsystem : public omi::ss::Renderer
 {
 public:
 

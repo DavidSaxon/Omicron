@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\builtin_subsystems\qto\MainWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cpp\builtin_subsystems\qto\QTOSubsystem.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_al\ALSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,12 +5,12 @@
 #ifndef OMI_AL_SUBSYSTEM_HPP_
 #define OMI_AL_SUBSYSTEM_HPP_
 
-#include <oss/Audio.hpp>
+#include <omicron/subsystem/Audio.hpp>
 
 /*!
  * \brief TODO
  */
-class ALSubsystem : public oss::Audio
+class ALSubsystem : public omi::ss::Audio
 {
 public:
 

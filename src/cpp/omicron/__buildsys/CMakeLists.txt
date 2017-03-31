@@ -1,17 +1,16 @@
-# # source files for the omicron runtime
-# set(OMICRON_RUNTIME_SRC
-#     ../Main.cpp
-#     ../private/Engine.cpp
-# )
+# source files for the omicron lib
+set(OMICRON_LIB_SRC
+    ../Proto.cpp
+)
 
-# # build the omicron runtime executable
-# add_executable(omicron ${OMICRON_RUNTIME_SRC})
+# build the omicron runtime executable
+add_library(libomicron SHARED ${OMICRON_LIB_SRC})
 
-# # link libraries to the omicron runtime
-# target_link_libraries(omicron
-#     arcanecollate_lib
-#     metaengine
-#     arcanelog
-#     arcanecore_io
-#     arcanecore_base
-# )
+# link libraries to the omicron runtime
+target_link_libraries(libomicron
+    arcanecollate_lib
+    metaengine
+    arcanelog
+    arcanecore_io
+    arcanecore_base
+)

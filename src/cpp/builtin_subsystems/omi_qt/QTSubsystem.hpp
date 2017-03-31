@@ -5,17 +5,17 @@
 #ifndef OMI_QT_SUBSYSTEM_HPP_
 #define OMI_QT_SUBSYSTEM_HPP_
 
-#include <oss/Input.hpp>
-#include <oss/UI.hpp>
-#include <oss/WindowManager.hpp>
+#include <omicron/subsystem/Input.hpp>
+#include <omicron/subsystem/UI.hpp>
+#include <omicron/subsystem/WindowManager.hpp>
 
 /*!
  * \brief TODO
  */
 class QTSubsystem
-    : public oss::WindowManager
-    , public oss::Input
-    , public oss::UI
+    : public omi::ss::WindowManager
+    , public omi::ss::Input
+    , public omi::ss::UI
 {
 public:
 

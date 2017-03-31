@@ -5,12 +5,12 @@
 #ifndef PXTRACE_SUBSYSTEM_HPP_
 #define PXTRACE_SUBSYSTEM_HPP_
 
-#include <oss/Renderer.hpp>
+#include <omicron/subsystem/Renderer.hpp>
 
 /*!
  * \brief TODO
  */
-class PXSubsystem : public oss::Renderer
+class PXSubsystem : public omi::ss::Renderer
 {
 public:
 

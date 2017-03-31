@@ -1,7 +1,7 @@
 /*!
  * \file
- * \brief Documents the omi namespace.
  * \author David Saxon
+ * \brief Documents the omi namespace.
  */
 #ifndef OMICRON_HPP_
 #define OMICRON_HPP_
