@@ -3,8 +3,11 @@
 #include <arcanecore/base/Exceptions.hpp>
 #include <arcanecore/base/Preproc.hpp>
 
-#include "omicron/runtime/base/Logging.hpp"
-#include "omicron/runtime/base/SubsystemManager.hpp"
+#include <omicron/report/ReportBoot.hpp>
+
+#include "omicron/runtime/RuntimeGlobals.hpp"
+#include "omicron/runtime/SubsystemManager.hpp"
+#include "omicron/runtime/boot/BootLogging.hpp"
 
 #ifdef ARC_OS_WINDOWS
     #include <windows.h>
@@ -44,7 +47,7 @@ bool startup_routine()
     // warn and do nothing if Omicron has already been initialised
     if(initialised)
     {
-        omi::runtime::logger->warning
+        global::logger->warning
             << "Attempted to run engine startup routines after the engine has "
             << "already successfully started." << std::endl;
         return true;
@@ -52,14 +55,15 @@ bool startup_routine()
 
     try
     {
-        omi::runtime::logging::startup_routine();
+        omi::report::startup_routine();
+        omi::runtime::boot::startup_logging_subroutine();
         os_startup_routine();
         omi::runtime::SubsystemManager::get_instance()->startup();
     }
     // TODO: can we abuse the runtime exception and naming trick like Katana...
     catch(const arc::ex::ArcException& exc)
     {
-        omi::runtime::logging::get_critical_stream()
+        get_critical_stream()
             << "Encountered exception during engine startup routines: ["
             << exc.get_type() << "] \"" << exc.get_message() << "\""
             << std::endl;
@@ -67,7 +71,7 @@ bool startup_routine()
     }
     catch(const std::exception& exc)
     {
-        omi::runtime::logging::get_critical_stream()
+        get_critical_stream()
             << "Encountered exception during engine startup routines: \""
             << exc.what() << "\"" << std::endl;
         return false;
@@ -83,11 +87,13 @@ bool shutdown_routine()
     try
     {
         omi::runtime::SubsystemManager::get_instance()->shutdown();
+        omi::runtime::boot::startup_logging_subroutine();
+        omi::report::shutdown_routine();
     }
     // TODO: can we abuse the runtime exception and naming trick like Katana...
     catch(const arc::ex::ArcException& exc)
     {
-        omi::runtime::logging::get_critical_stream()
+        get_critical_stream()
             << "Encountered exception during engine shutdown routines: ["
             << exc.get_type() << "] \"" << exc.get_message() << "\""
             << std::endl;
@@ -95,7 +101,7 @@ bool shutdown_routine()
     }
     catch(const std::exception& exc)
     {
-        omi::runtime::logging::get_critical_stream()
+        get_critical_stream()
             << "Encountered exception during engine shutdown routines: \""
             << exc.what() << "\"" << std::endl;
         return false;
@@ -106,9 +112,21 @@ bool shutdown_routine()
     return true;
 }
 
+std::ostream& get_critical_stream()
+{
+    // return the from proper logging if input is not null
+    if(global::logger != nullptr)
+    {
+        return global::logger->critical;
+    }
+    // return std::cerr
+    std::cerr << "{OMICRON-RUNTIME} - [CRITICAL]: ";
+    return std::cerr;
+}
+
 void os_startup_routine()
 {
-    omi::runtime::logger->debug
+    global::logger->debug
         << "Initialising Operating System specific functionality." << std::endl;
 
     #ifdef ARC_OS_WINDOWS

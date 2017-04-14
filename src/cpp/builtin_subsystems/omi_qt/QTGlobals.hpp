@@ -14,16 +14,8 @@ namespace global
 /*!
  * \brief The logging input to be used by QTO.
  */
-extern arclog::Input* input;
+extern arclog::Input* logger;
 
 } // namespace global
-
-/*!
- * \brief Convenience reference to the logger.
- *
- * Points to qto::global::input
- */
-extern arclog::Input*& logger;
-
 
 #endif

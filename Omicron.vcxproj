@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="omicron_meta|Win32">
+      <Configuration>omicron_meta</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="omicron_report|Win32">
+      <Configuration>omicron_report</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="omicron_runtime|Win32">
       <Configuration>omicron_runtime</Configuration>
       <Platform>Win32</Platform>
@@ -29,10 +37,18 @@
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">
     <ClCompile Include="src\cpp\omicron\runtime\Main.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\Engine.cpp" />
-    <ClCompile Include="src\cpp\omicron\runtime\base\Logging.cpp" />
-    <ClCompile Include="src\cpp\omicron\runtime\base\SubsystemManager.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\RuntimeGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\SubsystemManager.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\boot\BootLogging.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\boot\BootRoutines.cpp" />
-    <ClCompile Include="src\cpp\omicron\runtime\meta\MetaGlobals.cpp" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='omicron_report'">
+    <ClCompile Include="src\cpp\omicron\report\ReportBoot.cpp" />
+    <ClCompile Include="src\cpp\omicron\report\Logging.cpp" />
+    <ClCompile Include="src\cpp\omicron\report\ReportGlobals.cpp" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='omicron_meta'">
+    <ClCompile Include="src\cpp\omicron\meta\MetaGlobals.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_qt'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\MainWindow.cpp" />
@@ -60,6 +76,20 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omicron_runtime|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omicron_report|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omicron_meta|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -106,6 +136,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omicron_runtime|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omicron_report|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omicron_meta|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -130,6 +166,18 @@
     <IntDir>intermediate\$(Configuration)\</IntDir>
     <TargetName>omicron</TargetName>
     <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omicron_report|Win32'">
+    <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\</OutDir>
+    <IntDir>intermediate\$(Configuration)\</IntDir>
+    <TargetName>omicron_report</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omicron_meta|Win32'">
+    <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\</OutDir>
+    <IntDir>intermediate\$(Configuration)\</IntDir>
+    <TargetName>omicron_meta</TargetName>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\subsystems\</OutDir>
@@ -174,8 +222,44 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\David\AppData\Local\Programs\Python\Python36-32\libs;D:\Libraries\qt5-5.5.0-vs2013\qt5-x86-shared-release\lib;C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>python3.lib;metaengine.lib;arcanelog_shared.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\David\AppData\Local\Programs\Python\Python36-32\libs;C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>omicron_report.lib;omicron_meta.lib;python3.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omicron_report|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\src\cpp;C:\Dropbox\Development\ArcaneLog\ArcaneLog\src\cpp;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\src\cpp;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>OMI_REPORT_GLOBAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>omicron_meta.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omicron_meta|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\src\cpp;C:\Dropbox\Development\ArcaneLog\ArcaneLog\src\cpp;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\src\cpp;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>OMI_META_GLOBAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'">
@@ -192,7 +276,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>D:\Libraries\qt5-5.5.0-vs2013\qt5-x86-shared-release\lib;C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;metaengine.lib;arcanelog_shared.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;omicron_report.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'">
@@ -209,7 +293,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>metaengine.lib;arcanelog_shared.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>omicron_report.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='pxtrace|Win32'">
@@ -226,7 +310,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>metaengine.lib;arcanelog_shared.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>omicron_report.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_bullet|Win32'">
@@ -243,7 +327,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>metaengine.lib;arcanelog_shared.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>omicron_report.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_al|Win32'">
@@ -260,7 +344,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\MetaEngine\MetaEngine\build\win_x86;C:\Dropbox\Development\ArcaneLog\ArcaneLog\build\win_x86;C:\Dropbox\Development\ArcaneCollate\ArcaneCollate\build\win_x86;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>metaengine.lib;arcanelog_shared.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>omicron_report.lib;metaengine.lib;arcanelog.lib;arcanecollate.lib;arcanecore_io.lib;arcanecore_base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -51,6 +51,11 @@ public:
     /*!
      * \brief TODO
      */
+    virtual void shutdown();
+
+    /*!
+     * \brief TODO
+     */
     virtual void open_main_window();
 };
 

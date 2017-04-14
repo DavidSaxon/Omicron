@@ -4,11 +4,11 @@
  * \brief File which is programmitcally generated to provide access to the
  *        contents of in memory MetaEngine data for the Omicron Runtime.
  */
-#ifndef OMICRON_RUNTIME_META_METACOMPILED_HPP_
-#define OMICRON_RUNTIME_META_METACOMPILED_HPP_
+#ifndef OMICRON_META_INLINE_HPP_
+#define OMICRON_META_INLINE_HPP_
 
-#define OMICRON_RUNTIME_METACOMPILED_LOGGING "{}"
+#define OMICRON_META_INLINE_REPORT_LOGGING "{}"
 
-#define OMICRON_RUNTIME_METACOMPILED_SUBSYSTEMS "{}"
+#define OMICRON_META_INLINE_RUNTIME_SUBSYSTEMS "{}"
 
 #endif

@@ -1,6 +1,5 @@
 #include "omicron/runtime/Engine.hpp"
 
-#include "omicron/runtime/base/Logging.hpp"
 #include "omicron/runtime/boot/BootRoutines.hpp"
 
 namespace omi
@@ -34,7 +33,7 @@ int Engine::execute()
 {
     if(!omi::runtime::boot::startup_routine())
     {
-        omi::runtime::logging::get_critical_stream()
+        omi::runtime::boot::get_critical_stream()
             << "Engine startup failed. Aborting." << std::endl;
         return -1;
     }
@@ -43,7 +42,7 @@ int Engine::execute()
 
     if(!omi::runtime::boot::shutdown_routine())
     {
-        omi::runtime::logging::get_critical_stream()
+        omi::runtime::boot::get_critical_stream()
             << "Engine startup failed. Aborting." << std::endl;
         return -1;
     }

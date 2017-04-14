@@ -6,6 +6,8 @@
 #ifndef OMICRON_RUNTIME_BOOT_BOOTROUTINES_HPP_
 #define OMICRON_RUNTIME_BOOT_BOOTROUTINES_HPP_
 
+#include <iostream>
+
 namespace omi
 {
 namespace runtime
@@ -33,6 +35,15 @@ bool startup_routine();
  * \return Whether shutdown completed successfully.
  */
 bool shutdown_routine();
+
+/*!
+ * \brief Returns the output stream that should be used to log critical messages
+ *        to.
+ *
+ * This is useful when needing to log critical errors before knowing that
+ * logging has been initialised.
+ */
+std::ostream& get_critical_stream();
 
 } // namespace boot
 } // namespace runtime

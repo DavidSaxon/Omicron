@@ -1,9 +1,0 @@
-{
-    "outputs":
-    {
-        "StdOutput":
-        {
-            "use_ansi": true
-        }
-    }
-}

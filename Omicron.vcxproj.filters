@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\PXSubsystem.cpp">
+    <ClCompile Include="src\cpp\omicron\meta\MetaGlobals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

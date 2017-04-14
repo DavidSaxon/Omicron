@@ -141,10 +141,16 @@ public:
         return m_roles;
     }
 
+    // TODO: rename to startup
     /*!
      * \brief TODO:
      */
     virtual void boot() = 0;
+
+    /*!
+     * \brief TODO:
+     */
+    virtual void shutdown() {}
 
 protected:
 

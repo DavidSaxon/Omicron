@@ -39,8 +39,10 @@ link_directories(
     ${CMAKE_BINARY_DIR}/../../ArcaneCollate/ArcaneCollate/build/linux_x86
 )
 
-# omicron lib
-# add_subdirectory(src/cpp/omicron/__buildsys)
+# meta
+add_subdirectory(src/cpp/omicron/meta/__buildsys)
+# report
+add_subdirectory(src/cpp/omicron/report/__buildsys)
 # omicron runtime
 add_subdirectory(src/cpp/omicron/runtime/__buildsys)
 # OpenAL subsystem

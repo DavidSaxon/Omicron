@@ -1,4 +1,4 @@
-#include "omicron/runtime/base/Logging.hpp"
+#include "omicron/report/Logging.hpp"
 
 #include <chrono>
 #include <ctime>
@@ -6,7 +6,6 @@
 
 #include <arcanecore/base/Preproc.hpp>
 
-#include <arcanelog/Shared.hpp>
 #include <arcanelog/outputs/FileOutput.hpp>
 #include <arcanelog/outputs/StdOutput.hpp>
 
@@ -15,8 +14,9 @@
 #include <metaengine/Variant.hpp>
 #include <metaengine/visitors/Shorthand.hpp>
 
-#include "omicron/runtime/meta/MetaCompiled.hpp"
-#include "omicron/runtime/meta/MetaGlobals.hpp"
+#include <omicron/meta/MetaInline.hpp>
+
+#include "omicron/report/ReportGlobals.hpp"
 
 // allows us to use std::localtime, without warning it's unsafe, maybe this is
 // bad idea, but I can't imagine it being too detrimental since it's only being
@@ -27,31 +27,28 @@
 
 namespace omi
 {
-namespace runtime
-{
-namespace logging
+namespace report
 {
 
 //------------------------------------------------------------------------------
 //                                    GLOBALS
 //------------------------------------------------------------------------------
 
-arclog::Input* input = nullptr;
-
-} // namespace logging
-
-arclog::Input*& logger = logging::input;
-
-namespace logging
-{
-
-arclog::StdOutput*  std_output  = nullptr;
-arclog::FileOutput* file_output = nullptr;
+arclog::LogHandler log_handler;
 
 /*!
  * \brief The MetaEngine Variant for logging configuration.
  */
 static metaengine::VariantPtr g_metadata;
+
+/*!
+ * \brief The logging output to std::cout and std::cerr.
+ */
+arclog::StdOutput* std_output;
+/*!
+ * \brief The logging output for writing to the file system.
+ */
+arclog::FileOutput* file_output;
 
 //------------------------------------------------------------------------------
 //                                    CLASSES
@@ -108,21 +105,6 @@ static void std_get_reporter(
         const arc::io::sys::Path& file_path,
         const arc::str::UTF8String& message);
 
-/*!
- * \brief Reports when a MetaEngine Document has failed to load, and a fallback
- *        protocol must be executed.
- */
-static void load_fallback_reporter(
-        const arc::io::sys::Path& file_path,
-        const arc::str::UTF8String& message);
-
-/*!
- * \brief Reports when retrieving a value from a MetaEngine Document has failed,
- *        and a fallback protocol must be executed.
- */
-static void get_fallback_reporter(
-        const arc::io::sys::Path& file_path,
-        const arc::str::UTF8String& message);
 
 /*!
  * \brief Initialises the StdOutput logging writer.
@@ -134,11 +116,12 @@ static void init_std_output();
  */
 static void init_file_output();
 
+
 //------------------------------------------------------------------------------
 //                                   FUNCTIONS
 //------------------------------------------------------------------------------
 
-void startup_routine()
+void logging_startup_routine()
 {
     // logging MetaEngine data needs to be loaded before all other MetaEngine
     // data since we want to initialise logging as early as possible. Since
@@ -147,13 +130,13 @@ void startup_routine()
     metaengine::Document::set_load_fallback_reporter(std_load_reporter);
     metaengine::Document::set_get_fallback_reporter(std_get_reporter);
 
-    // build the path to the base logging document
-    arc::io::sys::Path meta_path(omi::runtime::meta::global::runtime_dir);
-    meta_path << "logging" << "logging.json";
+    // // build the path to the base logging document
+    arc::io::sys::Path meta_path(omi::report::global::meta_logging_dir);
+    meta_path << "logging.json";
 
     // built-in memory data
     static const arc::str::UTF8String meta_compiled(
-        OMICRON_RUNTIME_METACOMPILED_LOGGING
+        OMICRON_META_INLINE_REPORT_LOGGING
     );
 
     // construct the variant
@@ -166,37 +149,10 @@ void startup_routine()
         g_metadata->set_variant("unix");
     #endif
 
-    // create the logging profile
-    arclog::Profile profile(*g_metadata->get(
-        "profile",
-        metaengine::UTF8StringV::instance()
-    ));
-
-    // TODO: decide whether to use the shared handler or not
-    // vend the input from the shared handler
-    logging::input = arclog::shared_handler.vend_input(profile);
-
     // setup outputs
     init_std_output();
     init_file_output();
-
-    // connect the proper reporters
-    metaengine::Document::set_load_fallback_reporter(load_fallback_reporter);
-    metaengine::Document::set_get_fallback_reporter(get_fallback_reporter);
 }
-
-std::ostream& get_critical_stream()
-{
-    // return the from proper logging if input is not null
-    if(logging::input != nullptr)
-    {
-        return logging::input->critical;
-    }
-    // return std::cerr
-    std::cerr << "{OMICRON} - [CRITICAL]: ";
-    return std::cerr;
-}
-
 
 static void std_load_reporter(
         const arc::io::sys::Path& file_path,
@@ -212,24 +168,6 @@ static void std_get_reporter(
 {
     std::cerr << "MetaEngine error accessing data in \"" << file_path
               << "\": " << message << std::endl;
-}
-
-static void load_fallback_reporter(
-        const arc::io::sys::Path& file_path,
-        const arc::str::UTF8String& message)
-{
-    omi::runtime::logger->error
-        << "MetaEngine error loading data associated with file \""
-        << file_path << "\": " << message << std::endl;
-}
-
-static void get_fallback_reporter(
-        const arc::io::sys::Path& file_path,
-        const arc::str::UTF8String& message)
-{
-    omi::runtime::logger->error
-        << "MetaEngine error accessing data in \"" << file_path << "\": "
-        << message << std::endl;
 }
 
 static void init_std_output()
@@ -253,14 +191,7 @@ static void init_std_output()
     }
     std_output->set_use_ansi(use_ansi);
     // add to handler
-    arclog::shared_handler.add_output(std_output);
-
-    // if enabled alert that we're writing to std out
-    if(enabled)
-    {
-        omi::runtime::logger->info
-            << "Logging to stdout and stderr" << std::endl;
-    }
+    omi::report::log_handler.add_output(std_output);
 }
 
 static void init_file_output()
@@ -329,15 +260,7 @@ static void init_file_output()
         ArcLogVerbosityV::instance()
     ));
     // add to handler
-    arclog::shared_handler.add_output(file_output);
-
-    // if the enabled write the file we're logging to
-    if(enabled)
-    {
-        omi::runtime::logger->info
-            << "Logging to file: \"" << log_path << "\""
-            << std::endl;
-    }
+    omi::report::log_handler.add_output(file_output);
 }
 
 //------------------------------------------------------------------------------
@@ -403,6 +326,5 @@ bool ArcLogVerbosityV::retrieve(
     return true;
 }
 
-} // namespace logging
-} // namespace runtime
+} // namespace report
 } // namespace omi
