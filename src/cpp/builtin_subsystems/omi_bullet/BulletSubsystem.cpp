@@ -28,7 +28,7 @@ BulletSubsystem::~BulletSubsystem()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void BulletSubsystem::boot()
+void BulletSubsystem::startup()
 {
     // TODO:
 }

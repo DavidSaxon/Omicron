@@ -28,7 +28,7 @@ PXSubsystem::~PXSubsystem()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void PXSubsystem::boot()
+void PXSubsystem::startup()
 {
     // TODO:
 }

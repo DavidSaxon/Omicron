@@ -28,7 +28,7 @@ ALSubsystem::~ALSubsystem()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void ALSubsystem::boot()
+void ALSubsystem::startup()
 {
     // TODO:
 }

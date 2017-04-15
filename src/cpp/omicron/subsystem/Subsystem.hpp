@@ -25,7 +25,7 @@ extern "C"                                                                     \
 {                                                                              \
 ARC_IO_DL_EXPORT void* oss_register_lib()                                      \
 {                                                                              \
-    return static_cast<omi::ss::Subsystem*>(new subsystem());                      \
+    return static_cast<omi::ss::Subsystem*>(new subsystem());                  \
 }                                                                              \
 }
 
@@ -141,14 +141,23 @@ public:
         return m_roles;
     }
 
-    // TODO: rename to startup
     /*!
-     * \brief TODO:
+     * \brief Startups up this subsystem.
+     *
+     * \warning This function should not be called manually.
+     *
+     * Other than the constructor, this will be the first call made to this
+     * object, and will only be called once.
      */
-    virtual void boot() = 0;
+    virtual void startup() {};
 
     /*!
-     * \brief TODO:
+     * \brief Performs shutdown of this subsystem.
+     *
+     * \warning This function should not be called manually.
+     *
+     * Other than the destructor, once this function has been called, no further
+     * calls to this object will be made, and shutdown will only be called once.
      */
     virtual void shutdown() {}
 

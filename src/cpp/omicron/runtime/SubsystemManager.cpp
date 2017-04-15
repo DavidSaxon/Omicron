@@ -67,14 +67,6 @@ void SubsystemManager::startup()
 
     global::logger->debug << "SubsystemManager startup." << std::endl;
 
-    // // TODO: REMOVE ME
-    // global::logger->warning
-    //     << "global var: " << omi::proto::global_var << std::endl;
-    // global::logger->warning
-    //     << "func: " << omi::proto::test_me() << std::endl;
-    // omi::proto::global_var = "MO FUCK!";
-
-
     // build the path to the base subsystem document
     arc::io::sys::Path meta_path(omi::runtime::global::meta_root_dir);
     meta_path << "subsystems" << "subsystems.json";
@@ -165,18 +157,11 @@ void SubsystemManager::startup()
             // check if it's been started already
             if(started.find(subsystem) == started.end())
             {
-                subsystem->boot();
+                subsystem->startup();
                 started.insert(subsystem);
             }
         }
     }
-
-    // // TODO: REMOVE ME
-    // global::logger->warning
-    //     << "global var: " << omi::proto::global_var << std::endl;
-    // global::logger->warning
-    //     << "func: " << omi::proto::test_me() << std::endl;
-    // omi::proto::global_var = "MO FUCK!";
 }
 
 void SubsystemManager::shutdown()

@@ -25,9 +25,9 @@ target_link_libraries(omi_qt
     Qt5::Widgets
     Qt5::Gui
     Qt5::Core
+    omicron_report
     arcanecollate_lib
     metaengine
-    arcanelog_shared
     arcanelog
     arcanecore_io
     arcanecore_base

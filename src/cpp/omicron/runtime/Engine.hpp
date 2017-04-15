@@ -37,6 +37,14 @@ public:
      */
     static Engine* get_instance();
 
+
+    /*!
+     * \brief Performs a cycle of execution of the Omicron engine.
+     *
+     * Is called by the input subsystem.
+     */
+    static bool cycle();
+
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------

@@ -39,7 +39,7 @@ GLSubsystem::~GLSubsystem()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void GLSubsystem::boot()
+void GLSubsystem::startup()
 {
     // TODO:
 }

@@ -9,6 +9,14 @@
 #include <omicron/subsystem/UI.hpp>
 #include <omicron/subsystem/WindowManager.hpp>
 
+#include "omi_qt/MainWindow.hpp"
+
+//------------------------------------------------------------------------------
+//                              FORWARD DECLARATIONS
+//------------------------------------------------------------------------------
+
+class QApplication;
+
 /*!
  * \brief TODO
  */
@@ -23,18 +31,12 @@ public:
     //                                CONSTRUCTORS
     //--------------------------------------------------------------------------
 
-    /*!
-     * \brief TODO
-     */
     QTSubsystem();
 
     //--------------------------------------------------------------------------
     //                                DESTRUCTORS
     //--------------------------------------------------------------------------
 
-    /*!
-     * \brief TODO
-     */
     virtual ~QTSubsystem()
     {
     }
@@ -43,20 +45,41 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    /*!
-     * \brief TODO:
-     */
-    virtual void boot();
+    // override
+    virtual void startup();
 
-    /*!
-     * \brief TODO
-     */
+    // override
     virtual void shutdown();
 
-    /*!
-     * \brief TODO
-     */
+    // override
+    virtual void set_mode(WindowMode mode);
+
+    // override
+    virtual void start_main_loop(omi::ss::Input::EngineCycleFunc engine_cycle);
+
+    // override
     virtual void open_main_window();
+
+private:
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE ATTRIBUTES
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief The Qt application being used.
+     */
+    QApplication* m_qt_application;
+
+    /*!
+     * \brief The instance of the main window.
+     */
+    MainWindow* m_main_window;
+
+    /*!
+     * \brief The window mode being used.
+     */
+    WindowMode m_mode;
 };
 
 #endif

@@ -20,6 +20,29 @@ class WindowManager : virtual public Subsystem
 public:
 
     //--------------------------------------------------------------------------
+    //                                ENUMERATORS
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief Defines the different modes a window can be in.
+     */
+    enum WindowMode
+    {
+        /*!
+         * \brief The window is a standard window with borders.
+         */
+        kModeWindowed = 0,
+        /*!
+         * \brief A window without standard operating system provided borders.
+         */
+        kModeBorderless,
+        /*!
+         * \brief A window without borders and also occupies the entire screen.
+         */
+        kModeFullscreen
+    };
+
+    //--------------------------------------------------------------------------
     //                                CONSTRUCTORS
     //--------------------------------------------------------------------------
 
@@ -44,6 +67,11 @@ public:
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
+
+    /*!
+     * Sets the window mode to be used.
+     */
+    virtual void set_mode(WindowMode mode) = 0;
 
     /*!
      * \brief TODO

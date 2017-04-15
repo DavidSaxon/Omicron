@@ -20,6 +20,12 @@ class Input : virtual public Subsystem
 public:
 
     //--------------------------------------------------------------------------
+    //                                  TYPEDEFS
+    //--------------------------------------------------------------------------
+
+    typedef bool (*EngineCycleFunc)();
+
+    //--------------------------------------------------------------------------
     //                                CONSTRUCTORS
     //--------------------------------------------------------------------------
 
@@ -45,7 +51,17 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // TODO:
+    /*!
+     * \brief Is called to start the Input subsystem's main loop.
+     *
+     * \param engine_cycle A function which will execute a cycle of the Omicron
+     *                     engine. This function should be called once every
+     *                     cycle of the Input subsystem's main loop. This
+     *                     function will return false when engine execution has
+     *                     completed which signals this function should return
+     *                     control.
+     */
+    virtual void start_main_loop(EngineCycleFunc engine_cycle) = 0;
 };
 
 } // namespace ss
