@@ -5,6 +5,8 @@
 #ifndef OMI_QT_MAINWINDOW_HPP_
 #define OMI_QT_MAINWINDOW_HPP_
 
+#include <omicron/subsystem/Input.hpp>
+
 #include <QtGui/QOpenGLFunctions>
 #include <QtGui/QWindow>
 
@@ -41,6 +43,12 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
+    /*!
+     * \brief Sets the function that will be used to update a cycle of the
+     *        engine.
+     */
+    void set_engine_cycle(omi::ss::Input::EngineCycleFunc engine_cycle);
+
     // TODO: qt inherit
     virtual void initialize();
 
@@ -57,14 +65,15 @@ public slots:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief TODO
+     * \brief Performs a rendering and update cycle of Omicron.
      */
-    void renderLater();
+    void render_now();
 
     /*!
-     * \brief TODO
+     * \brief Calling this function will cause render_now to be called again on
+     *        the next event cycle.
      */
-    void renderNow();
+    void render_later();
 
 protected:
 
@@ -89,6 +98,11 @@ private:
     //--------------------------------------------------------------------------
 
     /*!
+     * \brief The function that will be used to update a cycle of the engine.
+     */
+    omi::ss::Input::EngineCycleFunc m_engine_cycle;
+
+    /*!
      * \brief TODO
      */
     QOpenGLContext* m_context;
@@ -101,10 +115,6 @@ private:
      * \brief TODO
      */
     bool m_update_pending;
-    /*!
-     * \brief TODO
-     */
-    bool m_animating;
 };
 
 #endif

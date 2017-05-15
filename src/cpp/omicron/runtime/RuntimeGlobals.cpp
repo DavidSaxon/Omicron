@@ -1,6 +1,6 @@
 #include "omicron/runtime/RuntimeGlobals.hpp"
 
-#include <omicron/meta/MetaGlobals.hpp>
+#include <omicron/config/ConfigGlobals.hpp>
 
 namespace omi
 {
@@ -9,10 +9,10 @@ namespace runtime
 namespace global
 {
 
-arclog::Input* logger = nullptr;
+arc::log::Input* logger = nullptr;
 
-const arc::io::sys::Path meta_root_dir(
-    arc::io::sys::Path(omi::meta::global::root_dir).join("runtime"));
+const arc::io::sys::Path config_root_dir(
+    arc::io::sys::Path(omi::config::global::root_dir).join("runtime"));
 
 } // namespace global
 } // namespace runtime

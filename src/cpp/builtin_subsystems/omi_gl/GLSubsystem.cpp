@@ -1,8 +1,7 @@
 #include "omi_gl/GLSubsystem.hpp"
 
-// TODO: REMOVE ME
-// #include <iostream>
-// #include <omicron/Proto.hpp>
+#include <GL/glew.h>
+#include <GL/gl.h>
 
 //------------------------------------------------------------------------------
 //                               REGISTER SUBSYSTEM
@@ -41,5 +40,20 @@ GLSubsystem::~GLSubsystem()
 
 void GLSubsystem::startup()
 {
+    // TODO:
+    glewInit();
+}
+
+void GLSubsystem::setup_rendering()
+{
+    // TODO:
+    glClearColor(0.0F, 0.7F, 1.0F, 1.0F);
+}
+
+void GLSubsystem::render()
+{
+    // clear buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
     // TODO:
 }

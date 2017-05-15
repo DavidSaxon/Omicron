@@ -18,10 +18,11 @@ set_target_properties(pxtrace
 )
 # link libraries
 target_link_libraries(pxtrace
+    ${GLEW_LIBRARIES}
     omicron_report
-    arcanecollate_lib
-    metaengine
-    arcanelog
+    arcanecore_collate
+    arcanecore_config
+    arcanecore_log
     arcanecore_io
     arcanecore_base
 )

@@ -15,7 +15,7 @@
 
 #include <json/json.h>
 
-#include <metaengine/Variant.hpp>
+#include <arcanecore/config/Variant.hpp>
 
 #include <omicron/subsystem/Subsystem.hpp>
 
@@ -103,7 +103,7 @@ private:
     /*!
      * \brief The MetaEngine Variant for general subsystem configuration.
      */
-    metaengine::VariantPtr m_metadata;
+    arc::config::VariantPtr m_config_data;
 
     /*!
      * \brief The search path to locate subsystem libraries within.

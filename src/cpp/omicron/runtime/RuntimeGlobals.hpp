@@ -8,7 +8,7 @@
 
 #include <arcanecore/io/sys/Path.hpp>
 
-#include <arcanelog/Input.hpp>
+#include <arcanecore/log/Input.hpp>
 
 namespace omi
 {
@@ -23,13 +23,13 @@ namespace global
 /*!
  * \brief The logging input to be used by the Omicron Runtime.
  */
-extern arclog::Input* logger;
+extern arc::log::Input* logger;
 
 /*!
  * \brief The root directory where all Omicron's runtime meta programming is
  *        located within.
  */
-extern const arc::io::sys::Path meta_root_dir;
+extern const arc::io::sys::Path config_root_dir;
 
 } // namespace global
 } // namespace runtime

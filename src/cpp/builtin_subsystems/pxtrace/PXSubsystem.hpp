@@ -32,6 +32,12 @@ public:
 
     // override
     virtual void startup();
+
+    // override
+    virtual void setup_rendering();
+
+    // override
+    virtual void render();
 };
 
 #endif

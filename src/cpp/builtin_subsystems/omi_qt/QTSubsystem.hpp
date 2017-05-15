@@ -57,9 +57,6 @@ public:
     // override
     virtual void start_main_loop(omi::ss::Input::EngineCycleFunc engine_cycle);
 
-    // override
-    virtual void open_main_window();
-
 private:
 
     //--------------------------------------------------------------------------

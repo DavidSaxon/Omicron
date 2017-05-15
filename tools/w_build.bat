@@ -1,7 +1,7 @@
 echo ----------------
-echo omicron_meta
+echo omicron_config
 echo ----------------
-msbuild ..\Omicron.sln /v:n /p:Configuration=omicron_meta
+msbuild ..\Omicron.sln /v:n /p:Configuration=omicron_config
 
 echo ----------------
 echo omicron_report

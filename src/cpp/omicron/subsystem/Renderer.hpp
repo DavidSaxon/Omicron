@@ -45,7 +45,16 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // TODO:
+    /*!
+     * \brief Is called once a valid GL context has been established to setup
+     *        rendering.
+     */
+    virtual void setup_rendering() = 0;
+
+    /*!
+     * \brief Is called to render the current frame.
+     */
+    virtual void render() = 0;
 };
 
 } // namespace ss

@@ -8,9 +8,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86)
 
 # TODO: how to control debug builds - and compiler optimisations
 # compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++0x -Wall -Wno-varargs -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++0x -Wall -Wno-varargs -fPIC -msse3")
 
+# require GLEW
+find_package(GLEW REQUIRED)
 # require QT
+find_package(OpenGL REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -21,26 +24,24 @@ include_directories(
     src/cpp
     src/cpp/builtin_subsystems
     /usr/include/python3.5
+    ${GLEW_INCLUDE_DIRS}
     # TODO: eventually replace with proper install paths
     ${CMAKE_BINARY_DIR}/../../ArcaneCore/ArcaneCore/src/cpp
-    ${CMAKE_BINARY_DIR}/../../ArcaneLog/ArcaneLog/src/cpp
-    ${CMAKE_BINARY_DIR}/../../MetaEngine/MetaEngine/src/cpp
-    ${CMAKE_BINARY_DIR}/../../ArcaneCollate/ArcaneCollate/src/cpp
 )
 # set general libraries link directories
 link_directories(
     ${LINK_DIRECTORIES}
     build/linux_x86/
     /usr/lib/python3.5/
+    ${OpenGL_LIBRARY_DIRS}
     # TODO: eventually replace with proper library paths
     ${CMAKE_BINARY_DIR}/../../ArcaneCore/ArcaneCore/build/linux_x86
-    ${CMAKE_BINARY_DIR}/../../ArcaneLog/ArcaneLog/build/linux_x86
-    ${CMAKE_BINARY_DIR}/../../MetaEngine/MetaEngine/build/linux_x86
-    ${CMAKE_BINARY_DIR}/../../ArcaneCollate/ArcaneCollate/build/linux_x86
 )
 
-# meta
-add_subdirectory(src/cpp/omicron/meta/__buildsys)
+add_definitions(${OpenGL_DEFINITIONS})
+
+# config
+add_subdirectory(src/cpp/omicron/config/__buildsys)
 # report
 add_subdirectory(src/cpp/omicron/report/__buildsys)
 # omicron runtime

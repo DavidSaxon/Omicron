@@ -1,6 +1,6 @@
 #include "omicron/runtime/boot/BootLogging.hpp"
 
-#include <metaengine/Document.hpp>
+#include <arcanecore/config/Document.hpp>
 
 #include <omicron/report/Logging.hpp>
 
@@ -40,13 +40,13 @@ static void get_fallback_reporter(
 bool startup_logging_subroutine()
 {
     // create the logging profile
-    arclog::Profile profile("OMICRON-RUNTIME");
+    arc::log::Profile profile("OMICRON-RUNTIME");
     // vend the input from the shared handler
     omi::runtime::global::logger = omi::report::log_handler.vend_input(profile);
 
     // connect fallback reporters for MetaEngine
-    metaengine::Document::set_load_fallback_reporter(load_fallback_reporter);
-    metaengine::Document::set_get_fallback_reporter(get_fallback_reporter);
+    arc::config::Document::set_load_fallback_reporter(load_fallback_reporter);
+    arc::config::Document::set_get_fallback_reporter(get_fallback_reporter);
 
     return true;
 }

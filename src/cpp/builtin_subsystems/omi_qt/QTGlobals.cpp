@@ -3,6 +3,6 @@
 namespace global
 {
 
-arclog::Input* logger = nullptr;
+arc::log::Input* logger = nullptr;
 
 } // namespace global

@@ -44,7 +44,7 @@ void QTSubsystem::startup()
 {
     // set up logging
     global::logger =
-        omi::report::log_handler.vend_input(arclog::Profile("OMICRON-QT"));
+        omi::report::log_handler.vend_input(arc::log::Profile("OMICRON-QT"));
 
     global::logger->info << "Starting up subsystem." << std::endl;
 
@@ -107,7 +107,7 @@ void QTSubsystem::start_main_loop(omi::ss::Input::EngineCycleFunc engine_cycle)
     global::logger->debug << "Entering the main loop." << std::endl;
 
     // pass the engine cycle function to the main window.
-    // TODO:
+    m_main_window->set_engine_cycle(engine_cycle);
 
     // show the main window
     m_main_window->show();
@@ -119,8 +119,4 @@ void QTSubsystem::start_main_loop(omi::ss::Input::EngineCycleFunc engine_cycle)
     m_qt_application->exec();
 
     global::logger->debug << "Exiting the main loop." << std::endl;
-}
-
-void QTSubsystem::open_main_window()
-{
 }

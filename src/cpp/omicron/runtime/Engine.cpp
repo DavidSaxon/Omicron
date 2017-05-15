@@ -1,6 +1,7 @@
 #include "omicron/runtime/Engine.hpp"
 
 #include <omicron/subsystem/Input.hpp>
+#include <omicron/subsystem/Renderer.hpp>
 #include <omicron/subsystem/WindowManager.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
@@ -30,10 +31,9 @@ Engine* Engine::get_instance()
     return &engine;
 }
 
-bool Engine::cycle()
+bool Engine::cycle_static()
 {
-    // TODO:
-    return true;
+    return Engine::get_instance()->cycle();
 }
 
 //------------------------------------------------------------------------------
@@ -51,26 +51,30 @@ int Engine::execute()
 
     // get the subsystem manager
     SubsystemManager* ss_manager = SubsystemManager::get_instance();
-
     // get the window manager subsystem
-    omi::ss::WindowManager* ss_window_manager =
-        dynamic_cast<omi::ss::WindowManager*>(
-            ss_manager->get_subsystem(omi::ss::Subsystem::kRoleWindowManager)
-        );
-    assert(ss_window_manager != nullptr);
+    m_window_manager = dynamic_cast<omi::ss::WindowManager*>(
+        ss_manager->get_subsystem(omi::ss::Subsystem::kRoleWindowManager)
+    );
+    assert(m_window_manager != nullptr);
     // get the input subsystem
-    omi::ss::Input* ss_input = dynamic_cast<omi::ss::Input*>(
+    m_input = dynamic_cast<omi::ss::Input*>(
         ss_manager->get_subsystem(omi::ss::Subsystem::kRoleInput)
     );
-    assert(ss_input != nullptr);
+    assert(m_input != nullptr);
+    // get the renderer subsystem
+    m_renderer = dynamic_cast<omi::ss::Renderer*>(
+        ss_manager->get_subsystem(omi::ss::Subsystem::kRoleRenderer)
+    );
+    assert(m_renderer != nullptr);
 
     // TODO: move this somewhere...
-    ss_window_manager->set_mode(omi::ss::WindowManager::kModeFullscreen);
+    // m_window_manager->set_mode(omi::ss::WindowManager::kModeFullscreen);
 
     global::logger->info << "Starting main loop" << std::endl;
     // start the main loop
-    ss_input->start_main_loop(&Engine::cycle);
+    m_input->start_main_loop(&Engine::cycle_static);
 
+    m_setup = false;
     if(!omi::runtime::boot::shutdown_routine())
     {
         omi::runtime::boot::get_critical_stream()
@@ -81,11 +85,35 @@ int Engine::execute()
     return 0;
 }
 
+bool Engine::cycle()
+{
+    // perform first time setup
+    if(!m_setup)
+    {
+        global::logger->info << "Performing first-frame setup" << std::endl;
+        // try
+        // {
+            m_renderer->setup_rendering();
+        // }
+        // catch TODO
+        m_setup = true;
+    }
+
+    // render the frame
+    m_renderer->render();
+
+    return true;
+}
+
 //------------------------------------------------------------------------------
 //                              PRIVATE CONSTRUCTOR
 //------------------------------------------------------------------------------
 
 Engine::Engine()
+    : m_setup         (false)
+    , m_window_manager(nullptr)
+    , m_input         (nullptr)
+    , m_renderer      (nullptr)
 {
 }
 

@@ -2,24 +2,20 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEvent>
+#include <QtWidgets/QApplication>
 
 #include <QtGui/QOpenGLPaintDevice>
 #include <QtGui/QPainter>
-
-// TODO: REMOVE ME
-#include <iostream>
 
 //------------------------------------------------------------------------------
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
 MainWindow::MainWindow()
-    :
-    QWindow         (),
-    m_context       (nullptr),
-    m_device        (nullptr),
-    m_update_pending(false),
-    m_animating     (false)
+    : QWindow         ()
+    , m_context       (nullptr)
+    , m_device        (nullptr)
+    , m_update_pending(false)
 {
     setSurfaceType(QWindow::OpenGLSurface);
 }
@@ -34,37 +30,45 @@ MainWindow::~MainWindow()
     {
         delete m_device;
     }
+
+    if(m_context != nullptr)
+    {
+        delete m_context;
+    }
 }
 
 //------------------------------------------------------------------------------
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
+void MainWindow::set_engine_cycle(omi::ss::Input::EngineCycleFunc engine_cycle)
+{
+    m_engine_cycle = engine_cycle;
+}
+
 void MainWindow::initialize()
 {
-    // TODO: how to get logger from Omicron
-    std::cout << "initialize called." << std::endl;
+    // TODO: needed?
 }
 
 void MainWindow::render(QPainter* painter)
 {
-    // TODO: how to get logger from Omicron
-    std::cout << "render with painter called." << std::endl;
-
     Q_UNUSED(painter);
+
+    // perform a cycle of the engine
+    if(!m_engine_cycle())
+    {
+        // execution has ended, stop Qt
+        QApplication::exit();
+    }
 }
 
 void MainWindow::render()
 {
-    // TODO: how to get logger from Omicron
-    std::cout << "plain render called" << std::endl;
-
     if(m_device == nullptr)
     {
         m_device = new QOpenGLPaintDevice();
     }
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     m_device->setSize(size());
 
@@ -77,32 +81,18 @@ void MainWindow::render()
 //                                  PUBLIC SLOTS
 //------------------------------------------------------------------------------
 
-void MainWindow::renderLater()
-{
-    // if an update is not running/pending, start a new one
-    if(!m_update_pending)
-    {
-        m_update_pending = true;
-        QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest));
-    }
-}
-
-void MainWindow::renderNow()
+void MainWindow::render_now()
 {
     // only render if the window is exposed
     if(!isExposed())
     {
-        // TODO: how to get logger from Omicron
-        std::cout << "can't render because the window is not exposed"
-                  << std::endl;
         return;
     }
 
     // does the context need initialisation?
     bool needs_initialise = false;
 
-    // TODO: move initialization to it's own function
-    // create a new context?
+    // create a new context
     if(m_context == nullptr)
     {
         m_context = new QOpenGLContext(this);
@@ -122,13 +112,21 @@ void MainWindow::renderNow()
         initialize();
     }
 
+    // hand off to the render function (which will update the engine)
     render();
-
+    // swap buffers
     m_context->swapBuffers(this);
+    // prepare to render again
+    render_later();
+}
 
-    if(m_animating)
+void MainWindow::render_later()
+{
+    // if an update is not running/pending, start a new one
+    if(!m_update_pending)
     {
-        renderLater();
+        m_update_pending = true;
+        QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest));
     }
 }
 
@@ -144,7 +142,7 @@ bool MainWindow::event(QEvent* event)
         {
             // render!
             m_update_pending = false;
-            renderNow();
+            render_now();
             return true;
         }
         default:
@@ -159,12 +157,9 @@ void MainWindow::exposeEvent(QExposeEvent* event)
 {
     Q_UNUSED(event);
 
-    // TODO: how to get logger from Omicron
-    std::cout << "expose event!" << std::endl;
-
     // trigger render on expose
     if(isExposed())
     {
-        renderNow();
+        render_now();
     }
 }

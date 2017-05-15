@@ -6,7 +6,7 @@
         "window_manager": ["omi_qt"],
         "input": ["omi_qt"],
         "ui": ["omi_qt"],
-        "renderer": ["omi_gl", "pxtrace"],
+        "renderer": ["pxtrace", "omi_gl"],
         "physics": ["omi_bullet"],
         "audio": ["omi_al"]
     },

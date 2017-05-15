@@ -6,7 +6,7 @@
 #ifndef OMI_QT_GLOBALS_HPP_
 #define OMI_QT_GLOBALS_HPP_
 
-#include <arcanelog/Input.hpp>
+#include <arcanecore/log/Input.hpp>
 
 namespace global
 {
@@ -14,7 +14,7 @@ namespace global
 /*!
  * \brief The logging input to be used by QTO.
  */
-extern arclog::Input* logger;
+extern arc::log::Input* logger;
 
 } // namespace global
 

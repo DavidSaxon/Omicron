@@ -6,9 +6,9 @@
 #include <arcanecore/base/Preproc.hpp>
 #include <arcanecore/io/sys/FileSystemOperations.hpp>
 
-#include <metaengine/visitors/Shorthand.hpp>
+#include <arcanecore/config/visitors/Shorthand.hpp>
 
-#include <omicron/meta/MetaInline.hpp>
+#include <omicron/config/ConfigInline.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 
@@ -68,26 +68,25 @@ void SubsystemManager::startup()
     global::logger->debug << "SubsystemManager startup." << std::endl;
 
     // build the path to the base subsystem document
-    arc::io::sys::Path meta_path(omi::runtime::global::meta_root_dir);
-    meta_path << "subsystems" << "subsystems.json";
+    arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
+    config_path << "subsystems" << "subsystems.json";
 
     // build in-memory data
-    static const arc::str::UTF8String meta_compiled(
-        OMICRON_META_INLINE_RUNTIME_SUBSYSTEMS);
+    static const arc::str::UTF8String config_compiled(
+        OMICRON_CONFIG_INLINE_RUNTIME_SUBSYSTEMS);
 
     // construct the variant
-    m_metadata.reset(new metaengine::Variant(
-        meta_path,
-        &meta_compiled,
-        "windows"
+    m_config_data.reset(new arc::config::Variant(
+        config_path,
+        &config_compiled
     ));
     // use unix variant?
     #ifdef ARC_OS_UNIX
-        m_metadata->set_variant("linux");
+        m_config_data->set_variant("linux");
     #endif
 
     // get the subsystem searchpaths
-    std::vector<arc::io::sys::Path> m_search_path = *m_metadata->get(
+    std::vector<arc::io::sys::Path> m_search_path = *m_config_data->get(
         "search_paths", ME_PATHVECV
     );
     if(m_search_path.empty())
@@ -97,7 +96,7 @@ void SubsystemManager::startup()
     }
 
     // get the subsystem extension
-    m_extension =  "." + *m_metadata->get(
+    m_extension =  "." + *m_config_data->get(
         "extension", ME_U8STRV
     );
 
@@ -135,7 +134,7 @@ void SubsystemManager::startup()
     }
 
     // get the name of the register function
-    m_register_symbol = *m_metadata->get(
+    m_register_symbol = *m_config_data->get(
         "register_symbol", ME_U8STRV
     );
 
@@ -260,8 +259,8 @@ void SubsystemManager::bind_role(omi::ss::Subsystem::Role role)
     // get the name of the role
     arc::str::UTF8String role_name = omi::ss::Subsystem::role_to_string(role);
 
-    // load the metadata for the subsystems to use for this role
-    std::vector<arc::str::UTF8String> subsystem_names = *m_metadata->get(
+    // load the config data for the subsystems to use for this role
+    std::vector<arc::str::UTF8String> subsystem_names = *m_config_data->get(
         "roles." + role_name, ME_U8STRVECV
     );
 

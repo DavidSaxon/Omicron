@@ -1,12 +1,12 @@
 /*!
  * \file
  * \author David Saxon
- * \brief Functionality related to logging through Omicron using ArcaneLog.
+ * \brief Functionality related to logging through Omicron using ArcaneCore Log.
  */
 #ifndef OMICRON_REPORT_LOGGING_HPP_
 #define OMICRON_REPORT_LOGGING_HPP_
 
-#include <arcanelog/LogHandler.hpp>
+#include <arcanecore/log/LogHandler.hpp>
 
 #include "omicron/report/ReportGlobals.hpp"
 
@@ -22,7 +22,7 @@ namespace report
 /*!
  * \brief The global log handler for all Omicron logging
  */
-OMI_REPORT_GLOBAL_API extern arclog::LogHandler log_handler;
+OMI_REPORT_GLOBAL_API extern arc::log::LogHandler log_handler;
 
 //------------------------------------------------------------------------------
 //                                   FUNCTIONS

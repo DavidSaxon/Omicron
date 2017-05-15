@@ -33,16 +33,16 @@ namespace global
 {
 
 /*!
- * \brief The root directory where all Omicron's report meta programming is
+ * \brief The root directory where all Omicron's report configuration data is
  *        located within.
  */
-extern const arc::io::sys::Path meta_root_dir;
+extern const arc::io::sys::Path config_root_dir;
 
 /*!
- * \brief The directory where Omicron's logging meta programming is located
+ * \brief The directory where Omicron's logging configuration data is located
  *        within.
  */
-extern const arc::io::sys::Path meta_logging_dir;
+extern const arc::io::sys::Path config_logging_dir;
 
 } // namespace global
 } // namespace report

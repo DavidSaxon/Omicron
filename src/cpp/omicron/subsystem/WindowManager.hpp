@@ -72,11 +72,6 @@ public:
      * Sets the window mode to be used.
      */
     virtual void set_mode(WindowMode mode) = 0;
-
-    /*!
-     * \brief TODO
-     */
-    virtual void open_main_window() = 0;
 };
 
 } // namespace ss
