@@ -5,7 +5,11 @@
 #ifndef PXTRACE_SUBSYSTEM_HPP_
 #define PXTRACE_SUBSYSTEM_HPP_
 
+#include <memory>
+
 #include <omicron/subsystem/Renderer.hpp>
+
+#include "pxtrace/FrameBuffer.hpp"
 
 /*!
  * \brief TODO
@@ -34,10 +38,21 @@ public:
     virtual void startup();
 
     // override
+    virtual void shutdown();
+
+    // override
     virtual void setup_rendering();
 
     // override
     virtual void render();
+
+private:
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE ATTRIBUTES
+    //--------------------------------------------------------------------------
+
+    std::unique_ptr<FrameBuffer> m_frame_buffer;
 };
 
 #endif

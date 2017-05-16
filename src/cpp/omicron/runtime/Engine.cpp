@@ -91,11 +91,17 @@ bool Engine::cycle()
     if(!m_setup)
     {
         global::logger->info << "Performing first-frame setup" << std::endl;
-        // try
-        // {
+        try
+        {
             m_renderer->setup_rendering();
-        // }
-        // catch TODO
+        }
+        catch(const std::exception& exc)
+        {
+            global::logger->critical
+                << "Renderer setup failed with error: " << exc.what()
+                << std::endl;
+            return false;
+        }
         m_setup = true;
     }
 

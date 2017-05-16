@@ -2,9 +2,9 @@
 
 #include <cassert>
 
-#include <QtWidgets/QApplication>
-
 #include <omicron/report/Logging.hpp>
+
+#include <QtWidgets/QApplication>
 
 #include "omi_qt/QTGlobals.hpp"
 
@@ -114,6 +114,9 @@ void QTSubsystem::start_main_loop(omi::ss::Input::EngineCycleFunc engine_cycle)
 
     // reapply the window mode to make sure it has an effect
     set_mode(m_mode);
+
+    // TODO: REMOVE ME
+    m_main_window->resize(480, 270);
 
     // begin the main loop
     m_qt_application->exec();

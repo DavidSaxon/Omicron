@@ -4,6 +4,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 
 # source files for the omicron runtime
 set(PXTRACE_SRC
+    ../FrameBuffer.cpp
+    ../PXGlobals.cpp
     ../PXSubsystem.cpp
 )
 

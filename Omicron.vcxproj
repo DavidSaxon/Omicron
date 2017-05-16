@@ -60,6 +60,8 @@
     <ClCompile Include="src\cpp\builtin_subsystems\omi_gl\GLSubsystem.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='pxtrace'">
+    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\FrameBuffer.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\PXGlobals.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\PXSubsystem.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_bullet'">

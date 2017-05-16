@@ -2,10 +2,9 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEvent>
-#include <QtWidgets/QApplication>
-
 #include <QtGui/QOpenGLPaintDevice>
 #include <QtGui/QPainter>
+#include <QtWidgets/QApplication>
 
 //------------------------------------------------------------------------------
 //                                  CONSTRUCTORS
