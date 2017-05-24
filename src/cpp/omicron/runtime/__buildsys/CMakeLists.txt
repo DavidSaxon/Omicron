@@ -13,8 +13,7 @@ add_executable(omicron ${OMICRON_RUNTIME_SRC})
 
 # link libraries to the omicron runtime
 target_link_libraries(omicron
-    omicron_report
-    omicron_config
+    omicron_api
     arcanecore_collate
     arcanecore_config
     arcanecore_json

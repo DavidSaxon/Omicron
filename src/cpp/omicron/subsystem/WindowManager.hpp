@@ -5,7 +5,10 @@
 #ifndef OMICRON_SUBSYSTEM_WINDOWMANAGER_HPP_
 #define OMICRON_SUBSYSTEM_WINDOWMANAGER_HPP_
 
+#include <omicron/window/MainWindow.hpp>
+
 #include "omicron/subsystem/Subsystem.hpp"
+
 
 namespace omi
 {

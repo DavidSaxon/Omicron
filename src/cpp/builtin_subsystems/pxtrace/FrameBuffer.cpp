@@ -32,17 +32,37 @@ FrameBuffer::~FrameBuffer()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void FrameBuffer::render()
+const arc::gm::Vector2u& FrameBuffer::get_dimensions() const
 {
-    // TODO: REMOVE ME
-    // update the texture data
+    return m_dimensions;
+}
+
+void FrameBuffer::clear(const arc::gm::Vector3f& colour)
+{
     for(std::size_t i = 0; i < m_dimensions.x() * m_dimensions.y(); ++i)
     {
-        m_texture_data[(i * 3) + 0] = rand() % 256;
-        m_texture_data[(i * 3) + 1] = rand() % 256;
-        m_texture_data[(i * 3) + 2] = rand() % 256;
+        m_texture_data[(i * 3) + 0] =
+            static_cast<unsigned char>(colour.x() * 255.0F);
+        m_texture_data[(i * 3) + 1] =
+            static_cast<unsigned char>(colour.y() * 255.0F);
+        m_texture_data[(i * 3) + 2] =
+            static_cast<unsigned char>(colour.z() * 255.0F);
     }
+}
 
+void FrameBuffer::set(
+        const arc::gm::Vector2u& coords,
+        const arc::gm::Vector3f& colour)
+{
+    std::size_t index = (coords.y() * m_dimensions.x() * 3) + (coords.x() * 3);
+
+    m_texture_data[index + 0] = static_cast<unsigned char>(colour.x() * 255.0F);
+    m_texture_data[index + 1] = static_cast<unsigned char>(colour.y() * 255.0F);
+    m_texture_data[index + 2] = static_cast<unsigned char>(colour.z() * 255.0F);
+}
+
+void FrameBuffer::render()
+{
     // update the OPenGL texture
     glTexSubImage2D(
         GL_TEXTURE_2D,
@@ -71,7 +91,8 @@ void FrameBuffer::render()
 
 void FrameBuffer::init()
 {
-    glViewport(0, 0, m_dimensions.x(), m_dimensions.y());
+    // glViewport(0, 0, m_dimensions.x(), m_dimensions.y());
+    glViewport(0, 0, 1920, 1080);
 
     glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
 
@@ -148,13 +169,6 @@ void FrameBuffer::init()
 
     // setup the texture data
     m_texture_data.resize(m_dimensions.x() * m_dimensions.y() * 3, 0);
-    // TODO: REMOVE ME
-    for(std::size_t i = 0; i < m_dimensions.x() * m_dimensions.y(); ++i)
-    {
-        m_texture_data[(i * 3) + 0] = rand() % 256;
-        m_texture_data[(i * 3) + 1] = rand() % 256;
-        m_texture_data[(i * 3) + 2] = rand() % 256;
-    }
 
     // setup the texture
     glEnable(GL_TEXTURE_2D);

@@ -38,6 +38,12 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
+    const arc::gm::Vector2u& get_dimensions() const;
+
+    void clear(const arc::gm::Vector3f& colour);
+
+    void set(const arc::gm::Vector2u& coords, const arc::gm::Vector3f& colour);
+
     void render();
 
 private:

@@ -7,6 +7,7 @@
 
 #include "omicron/subsystem/Subsystem.hpp"
 
+
 namespace omi
 {
 namespace ss

@@ -1,6 +1,7 @@
-#include "omicron/report/ReportGlobals.hpp"
+#include "omicron/api/report/ReportGlobals.hpp"
 
-#include <omicron/config/ConfigGlobals.hpp>
+#include "omicron/api/config/ConfigGlobals.hpp"
+
 
 namespace omi
 {

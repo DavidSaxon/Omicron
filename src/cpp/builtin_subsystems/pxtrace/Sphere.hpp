@@ -2,61 +2,54 @@
  * \file
  * \author David Saxon
  */
-#ifndef OMICRON_WINDOW_MAINWINDOW_HPP_
-#define OMICRON_WINDOW_MAINWINDOW_HPP_
+#ifndef PXTRACE_SPHERE_HPP_
+#define PXTRACE_SPHERE_HPP_
 
 #include <arcanecore/base/lang/Restrictors.hpp>
+#include <arcanecore/base/memory/Alignment.hpp>
+#include <arcanecore/gm/Vector.hpp>
 
-namespace omi
-{
-namespace window
-{
 
-/*!
- * \brief Singleton object which controls the main window of Omicron.
- */
-class MainWindow
-    : private arc::lang::Noncopyable
-    , private arc::lang::Nonmovable
+class Sphere
+    : private arc::lang::Nonmovable
     , private arc::lang::Noncomparable
+    , public arc::memory::AlignedBase<Sphere>
 {
 public:
+
+    //--------------------------------------------------------------------------
+    //                                CONSTRUCTORS
+    //--------------------------------------------------------------------------
+
+    Sphere(const arc::gm::SimdVector3f& position, float radius);
+
+    Sphere(const Sphere& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    ~MainWindow();
-
-    //--------------------------------------------------------------------------
-    //                          PUBLIC STATIC FUNCTIONS
-    //--------------------------------------------------------------------------
-
-    /*!
-     * \brief Returns the singleton instance of the Omicron engine.
-     */
-    static MainWindow* get_instance();
+    ~Sphere();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // TODO:
-    // set mode
-    // set size
-    // set position
-    // etc
+    bool intersects(
+            const arc::gm::SimdVector3f& ray_origin,
+            const arc::gm::SimdVector3f& ray_direction,
+            float& t0,
+            float& t1) const;
 
 private:
 
     //--------------------------------------------------------------------------
-    //                            PRIVATE CONSTRUCTOR
+    //                             PRIVATE ATTRIBUTES
     //--------------------------------------------------------------------------
 
-    MainWindow();
+    arc::gm::SimdVector3f m_position;
+    float m_radius;
+    float m_radius2;
 };
-
-} // namespace window
-} // namespace omi
 
 #endif

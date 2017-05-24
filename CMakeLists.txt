@@ -8,7 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/linux_x86)
 
 # TODO: how to control debug builds - and compiler optimisations
 # compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++0x -Wall -Wno-varargs -fPIC -msse3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -std=c++0x -Wall -Wno-varargs -fPIC -msse3 -mfpmath=sse")
 
 # require GLEW
 find_package(GLEW REQUIRED)
@@ -40,10 +40,8 @@ link_directories(
 
 add_definitions(${OpenGL_DEFINITIONS})
 
-# config
-add_subdirectory(src/cpp/omicron/config/__buildsys)
-# report
-add_subdirectory(src/cpp/omicron/report/__buildsys)
+# api
+add_subdirectory(src/cpp/omicron/api/__buildsys)
 # omicron runtime
 add_subdirectory(src/cpp/omicron/runtime/__buildsys)
 # OpenAL subsystem

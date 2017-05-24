@@ -3,12 +3,13 @@
  * \author David Saxon
  * \brief Functionality related to logging through Omicron using ArcaneCore Log.
  */
-#ifndef OMICRON_REPORT_LOGGING_HPP_
-#define OMICRON_REPORT_LOGGING_HPP_
+#ifndef OMICRON_API_REPORT_LOGGING_HPP_
+#define OMICRON_API_REPORT_LOGGING_HPP_
 
 #include <arcanecore/log/LogHandler.hpp>
 
-#include "omicron/report/ReportGlobals.hpp"
+#include "omicron/api/report/ReportGlobals.hpp"
+
 
 namespace omi
 {

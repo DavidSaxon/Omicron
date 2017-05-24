@@ -19,7 +19,7 @@ set_target_properties(omi_gl
 # link libraries
 target_link_libraries(omi_gl
     ${GLEW_LIBRARIES}
-    omicron_report
+    omicron_api
     arcanecore_collate
     arcanecore_config
     arcanecore_log

@@ -2,9 +2,10 @@
 
 #include <arcanecore/config/Document.hpp>
 
-#include <omicron/report/Logging.hpp>
+#include <omicron/api/report/Logging.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
+
 
 namespace omi
 {

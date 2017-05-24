@@ -1,4 +1,5 @@
-#include "omicron/window/MainWindow.hpp"
+#include "omicron/api/window/MainWindow.hpp"
+
 
 namespace omi
 {
@@ -28,6 +29,10 @@ MainWindow* MainWindow::get_instance()
 //------------------------------------------------------------------------------
 
 // TODO:
+void MainWindow::set_mode(WindowMode mode)
+{
+    // TODO: pass through the subsystem
+}
 
 //------------------------------------------------------------------------------
 //                              PRIVATE CONSTRUCTOR

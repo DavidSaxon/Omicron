@@ -11,6 +11,7 @@
 #include <arcanecore/base/str/UTF8String.hpp>
 #include <arcanecore/io/dl/DLOperations.hpp>
 
+
 /*!
  * \brief Macro that should be used exactly once in a subsystem DSO in order
  *        to provided the needed symbols for Omicron to register the subsystem.

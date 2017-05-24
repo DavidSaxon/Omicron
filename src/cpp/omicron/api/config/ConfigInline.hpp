@@ -4,8 +4,8 @@
  * \brief File which is programmitcally generated to provide access to the
  *        contents of in memory ArcaneCore Config data for the Omicron Runtime.
  */
-#ifndef OMICRON_CONFIG_INLINE_HPP_
-#define OMICRON_CONFIG_INLINE_HPP_
+#ifndef OMICRON_API_CONFIG_INLINE_HPP_
+#define OMICRON_API_CONFIG_INLINE_HPP_
 
 #define OMICRON_CONFIG_INLINE_REPORT_LOGGING "{}"
 

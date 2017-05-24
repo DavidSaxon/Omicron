@@ -1,4 +1,4 @@
-#include "omicron/report/Logging.hpp"
+#include "omicron/api/report/Logging.hpp"
 
 #include <chrono>
 #include <ctime>
@@ -14,9 +14,9 @@
 #include <arcanecore/config/Variant.hpp>
 #include <arcanecore/config/visitors/Shorthand.hpp>
 
-#include <omicron/config/ConfigInline.hpp>
+#include "omicron/api/config/ConfigInline.hpp"
+#include "omicron/api/report/ReportGlobals.hpp"
 
-#include "omicron/report/ReportGlobals.hpp"
 
 // allows us to use std::localtime, without warning it's unsafe, maybe this is
 // bad idea, but I can't imagine it being too detrimental since it's only being

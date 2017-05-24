@@ -2,11 +2,12 @@
 
 #include <cassert>
 
-#include <omicron/report/Logging.hpp>
+#include <omicron/api/report/Logging.hpp>
 
 #include <QtWidgets/QApplication>
 
 #include "omi_qt/QTGlobals.hpp"
+
 
 //------------------------------------------------------------------------------
 //                               REGISTER SUBSYSTEM
@@ -32,7 +33,7 @@ static std::vector<char*> g_argv = {const_cast<char*>("omicron")};
 QTSubsystem::QTSubsystem()
     : m_qt_application(nullptr)
     , m_main_window   (nullptr)
-    , m_mode          (omi::ss::WindowManager::kModeWindowed)
+    , m_mode          (omi::ss::WindowManager::kModeFullscreen)
 {
 }
 
@@ -116,7 +117,7 @@ void QTSubsystem::start_main_loop(omi::ss::Input::EngineCycleFunc engine_cycle)
     set_mode(m_mode);
 
     // TODO: REMOVE ME
-    m_main_window->resize(480, 270);
+    // m_main_window->resize(480, 270);
 
     // begin the main loop
     m_qt_application->exec();

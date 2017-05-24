@@ -2,23 +2,19 @@
  * \file
  * \author David Saxon
  */
-#ifndef PXTRACE_SUBSYSTEM_HPP_
-#define PXTRACE_SUBSYSTEM_HPP_
+#ifndef PXTRACE_CAMERA_HPP_
+#define PXTRACE_CAMERA_HPP_
 
-#include <memory>
-#include <vector>
-
-#include <omicron/subsystem/Renderer.hpp>
-
-#include "pxtrace/Camera.hpp"
-#include "pxtrace/FrameBuffer.hpp"
-#include "pxtrace/Sphere.hpp"
+#include <arcanecore/base/lang/Restrictors.hpp>
+#include <arcanecore/base/memory/Alignment.hpp>
+#include <arcanecore/gm/Vector.hpp>
 
 
-/*!
- * \brief TODO
- */
-class PXSubsystem : public omi::ss::Renderer
+class Camera
+    : private arc::lang::Noncopyable
+    , private arc::lang::Nonmovable
+    , private arc::lang::Noncomparable
+    , public arc::memory::AlignedBase<Camera>
 {
 public:
 
@@ -26,29 +22,23 @@ public:
     //                                CONSTRUCTORS
     //--------------------------------------------------------------------------
 
-    PXSubsystem();
+    Camera(float focal_length);
 
     //--------------------------------------------------------------------------
-    //                                DESTRUCTORS
+    //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    virtual ~PXSubsystem();
+    ~Camera();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // override
-    virtual void startup();
+    float get_focal_length() const;
 
-    // override
-    virtual void shutdown();
+    const arc::gm::SimdVector3f& get_focal_point() const;
 
-    // override
-    virtual void setup_rendering();
-
-    // override
-    virtual void render();
+    void set_focal_length(float focal_length);
 
 private:
 
@@ -56,9 +46,8 @@ private:
     //                             PRIVATE ATTRIBUTES
     //--------------------------------------------------------------------------
 
-    std::unique_ptr<FrameBuffer> m_frame_buffer;
-    std::unique_ptr<Camera> m_camera;
-    std::vector<std::unique_ptr<Sphere>> m_spheres;
+    float m_focal_length;
+    arc::gm::SimdVector3f m_focal_point;
 };
 
 #endif

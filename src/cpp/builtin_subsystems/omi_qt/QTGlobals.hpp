@@ -8,6 +8,7 @@
 
 #include <arcanecore/log/Input.hpp>
 
+
 namespace global
 {
 

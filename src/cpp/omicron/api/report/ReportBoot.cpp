@@ -1,6 +1,7 @@
-#include "omicron/report/ReportBoot.hpp"
+#include "omicron/api/report/ReportBoot.hpp"
 
-#include "omicron/report/Logging.hpp"
+#include "omicron/api/report/Logging.hpp"
+
 
 namespace omi
 {

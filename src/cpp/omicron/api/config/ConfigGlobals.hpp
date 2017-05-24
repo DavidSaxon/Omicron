@@ -4,11 +4,12 @@
  *        Omicron.
  * \author David Saxon
  */
-#ifndef OMICRON_META_GLOBALS_HPP_
-#define OMICRON_META_GLOBALS_HPP_
+#ifndef OMICRON_API_CONFIG_GLOBALS_HPP_
+#define OMICRON_API_CONFIG_GLOBALS_HPP_
 
 #include <arcanecore/base/Preproc.hpp>
 #include <arcanecore/io/sys/Path.hpp>
+
 
 //------------------------------EXPORT DEFINITION-------------------------------
 #ifdef ARC_OS_WINDOWS

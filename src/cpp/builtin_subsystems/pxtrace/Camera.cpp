@@ -1,35 +1,40 @@
-#include "omi_al/ALSubsystem.hpp"
+#include "pxtrace/Camera.hpp"
 
-
-//------------------------------------------------------------------------------
-//                               REGISTER SUBSYSTEM
-//------------------------------------------------------------------------------
-
-OSS_REGISTER_SUBSYSTEM(ALSubsystem);
 
 //------------------------------------------------------------------------------
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-ALSubsystem::ALSubsystem()
+Camera::Camera(float focal_length)
+    : m_focal_length(focal_length)
+    , m_focal_point (0.0F, 0.0F, -focal_length)
 {
-    // TODO: setup logger
 }
 
 //------------------------------------------------------------------------------
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-ALSubsystem::~ALSubsystem()
+Camera::~Camera()
 {
-
 }
 
 //------------------------------------------------------------------------------
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void ALSubsystem::startup()
+float Camera::get_focal_length() const
 {
-    // TODO:
+    return m_focal_length;
+}
+
+const arc::gm::SimdVector3f& Camera::get_focal_point() const
+{
+    return m_focal_point;
+}
+
+void Camera::set_focal_length(float focal_length)
+{
+    m_focal_length = focal_length;
+    m_focal_point = arc::gm::SimdVector3f(0.0F, 0.0F, -focal_length);
 }

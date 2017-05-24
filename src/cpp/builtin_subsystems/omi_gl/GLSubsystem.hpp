@@ -7,6 +7,7 @@
 
 #include <omicron/subsystem/Renderer.hpp>
 
+
 /*!
  * \brief TODO
  */

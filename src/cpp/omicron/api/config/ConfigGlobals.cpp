@@ -1,4 +1,5 @@
-#include "omicron/config/ConfigGlobals.hpp"
+#include "omicron/api/config/ConfigGlobals.hpp"
+
 
 namespace omi
 {

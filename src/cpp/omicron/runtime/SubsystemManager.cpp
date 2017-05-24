@@ -8,9 +8,10 @@
 
 #include <arcanecore/config/visitors/Shorthand.hpp>
 
-#include <omicron/config/ConfigInline.hpp>
+#include <omicron/api/config/ConfigInline.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
+
 
 namespace omi
 {

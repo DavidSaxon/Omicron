@@ -1,6 +1,7 @@
 #include "omicron/runtime/RuntimeGlobals.hpp"
 
-#include <omicron/config/ConfigGlobals.hpp>
+#include <omicron/api/config/ConfigGlobals.hpp>
+
 
 namespace omi
 {

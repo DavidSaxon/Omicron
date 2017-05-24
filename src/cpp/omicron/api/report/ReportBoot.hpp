@@ -4,11 +4,12 @@
  * \brief Functionality for starting up and shutting down the Omicron reporting
  *        module.
  */
-#ifndef OMICRON_REPORT_BOOT_HPP_
-#define OMICRON_REPORT_BOOT_HPP_
+#ifndef OMICRON_API_REPORT_BOOT_HPP_
+#define OMICRON_API_REPORT_BOOT_HPP_
 // TODO: hide from public API
 
-#include "omicron/report/ReportGlobals.hpp"
+#include "omicron/api/report/ReportGlobals.hpp"
+
 
 namespace omi
 {

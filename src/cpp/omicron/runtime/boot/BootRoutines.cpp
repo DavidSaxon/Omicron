@@ -3,7 +3,7 @@
 #include <arcanecore/base/Exceptions.hpp>
 #include <arcanecore/base/Preproc.hpp>
 
-#include <omicron/report/ReportBoot.hpp>
+#include <omicron/api/report/ReportBoot.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/SubsystemManager.hpp"
@@ -12,6 +12,7 @@
 #ifdef ARC_OS_WINDOWS
     #include <windows.h>
 #endif
+
 
 namespace omi
 {

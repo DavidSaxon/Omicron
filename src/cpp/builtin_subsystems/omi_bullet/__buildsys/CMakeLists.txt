@@ -18,7 +18,7 @@ set_target_properties(omi_bullet
 )
 # link libraries
 target_link_libraries(omi_bullet
-    omicron_report
+    omicron_api
     arcanecore_collate
     arcanecore_config
     arcanecore_log

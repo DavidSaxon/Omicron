@@ -18,7 +18,7 @@ set_target_properties(omi_al
 )
 # link libraries
 target_link_libraries(omi_al
-    omicron_report
+    omicron_api
     arcanecore_collate
     arcanecore_config
     arcanecore_log
