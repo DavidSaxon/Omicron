@@ -50,30 +50,30 @@ int Engine::execute()
         return -1;
     }
 
-    // get the subsystem manager
-    SubsystemManager* ss_manager = SubsystemManager::get_instance();
-    // get the window manager subsystem
-    m_window_manager = dynamic_cast<omi::ss::WindowManager*>(
-        ss_manager->get_subsystem(omi::ss::Subsystem::kRoleWindowManager)
-    );
-    assert(m_window_manager != nullptr);
-    // get the input subsystem
-    m_input = dynamic_cast<omi::ss::Input*>(
-        ss_manager->get_subsystem(omi::ss::Subsystem::kRoleInput)
-    );
-    assert(m_input != nullptr);
-    // get the renderer subsystem
-    m_renderer = dynamic_cast<omi::ss::Renderer*>(
-        ss_manager->get_subsystem(omi::ss::Subsystem::kRoleRenderer)
-    );
-    assert(m_renderer != nullptr);
+    // // get the subsystem manager
+    // SubsystemManager* ss_manager = SubsystemManager::get_instance();
+    // // get the window manager subsystem
+    // m_window_manager = dynamic_cast<omi::ss::WindowManager*>(
+    //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleWindowManager)
+    // );
+    // assert(m_window_manager != nullptr);
+    // // get the input subsystem
+    // m_input = dynamic_cast<omi::ss::Input*>(
+    //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleInput)
+    // );
+    // assert(m_input != nullptr);
+    // // get the renderer subsystem
+    // m_renderer = dynamic_cast<omi::ss::Renderer*>(
+    //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleRenderer)
+    // );
+    // assert(m_renderer != nullptr);
 
-    // TODO: move this somewhere...
-    // m_window_manager->set_mode(omi::ss::WindowManager::kModeFullscreen);
+    // // TODO: move this somewhere...
+    // // m_window_manager->set_mode(omi::ss::WindowManager::kModeFullscreen);
 
-    global::logger->info << "Starting main loop" << std::endl;
-    // start the main loop
-    m_input->start_main_loop(&Engine::cycle_static);
+    // global::logger->info << "Starting main loop" << std::endl;
+    // // start the main loop
+    // m_input->start_main_loop(&Engine::cycle_static);
 
     m_setup = false;
     if(!omi::runtime::boot::shutdown_routine())

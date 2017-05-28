@@ -8,7 +8,7 @@ namespace config
 namespace global
 {
 
-OMI_CONFIG_GLOBAL_API const arc::io::sys::Path root_dir(
+OMI_API_GLOBAL const arc::io::sys::Path root_dir(
     {arc::str::UTF8String("config"), arc::str::UTF8String("omicron")});
 
 } // namespace global

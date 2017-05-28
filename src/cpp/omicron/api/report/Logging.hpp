@@ -8,7 +8,7 @@
 
 #include <arcanecore/log/LogHandler.hpp>
 
-#include "omicron/api/report/ReportGlobals.hpp"
+#include "omicron/api/API.hpp"
 
 
 namespace omi
@@ -23,7 +23,7 @@ namespace report
 /*!
  * \brief The global log handler for all Omicron logging
  */
-OMI_REPORT_GLOBAL_API extern arc::log::LogHandler log_handler;
+OMI_API_GLOBAL extern arc::log::LogHandler log_handler;
 
 //------------------------------------------------------------------------------
 //                                   FUNCTIONS

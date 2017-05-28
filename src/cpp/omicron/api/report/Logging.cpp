@@ -34,7 +34,7 @@ namespace report
 //                                    GLOBALS
 //------------------------------------------------------------------------------
 
-arc::log::LogHandler log_handler;
+OMI_API_GLOBAL arc::log::LogHandler log_handler;
 
 /*!
  * \brief The MetaEngine Variant for logging configuration.

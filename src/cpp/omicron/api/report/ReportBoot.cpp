@@ -12,12 +12,12 @@ namespace report
 //                                   FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_REPORT_GLOBAL_API void startup_routine()
+OMI_API_GLOBAL void startup_routine()
 {
     omi::report::logging_startup_routine();
 }
 
-OMI_REPORT_GLOBAL_API void shutdown_routine()
+OMI_API_GLOBAL void shutdown_routine()
 {
 }
 

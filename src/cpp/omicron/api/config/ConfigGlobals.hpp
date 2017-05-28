@@ -10,18 +10,8 @@
 #include <arcanecore/base/Preproc.hpp>
 #include <arcanecore/io/sys/Path.hpp>
 
+#include "omicron/api/API.hpp"
 
-//------------------------------EXPORT DEFINITION-------------------------------
-#ifdef ARC_OS_WINDOWS
-    #ifdef OMI_CONFIG_GLOBAL_EXPORT
-        #define OMI_CONFIG_GLOBAL_API __declspec(dllexport)
-    #else
-        #define OMI_CONFIG_GLOBAL_API __declspec(dllimport)
-    #endif
-#else
-    #define OMI_CONFIG_GLOBAL_API
-#endif
-//------------------------------------------------------------------------------
 
 namespace omi
 {
@@ -38,7 +28,7 @@ namespace global
 /*!
  * \brief The root directory where all Omicron config data is located within.
  */
-OMI_CONFIG_GLOBAL_API extern const arc::io::sys::Path root_dir;
+OMI_API_GLOBAL extern const arc::io::sys::Path root_dir;
 
 } // namespace global
 } // namespace config

@@ -1,12 +1,7 @@
 echo ----------------
-echo omicron_config
+echo omicron_api
 echo ----------------
-msbuild ..\Omicron.sln /v:n /p:Configuration=omicron_config
-
-echo ----------------
-echo omicron_report
-echo ----------------
-msbuild ..\Omicron.sln /v:n /p:Configuration=omicron_report
+msbuild ..\Omicron.sln /v:n /p:Configuration=omicron_api
 
 echo ----------------
 echo omicron_runtime

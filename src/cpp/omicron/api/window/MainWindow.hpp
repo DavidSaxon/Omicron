@@ -55,6 +55,32 @@ public:
     // set position
     // etc
 
+    // TODO: is minimized
+
+    // TODO: minimise
+
+    // TODO: expand
+
+    // TODO: is focused
+
+    // TODO: focus
+
+protected:
+
+    //--------------------------------------------------------------------------
+    //                         PROTECTED MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief TODO:
+     */
+    void open();
+
+    /*!
+     * \brief TODO:
+     */
+    void close();
+
 private:
 
     //--------------------------------------------------------------------------

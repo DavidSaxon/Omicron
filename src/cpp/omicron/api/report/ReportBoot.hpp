@@ -8,6 +8,7 @@
 #define OMICRON_API_REPORT_BOOT_HPP_
 // TODO: hide from public API
 
+#include "omicron/api/API.hpp"
 #include "omicron/api/report/ReportGlobals.hpp"
 
 
@@ -23,12 +24,12 @@ namespace report
 /*!
  * \brief Initializes the report module.
  */
-OMI_REPORT_GLOBAL_API void startup_routine();
+OMI_API_GLOBAL void startup_routine();
 
 /*!
  * \brief Shutsdown the report module.
  */
-OMI_REPORT_GLOBAL_API void shutdown_routine();
+OMI_API_GLOBAL void shutdown_routine();
 
 } // namespace report
 } // namespace omi

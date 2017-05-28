@@ -15,7 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\omicron\config\ConfigGlobals.cpp">
+    <ClCompile Include="src\cpp\omicron\api\config\ConfigGlobals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
