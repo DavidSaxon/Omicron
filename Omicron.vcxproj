@@ -35,19 +35,20 @@
     <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\window\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">
     <ClCompile Include="src\cpp\omicron\runtime\Main.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\Engine.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\RuntimeGlobals.cpp" />
-    <ClCompile Include="src\cpp\omicron\runtime\SubsystemManager.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\boot\BootLogging.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\boot\BootRoutines.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\subsystem\SubsystemManager.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\subsystem\WindowSubsystem.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_qt'">
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\MainWindow.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QTBootstrap.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QTGlobals.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QTSubsystem.cpp" />
     <ClCompile Include="gen\omi_qt\*" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_gl'">

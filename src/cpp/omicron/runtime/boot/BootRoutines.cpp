@@ -6,8 +6,8 @@
 #include <omicron/api/report/ReportBoot.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
-#include "omicron/runtime/SubsystemManager.hpp"
 #include "omicron/runtime/boot/BootLogging.hpp"
+#include "omicron/runtime/subsystem/SubsystemManager.hpp"
 
 #ifdef ARC_OS_WINDOWS
     #include <windows.h>
@@ -59,7 +59,7 @@ bool startup_routine()
         omi::report::startup_routine();
         omi::runtime::boot::startup_logging_subroutine();
         os_startup_routine();
-        omi::runtime::SubsystemManager::get_instance()->startup();
+        omi::runtime::ss::SubsystemManager::get_instance()->startup();
     }
     // TODO: can we abuse the runtime exception and naming trick like Katana...
     catch(const arc::ex::ArcException& exc)
@@ -87,7 +87,7 @@ bool shutdown_routine()
 {
     try
     {
-        omi::runtime::SubsystemManager::get_instance()->shutdown();
+        omi::runtime::ss::SubsystemManager::get_instance()->shutdown();
         omi::runtime::boot::startup_logging_subroutine();
         omi::report::shutdown_routine();
     }

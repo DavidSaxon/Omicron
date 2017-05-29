@@ -20,22 +20,15 @@ MainWindow::~MainWindow()
 
 MainWindow* MainWindow::get_instance()
 {
-    static MainWindow instance;
-    return &instance;
+    // TODO: use factory
+    return nullptr;
+
+    // static MainWindow instance;
+    // return &instance;
 }
 
 //------------------------------------------------------------------------------
-//                            PUBLIC MEMBER FUNCTIONS
-//------------------------------------------------------------------------------
-
-// TODO:
-void MainWindow::set_mode(WindowMode mode)
-{
-    // TODO: pass through the subsystem
-}
-
-//------------------------------------------------------------------------------
-//                              PRIVATE CONSTRUCTOR
+//                             PROTECTED CONSTRUCTOR
 //------------------------------------------------------------------------------
 
 MainWindow::MainWindow()

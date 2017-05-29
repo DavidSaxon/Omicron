@@ -47,7 +47,12 @@ public:
     /*!
      * \brief TODO:
      */
-    void set_mode(WindowMode mode);
+    virtual WindowMode get_mode() const = 0;
+
+    /*!
+     * \brief TODO:
+     */
+    virtual void set_mode(WindowMode mode) = 0;
 
     // TODO:
     // set mode
@@ -74,17 +79,15 @@ protected:
     /*!
      * \brief TODO:
      */
-    void open();
+    virtual void open() = 0;
 
     /*!
      * \brief TODO:
      */
-    void close();
-
-private:
+    virtual void close() = 0;
 
     //--------------------------------------------------------------------------
-    //                            PRIVATE CONSTRUCTOR
+    //                           PROTECTED CONSTRUCTOR
     //--------------------------------------------------------------------------
 
     MainWindow();

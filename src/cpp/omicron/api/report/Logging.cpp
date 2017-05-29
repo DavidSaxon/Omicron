@@ -175,7 +175,7 @@ static void init_std_output()
     // stdoutput
     std_output = new arc::log::StdOutput();
     // enabled?
-    bool enabled = *g_config_data->get("outputs.StdOutput.enabled", ME_BOOLV);
+    bool enabled = *g_config_data->get("outputs.StdOutput.enabled", AC_BOOLV);
     std_output->set_enabled(enabled);
     // verbosity
     std_output->set_verbosity_level(*g_config_data->get(
@@ -184,7 +184,7 @@ static void init_std_output()
     ));
     // use ansi?
     bool use_ansi_b =
-        *g_config_data->get("outputs.StdOutput.use_ansi", ME_BOOLV);
+        *g_config_data->get("outputs.StdOutput.use_ansi", AC_BOOLV);
     arc::log::StdOutput::UseANSI use_ansi = arc::log::StdOutput::USEANSI_NEVER;
     if(use_ansi_b)
     {
@@ -199,7 +199,7 @@ static void init_file_output()
 {
     // build the path to write logs to
     arc::io::sys::Path log_path =
-        *g_config_data->get("outputs.FileOutput.base_path", ME_PATHV);
+        *g_config_data->get("outputs.FileOutput.base_path", AC_PATHV);
 
     // get time
     std::chrono::time_point<std::chrono::system_clock> now =
@@ -207,7 +207,7 @@ static void init_file_output()
     time_t now_t = std::chrono::system_clock::to_time_t(now);
     // get the syntax to read the date as
     arc::str::UTF8String date_syntax =
-        *g_config_data->get("outputs.FileOutput.path_date_syntax", ME_U8STRV);
+        *g_config_data->get("outputs.FileOutput.path_date_syntax", AC_U8STRV);
     // get the date
     char date_buffer[50];
     strftime(
@@ -219,7 +219,7 @@ static void init_file_output()
     log_path << date_buffer;
     // get the syntax to read the time as
     arc::str::UTF8String time_syntax =
-        *g_config_data->get("outputs.FileOutput.path_time_syntax", ME_U8STRV);
+        *g_config_data->get("outputs.FileOutput.path_time_syntax", AC_U8STRV);
     // get the time
     char time_buffer[50];
     strftime(
@@ -231,7 +231,7 @@ static void init_file_output()
     arc::str::UTF8String file_name(time_buffer);
     // get the file extension
     arc::str::UTF8String file_extension =
-        *g_config_data->get("outputs.FileOutput.file_extension", ME_U8STRV);
+        *g_config_data->get("outputs.FileOutput.file_extension", AC_U8STRV);
     file_name << "." << file_extension;
     // update the path
     log_path << file_name;
@@ -240,7 +240,7 @@ static void init_file_output()
     file_output = new arc::log::FileOutput(log_path, false);
 
     // enabled?
-    bool enabled = *g_config_data->get("outputs.FileOutput.enabled", ME_BOOLV);
+    bool enabled = *g_config_data->get("outputs.FileOutput.enabled", AC_BOOLV);
     // need to test this since enabling the file writer opens it
     try
     {

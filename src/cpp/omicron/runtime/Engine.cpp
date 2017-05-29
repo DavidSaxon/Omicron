@@ -5,8 +5,8 @@
 #include <omicron/subsystem/WindowManager.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
-#include "omicron/runtime/SubsystemManager.hpp"
 #include "omicron/runtime/boot/BootRoutines.hpp"
+#include "omicron/runtime/subsystem/SubsystemManager.hpp"
 
 
 namespace omi
@@ -50,8 +50,8 @@ int Engine::execute()
         return -1;
     }
 
-    // // get the subsystem manager
-    // SubsystemManager* ss_manager = SubsystemManager::get_instance();
+    // get the subsystem manager
+    ss::SubsystemManager* ss_manager = ss::SubsystemManager::get_instance();
     // // get the window manager subsystem
     // m_window_manager = dynamic_cast<omi::ss::WindowManager*>(
     //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleWindowManager)
@@ -71,9 +71,9 @@ int Engine::execute()
     // // TODO: move this somewhere...
     // // m_window_manager->set_mode(omi::ss::WindowManager::kModeFullscreen);
 
-    // global::logger->info << "Starting main loop" << std::endl;
-    // // start the main loop
-    // m_input->start_main_loop(&Engine::cycle_static);
+    global::logger->info << "Starting main loop" << std::endl;
+    // start the main loop
+    ss_manager->start_main_loop(&Engine::cycle_static);
 
     m_setup = false;
     if(!omi::runtime::boot::shutdown_routine())

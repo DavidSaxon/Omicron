@@ -3,9 +3,10 @@ set(OMICRON_RUNTIME_SRC
     ../Main.cpp
     ../Engine.cpp
     ../RuntimeGlobals.cpp
-    ../SubsystemManager.cpp
     ../boot/BootLogging.cpp
     ../boot/BootRoutines.cpp
+    ../subsystem/SubsystemManager.cpp
+    ../subsystem/WindowSubsystem.cpp
 )
 
 # build the omicron runtime executable

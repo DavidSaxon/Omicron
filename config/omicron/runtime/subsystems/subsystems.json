@@ -3,12 +3,11 @@
     "extension": "dll",
     "roles":
     {
-        "window_manager": ["omi_qt"],
-        "input": ["omi_qt"],
-        "ui": ["omi_qt"],
-        "renderer": ["pxtrace", "omi_gl"],
-        "physics": ["omi_bullet"],
-        "audio": ["omi_al"]
-    },
-    "register_symbol": "oss_register_lib"
+        "window": "omi_qt"
+        // "input": ["omi_qt"],
+        // "ui": ["omi_qt"],
+        // "renderer": ["pxtrace", "omi_gl"],
+        // "physics": ["omi_bullet"],
+        // "audio": ["omi_al"]
+    }
 }

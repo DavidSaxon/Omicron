@@ -4,6 +4,8 @@ set(API_SRC
     ../report/Logging.cpp
     ../report/ReportBoot.cpp
     ../report/ReportGlobals.cpp
+
+    ../window/MainWindow.cpp
 )
 
 add_library(omicron_api SHARED ${API_SRC})
