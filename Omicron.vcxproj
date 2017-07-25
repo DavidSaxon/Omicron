@@ -32,6 +32,9 @@
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_api'">
     <ClCompile Include="src\cpp\omicron\api\config\ConfigGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\asset\AssetGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\asset\AssetLibrary.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\asset\resource\OBJResource.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp" />
@@ -47,8 +50,9 @@
     <ClCompile Include="src\cpp\omicron\runtime\subsystem\WindowSubsystem.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_qt'">
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QTBootstrap.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QTGlobals.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtBootstrap.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtGlobals.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtMainWindow.cpp" />
     <ClCompile Include="gen\omi_qt\*" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_gl'">

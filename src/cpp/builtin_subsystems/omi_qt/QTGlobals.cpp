@@ -1,4 +1,4 @@
-#include "omi_qt/QTGlobals.hpp"
+#include "omi_qt/QtGlobals.hpp"
 
 
 namespace omi_qt

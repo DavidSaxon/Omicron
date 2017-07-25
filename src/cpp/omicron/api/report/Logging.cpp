@@ -130,7 +130,7 @@ void logging_startup_routine()
     arc::config::Document::set_load_fallback_reporter(std_load_reporter);
     arc::config::Document::set_get_fallback_reporter(std_get_reporter);
 
-    // // build the path to the base logging document
+    // build the path to the base logging document
     arc::io::sys::Path config_path(omi::report::global::config_logging_dir);
     config_path << "logging.json";
 

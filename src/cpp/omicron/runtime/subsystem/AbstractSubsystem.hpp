@@ -48,10 +48,15 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Loads the subsystem from the given dynamic library, starts it,
-     *        and binds it into Omicron.
+     * \brief Loads the subsystem from the given dynamic library and binds it
+     *        into Omicron.
      */
     virtual void bind(arc::io::dl::Handle library) = 0;
+
+    /*!
+     * \brief Starts up this subsystem.
+     */
+    virtual void startup() = 0;
 
     /*!
      * \brief Unbinds the subsystem from Omicron and shuts it down.

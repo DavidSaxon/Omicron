@@ -4,7 +4,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 
 # source files for the omicron runtime
 set(OMI_GL_SRC
-    ../GLSubsystem.cpp
+    ../GLBootstrap.cpp
+    ../GLGlobals.cpp
 )
 
 # build the omicron runtime executable

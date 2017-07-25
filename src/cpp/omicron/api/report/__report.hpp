@@ -3,8 +3,8 @@
  * \brief Documents the omi::report namespace.
  * \author David Saxon
  */
-#ifndef OMICRON_REPORT_HPP_
-#define OMICRON_REPORT_HPP_
+#ifndef OMICRON_API_REPORT_HPP_
+#define OMICRON_API_REPORT_HPP_
 
 namespace omi
 {

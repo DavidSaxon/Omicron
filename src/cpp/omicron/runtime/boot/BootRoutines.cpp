@@ -3,6 +3,7 @@
 #include <arcanecore/base/Exceptions.hpp>
 #include <arcanecore/base/Preproc.hpp>
 
+#include <omicron/api/asset/AssetLibrary.hpp>
 #include <omicron/api/report/ReportBoot.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
@@ -59,7 +60,8 @@ bool startup_routine()
         omi::report::startup_routine();
         omi::runtime::boot::startup_logging_subroutine();
         os_startup_routine();
-        omi::runtime::ss::SubsystemManager::get_instance()->startup();
+        omi::asset::AssetLibrary::instance()->startup_routine();
+        omi::runtime::ss::SubsystemManager::instance()->startup();
     }
     // TODO: can we abuse the runtime exception and naming trick like Katana...
     catch(const arc::ex::ArcException& exc)
@@ -87,7 +89,8 @@ bool shutdown_routine()
 {
     try
     {
-        omi::runtime::ss::SubsystemManager::get_instance()->shutdown();
+        omi::runtime::ss::SubsystemManager::instance()->shutdown();
+        omi::asset::AssetLibrary::instance()->shutdown_routine();
         omi::runtime::boot::startup_logging_subroutine();
         omi::report::shutdown_routine();
     }

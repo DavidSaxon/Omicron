@@ -1,0 +1,3 @@
+﻿res/builtin/mesh/bunny.obj,data/resources.arccol,0,0,205917
+res/pxtrace/shaders/framebuffer.fragment.glsl,data/resources.arccol,0,205917,275
+res/pxtrace/shaders/framebuffer.vertex.glsl,data/resources.arccol,0,206192,261

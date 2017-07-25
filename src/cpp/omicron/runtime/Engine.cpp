@@ -1,8 +1,6 @@
 #include "omicron/runtime/Engine.hpp"
 
-#include <omicron/subsystem/Input.hpp>
-#include <omicron/subsystem/Renderer.hpp>
-#include <omicron/subsystem/WindowManager.hpp>
+#include <omicron/api/window/MainWindow.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/boot/BootRoutines.hpp"
@@ -26,15 +24,15 @@ Engine::~Engine()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-Engine* Engine::get_instance()
+Engine* Engine::instance()
 {
-    static Engine engine;
-    return &engine;
+    static Engine inst;
+    return &inst;
 }
 
 bool Engine::cycle_static()
 {
-    return Engine::get_instance()->cycle();
+    return Engine::instance()->cycle();
 }
 
 //------------------------------------------------------------------------------
@@ -50,26 +48,13 @@ int Engine::execute()
         return -1;
     }
 
-    // get the subsystem manager
-    ss::SubsystemManager* ss_manager = ss::SubsystemManager::get_instance();
-    // // get the window manager subsystem
-    // m_window_manager = dynamic_cast<omi::ss::WindowManager*>(
-    //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleWindowManager)
-    // );
-    // assert(m_window_manager != nullptr);
-    // // get the input subsystem
-    // m_input = dynamic_cast<omi::ss::Input*>(
-    //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleInput)
-    // );
-    // assert(m_input != nullptr);
-    // // get the renderer subsystem
-    // m_renderer = dynamic_cast<omi::ss::Renderer*>(
-    //     ss_manager->get_subsystem(omi::ss::Subsystem::kRoleRenderer)
-    // );
-    // assert(m_renderer != nullptr);
+    // TODO: need to do first time window setup somewhere...
+    omi::window::MainWindow* main_window =
+        omi::window::MainWindow::instance();
+    main_window->set_mode(omi::window::kModeFullscreen);
 
-    // // TODO: move this somewhere...
-    // // m_window_manager->set_mode(omi::ss::WindowManager::kModeFullscreen);
+    // get the subsystem manager
+    ss::SubsystemManager* ss_manager = ss::SubsystemManager::instance();
 
     global::logger->info << "Starting main loop" << std::endl;
     // start the main loop
@@ -92,22 +77,24 @@ bool Engine::cycle()
     if(!m_setup)
     {
         global::logger->info << "Performing first-frame setup" << std::endl;
-        try
-        {
-            m_renderer->setup_rendering();
-        }
-        catch(const std::exception& exc)
-        {
-            global::logger->critical
-                << "Renderer setup failed with error: " << exc.what()
-                << std::endl;
-            return false;
-        }
+        // TODO: setup rendering
+        // try
+        // {
+        //     m_renderer->setup_rendering();
+        // }
+        // catch(const std::exception& exc)
+        // {
+        //     global::logger->critical
+        //         << "Renderer setup failed with error: " << exc.what()
+        //         << std::endl;
+        //     return false;
+        // }
         m_setup = true;
     }
 
+    // TODO:
     // render the frame
-    m_renderer->render();
+    // m_renderer->render();
 
     return true;
 }
@@ -117,10 +104,7 @@ bool Engine::cycle()
 //------------------------------------------------------------------------------
 
 Engine::Engine()
-    : m_setup         (false)
-    , m_window_manager(nullptr)
-    , m_input         (nullptr)
-    , m_renderer      (nullptr)
+    : m_setup(false)
 {
 }
 

@@ -18,7 +18,7 @@ namespace ss
 {
 
 /*!
- * \brief Object used to bootstrap a window subsystem and enter Omicron's main
+ * \brief Object used to bootstrap a window subsystem and enters Omicron's main
  *        loop.
  */
 class Bootstrap
@@ -69,7 +69,7 @@ public:
      */
     virtual void start_main_loop(EngineCycleFunc* engine_cycle_func) = 0;
 
-// protected:
+protected:
 
     //--------------------------------------------------------------------------
     //                           PROTECTED CONSTRUCTOR

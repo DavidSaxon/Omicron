@@ -1,18 +1,22 @@
-#include "omi_qt/QTBootstrap.hpp"
+#include "omi_qt/QtBootstrap.hpp"
 
 #include <omicron/api/report/Logging.hpp>
 #include <omicron/api/window/subsystem/WindowInterface.hpp>
 
 #include <QtWidgets/QApplication>
 
-#include "omi_qt/QTGlobals.hpp"
+#include "omi_qt/QtGlobals.hpp"
+#include "omi_qt/QtMainWindow.hpp"
 
 
 //------------------------------------------------------------------------------
 //                               REGISTER SUBSYSTEM
 //------------------------------------------------------------------------------
 
-OMICRON_API_WINDOW_SUBSYSTEM_REGISTER(omi_qt::QTBootstrap)
+OMICRON_API_WINDOW_SUBSYSTEM_REGISTER(
+    omi_qt::QtBootstrap,
+    omi_qt::QtMainWindow
+);
 
 namespace omi_qt
 {
@@ -32,7 +36,7 @@ static std::vector<char*> g_argv = {const_cast<char*>("omicron")};
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-QTBootstrap::~QTBootstrap()
+QtBootstrap::~QtBootstrap()
 {
 }
 
@@ -40,9 +44,9 @@ QTBootstrap::~QTBootstrap()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-QTBootstrap* QTBootstrap::get_instance()
+QtBootstrap* QtBootstrap::get_instance()
 {
-    static QTBootstrap instance;
+    static QtBootstrap instance;
     return &instance;
 }
 
@@ -50,7 +54,7 @@ QTBootstrap* QTBootstrap::get_instance()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void QTBootstrap::startup()
+void QtBootstrap::startup()
 {
     // set up logging
     global::logger =
@@ -62,13 +66,13 @@ void QTBootstrap::startup()
     m_qt_application = new QApplication(g_argc, &g_argv[0]);
 
     // instantiate the main window
-    // TODO:
+    QtMainWindow::get_instance();
 
     // super call
     omi::window::ss::Bootstrap::startup();
 }
 
-void QTBootstrap::shutdown()
+void QtBootstrap::shutdown()
 {
     global::logger->info << "Shutting down Omicron Qt subsystem." << std::endl;
 
@@ -85,15 +89,15 @@ void QTBootstrap::shutdown()
     omi::window::ss::Bootstrap::shutdown();
 }
 
-void QTBootstrap::start_main_loop(
+void QtBootstrap::start_main_loop(
         omi::window::ss::EngineCycleFunc* engine_cycle_func)
 {
     global::logger->debug << "Entering the main loop." << std::endl;
 
-    // TODO: set main loop on main window
-
-
-    // TODO: show the main window
+    // set main loop on main window
+    QtMainWindow::get_instance()->set_engine_cycle(engine_cycle_func);
+    // show the main window
+    QtMainWindow::get_instance()->show();
 
     // begin the main loop
     m_qt_application->exec();
@@ -105,7 +109,7 @@ void QTBootstrap::start_main_loop(
 //                              PRIVATE CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-QTBootstrap::QTBootstrap()
+QtBootstrap::QtBootstrap()
     : omi::window::ss::Bootstrap()
     , m_qt_application          (nullptr)
 {

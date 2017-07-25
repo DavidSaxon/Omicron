@@ -1,3 +1,6 @@
+// hide from doxygen
+#ifndef IN_DOXYGEN
+
 /*!
  * \file
  * \author David Saxon
@@ -6,7 +9,6 @@
  */
 #ifndef OMICRON_API_REPORT_BOOT_HPP_
 #define OMICRON_API_REPORT_BOOT_HPP_
-// TODO: hide from public API
 
 #include "omicron/api/API.hpp"
 #include "omicron/api/report/ReportGlobals.hpp"
@@ -35,3 +37,6 @@ OMI_API_GLOBAL void shutdown_routine();
 } // namespace omi
 
 #endif
+
+#endif
+// IN_DOXYGEN

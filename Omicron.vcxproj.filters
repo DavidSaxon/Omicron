@@ -15,16 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\omicron\api\config\ConfigGlobals.cpp">
+    <ClCompile Include="src\cpp\omicron\runtime\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp">
+    <ClCompile Include="src\cpp\omicron\runtime\Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp">
+    <ClCompile Include="src\cpp\omicron\runtime\RuntimeGlobals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp">
+    <ClCompile Include="src\cpp\omicron\runtime\boot\BootLogging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\omicron\runtime\boot\BootRoutines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\omicron\runtime\subsystem\SubsystemManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\omicron\runtime\subsystem\WindowSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

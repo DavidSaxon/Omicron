@@ -19,18 +19,6 @@
 
 namespace omi
 {
-
-//------------------------------------------------------------------------------
-//                              FORWARD DECLARATIONS
-//------------------------------------------------------------------------------
-
-namespace ss
-{
-class Input;
-class Renderer;
-class WindowManager;
-} // namespace ss
-
 namespace runtime
 {
 
@@ -57,7 +45,7 @@ public:
     /*!
      * \brief Returns the singleton instance of the Omicron engine.
      */
-    static Engine* get_instance();
+    static Engine* instance();
 
 
     /*!
@@ -98,19 +86,6 @@ private:
      * that require the engine to be in a valid state or a GL context.
      */
     bool m_setup;
-
-    /*!
-     * \brief The current window manager subsystem.
-     */
-    omi::ss::WindowManager* m_window_manager;
-    /*!
-     * \brief The current input subsystem.
-     */
-    omi::ss::Input* m_input;
-    /*!
-     * \brief The current renderer subsystem.
-     */
-    omi::ss::Renderer* m_renderer;
 
     //--------------------------------------------------------------------------
     //                            PRIVATE CONSTRUCTOR

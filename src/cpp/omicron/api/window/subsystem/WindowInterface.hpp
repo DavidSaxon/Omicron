@@ -20,16 +20,24 @@
  * Every window subsystem should use this macro once and only once within its
  * implementation.
  *
- * \param Bootstrapper Returns the subsystem's implementation of
- *                     omi::window::ss:Bootstrap.
+ * \param BootstrapperType The subsystem's implementation of
+ *                         omi::window::ss:Bootstrap.
  */
-#define OMICRON_API_WINDOW_SUBSYSTEM_REGISTER(Bootstrapper)                    \
+#define OMICRON_API_WINDOW_SUBSYSTEM_REGISTER(                                 \
+        BootstrapperType,                                                      \
+        MainWindowType)                                                        \
     extern "C"                                                                 \
     {                                                                          \
-    ARC_IO_DL_EXPORT void OMICRON_API_WINDOW_SUBSYSTEM_REGISTER_SYMBOL(        \
-            void** bootstrap)                                                  \
+    omi::window::MainWindow* main_window_factory()                             \
     {                                                                          \
-        *bootstrap = Bootstrapper::get_instance();                             \
+        return (omi::window::MainWindow*) MainWindowType::get_instance();      \
+    }                                                                          \
+    ARC_IO_DL_EXPORT void OMICRON_API_WINDOW_SUBSYSTEM_REGISTER_SYMBOL(        \
+            void** bootstrap,                                                  \
+            void** main_window_factory_func)                                   \
+    {                                                                          \
+        *bootstrap = BootstrapperType::get_instance();                         \
+        *main_window_factory_func = (void*) &main_window_factory;              \
     }                                                                          \
     }
 
@@ -38,6 +46,12 @@ namespace omi
 {
 namespace window
 {
+
+//------------------------------------------------------------------------------
+//                              FORWARD DECLARATIONS
+//------------------------------------------------------------------------------
+
+class MainWindow;
 
 /*!
  * \brief Module for implementing Omicron window subsystems.
@@ -51,6 +65,7 @@ namespace ss
  */
 typedef bool (EngineCycleFunc)();
 
+typedef omi::window::MainWindow* (MainWindowFactory)();
 
 } // namespace ss
 } // namespace window

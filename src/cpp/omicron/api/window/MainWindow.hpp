@@ -7,7 +7,9 @@
 
 #include <arcanecore/base/lang/Restrictors.hpp>
 
+#include "omicron/api/API.hpp"
 #include "omicron/api/window/Window.hpp"
+#include "omicron/api/window/subsystem/WindowInterface.hpp"
 
 
 namespace omi
@@ -29,28 +31,37 @@ public:
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    ~MainWindow();
+    OMI_API_GLOBAL ~MainWindow();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Returns the singleton instance of the Omicron engine.
+     * \brief Returns the singleton instance of the main window.
      */
-    static MainWindow* get_instance();
+    OMI_API_GLOBAL static MainWindow* instance();
+
+    // hide from doxygen
+    #ifndef IN_DOXYGEN
+
+    OMI_API_GLOBAL static void set_host(
+            omi::window::ss::MainWindowFactory* factory_func);
+
+    #endif
+    // IN_DOXYGEN
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief TODO:
+     * \brief Returns the current windowing mode of the main window.
      */
     virtual WindowMode get_mode() const = 0;
 
     /*!
-     * \brief TODO:
+     * \brief Sets the windowing mode the main window will use.
      */
     virtual void set_mode(WindowMode mode) = 0;
 
@@ -73,24 +84,22 @@ public:
 protected:
 
     //--------------------------------------------------------------------------
-    //                         PROTECTED MEMBER FUNCTIONS
-    //--------------------------------------------------------------------------
-
-    /*!
-     * \brief TODO:
-     */
-    virtual void open() = 0;
-
-    /*!
-     * \brief TODO:
-     */
-    virtual void close() = 0;
-
-    //--------------------------------------------------------------------------
     //                           PROTECTED CONSTRUCTOR
     //--------------------------------------------------------------------------
 
-    MainWindow();
+    OMI_API_GLOBAL MainWindow();
+
+    //--------------------------------------------------------------------------
+    //                         PROTECTED MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+private:
+
+    //--------------------------------------------------------------------------
+    //                         PRIVATE STATIC ATTRIBUTES
+    //--------------------------------------------------------------------------
+
+    static omi::window::ss::MainWindowFactory* s_factory_func;
 };
 
 } // namespace window

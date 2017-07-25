@@ -6,8 +6,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 
 # source files for the omicron runtime
 set(OMI_QT_SRC
-    ../QTBootstrap.cpp
-    ../QTGlobals.cpp
+    ../QtBootstrap.cpp
+    ../QtGlobals.cpp
+    ../QtMainWindow.cpp
 )
 
 # build the omicron runtime executable

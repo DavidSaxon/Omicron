@@ -67,7 +67,7 @@ public:
     /*!
      * \brief Returns the singleton instance of the SubsystemManager.
      */
-    static SubsystemManager* get_instance();
+    static SubsystemManager* instance();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS

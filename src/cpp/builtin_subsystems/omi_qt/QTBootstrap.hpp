@@ -17,7 +17,10 @@ class QApplication;
 namespace omi_qt
 {
 
-class QTBootstrap : public omi::window::ss::Bootstrap
+/*!
+ * \brief Handles startup and shutdown of the Omicron Qt window subsystem.
+ */
+class QtBootstrap : public omi::window::ss::Bootstrap
 {
 public:
 
@@ -25,16 +28,16 @@ public:
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    virtual ~QTBootstrap();
+    virtual ~QtBootstrap();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Returns the singleton instance of the Omi QT bootstrapper.
+     * \brief Returns the singleton instance of the Omicron Qt bootstrapper.
      */
-    static QTBootstrap* get_instance();
+    static QtBootstrap* get_instance();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -65,7 +68,7 @@ private:
     //                            PRIVATE CONSTRUCTORS
     //--------------------------------------------------------------------------
 
-    QTBootstrap();
+    QtBootstrap();
 };
 
 } // namespace omi_qt

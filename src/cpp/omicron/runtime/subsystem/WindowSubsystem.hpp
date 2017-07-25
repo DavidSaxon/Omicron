@@ -58,6 +58,9 @@ public:
     virtual void bind(arc::io::dl::Handle library);
 
     // override
+    virtual void startup();
+
+    // override
     virtual void release();
 
     /*!
@@ -74,7 +77,9 @@ private:
     /*!
      * \brief The function type that is used to register window subsystems.
      */
-    typedef void (RegisterFunc)(void** bootstrapper);
+    typedef void (RegisterFunc)(
+            void** bootstrapper,
+            void** main_window_factory_func);
 
     //--------------------------------------------------------------------------
     //                             PRIVATE ATTRIBUTES
@@ -84,6 +89,10 @@ private:
      * \brief The bootstrapper for this window subsystem.
      */
     omi::window::ss::Bootstrap* m_bootstrapper;
+    /*!
+     * \brief The factory function to get the MainWindow instance.
+     */
+    omi::window::ss::MainWindowFactory* m_main_window_factory;
 };
 
 } // namespace ss

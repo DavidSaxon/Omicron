@@ -1,6 +1,9 @@
 set(API_SRC
     ../config/ConfigGlobals.cpp
 
+    ../asset/AssetGlobals.cpp
+    ../asset/AssetLibrary.cpp
+
     ../report/Logging.cpp
     ../report/ReportBoot.cpp
     ../report/ReportGlobals.cpp

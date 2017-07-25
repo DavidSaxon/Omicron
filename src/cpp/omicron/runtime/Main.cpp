@@ -3,5 +3,5 @@
 
 int main(int argc, char* argv[])
 {
-    return omi::runtime::Engine::get_instance()->execute();
+    return omi::runtime::Engine::instance()->execute();
 }

@@ -1,5 +1,7 @@
 #include "omicron/api/window/MainWindow.hpp"
 
+#include <cassert>
+
 
 namespace omi
 {
@@ -7,10 +9,16 @@ namespace window
 {
 
 //------------------------------------------------------------------------------
+//                               STATIC ATTRIBUTES
+//------------------------------------------------------------------------------
+
+omi::window::ss::MainWindowFactory* MainWindow::s_factory_func = nullptr;
+
+//------------------------------------------------------------------------------
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-MainWindow::~MainWindow()
+OMI_API_GLOBAL MainWindow::~MainWindow()
 {
 }
 
@@ -18,20 +26,25 @@ MainWindow::~MainWindow()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-MainWindow* MainWindow::get_instance()
+OMI_API_GLOBAL MainWindow* MainWindow::instance()
 {
-    // TODO: use factory
-    return nullptr;
+    assert(s_factory_func != nullptr);
 
-    // static MainWindow instance;
-    // return &instance;
+    static MainWindow* inst = s_factory_func();
+    return inst;
+}
+
+OMI_API_GLOBAL void MainWindow::set_host(
+        omi::window::ss::MainWindowFactory* factory_func)
+{
+    s_factory_func = factory_func;
 }
 
 //------------------------------------------------------------------------------
 //                             PROTECTED CONSTRUCTOR
 //------------------------------------------------------------------------------
 
-MainWindow::MainWindow()
+OMI_API_GLOBAL MainWindow::MainWindow()
 {
 }
 

@@ -1,7 +1,7 @@
 /*!
  * \file
  * \author David Saxon
- * \brief Globals for Omi QT.
+ * \brief Globals for Omi Qt.
  */
 #ifndef OMI_QT_GLOBALS_HPP_
 #define OMI_QT_GLOBALS_HPP_
@@ -15,7 +15,7 @@ namespace global
 {
 
 /*!
- * \brief The logging input to be used by Omi QT.
+ * \brief The logging input to be used by Omi Qt.
  */
 extern arc::log::Input* logger;
 

@@ -50,10 +50,10 @@ SubsystemManager::~SubsystemManager()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-SubsystemManager* SubsystemManager::get_instance()
+SubsystemManager* SubsystemManager::instance()
 {
-    static SubsystemManager instance;
-    return &instance;
+    static SubsystemManager inst;
+    return &inst;
 }
 
 //------------------------------------------------------------------------------
@@ -139,7 +139,8 @@ void SubsystemManager::startup()
     // bind the subsystems
     m_window.bind(get_or_load_library("window"));
 
-    // TODO: start subsystems separately
+    // start the subsystems
+    m_window.startup();
 
     // we're done
     m_initialised = true;

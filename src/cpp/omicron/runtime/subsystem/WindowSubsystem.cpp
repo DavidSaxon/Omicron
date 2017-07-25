@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include <omicron/api/window/MainWindow.hpp>
 #include <omicron/api/window/subsystem/WindowBootstrap.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
@@ -19,7 +20,8 @@ namespace ss
 //------------------------------------------------------------------------------
 
 WindowSubsystem::WindowSubsystem()
-    : m_bootstrapper(nullptr)
+    : m_bootstrapper       (nullptr)
+    , m_main_window_factory(nullptr)
 {
 }
 
@@ -47,7 +49,18 @@ void WindowSubsystem::bind(arc::io::dl::Handle library)
     );
 
     // call the register function
-    (*register_func)((void**) &m_bootstrapper);
+    (*register_func)(
+        (void**) &m_bootstrapper,
+        (void**) &m_main_window_factory
+    );
+
+    // bind into the engine
+    omi::window::MainWindow::set_host(m_main_window_factory);
+}
+
+void WindowSubsystem::startup()
+{
+    global::logger->debug << "Starting window subsystem." << std::endl;
 
     // start the window subsystem
     m_bootstrapper->startup();
