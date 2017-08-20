@@ -1,0 +1,25 @@
+/++++++\
+| TODO |
+\++++++/
+
+- are render packets a location type?
+
+- model contains render packets (and animation data)
+     - is model a good name
+     - what about non-mesh locations e.g. volumetric point clouds
+     - billboards
+     - sprites (animated as well)
+
+- animation data contains skeletons and clips?
+    - but then how do skeletons relate to meshes
+
+- light asset type??
+
+- camera asset type???
+
+- how do assets that modify other assets work?
+    - i.e. skeleton with a clip that modifies a mesh
+
+- how does instancing work? Is it an asset or just part of the rendering engine
+
+- use a generic keyframe animation system

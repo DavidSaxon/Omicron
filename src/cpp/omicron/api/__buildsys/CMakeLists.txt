@@ -1,4 +1,8 @@
 set(API_SRC
+    ../common/attribute/Attribute.cpp
+    ../common/attribute/DataAttribute.cpp
+    ../common/attribute/Int32Attribute.cpp
+
     ../config/ConfigGlobals.cpp
 
     ../asset/AssetGlobals.cpp
