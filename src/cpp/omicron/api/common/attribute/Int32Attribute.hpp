@@ -15,6 +15,8 @@ namespace omi
 // TODO: DOC
 class Int32Attribute : public DataAttribute
 {
+public:
+
     //--------------------------------------------------------------------------
     //                              TYPE DEFINITIONS
     //--------------------------------------------------------------------------
@@ -23,7 +25,11 @@ class Int32Attribute : public DataAttribute
      * \brief The data type this attribute is storing.
      */
     typedef arc::int32 DataType;
-    // TODO: ArrayType
+    /*!
+     * \brief The array type that is used to return weak references to this
+     *        attribute's data.
+     */
+    typedef std::vector<DataType> ArrayType;
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC ATTRIBUTES
@@ -35,46 +41,46 @@ class Int32Attribute : public DataAttribute
     OMI_API_GLOBAL static Type kTypeInt32;
 
     //--------------------------------------------------------------------------
-    //                               PUBLIC STRUCTS
+    //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    // TODO: Doc
-    struct Int32Storage : public Attribute::Storage
-    {
-        std::vector<DataType> m_data;
+    typedef DataAttribute::TypedDataStorage<DataType> Int32Storage;
 
-        Int32Storage()
-        {
-        }
+    //--------------------------------------------------------------------------
+    //                                 DEFINITION
+    //--------------------------------------------------------------------------
 
-        template<typename T_InputIterator>
-        Int32Storage(
-                const T_InputIterator& first,
-                const T_InputIterator& last)
-            : m_data(first, last)
-        {
-        }
-    };
+    // // TODO: DOC
+    // class Int32Definition : public DataAttribute::DataDefinition
+    // {
+    // public:
 
-    // TODO: DOC
-    struct Int32Definition : public DataAttribute::DataDefinition
-    {
-        Int32Definition()
-            : DataAttribute::DataDefinition(kTypeInt32, 0)
-        {
-            m_storage = new Int32Storage();
-        }
+    //     //-----------------------C O N S T R U C T O R S------------------------
 
-        template<typename T_InputIterator>
-        Int32Definition(
-                const T_InputIterator& first,
-                const T_InputIterator& last,
-                std::size_t tuple_size)
-            : DataAttribute::DataDefinition(kTypeInt32, tuple_size)
-        {
-            m_storage = new Int32Storage(first, last);
-        }
-    };
+    //     // TODO: DOC
+    //     OMI_API_GLOBAL Int32Definition(std::size_t tuple_size, bool immutable);
+
+    //     // TODO: DOC
+    //     template<typename T_InputIterator>
+    //     Int32Definition(
+    //             const T_InputIterator& first,
+    //             const T_InputIterator& last,
+    //             std::size_t tuple_size,
+    //             bool immutable)
+    //         : DataAttribute::DataDefinition(kTypeInt32, immutable)
+    //     {
+    //         set_storage(new Int32Storage(first, last, tuple_size));
+    //     }
+
+    //     //-------------------------D E S T R U C T O R--------------------------
+
+    //     OMI_API_GLOBAL virtual ~Int32Definition();
+
+    //     //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
+
+    //     // override
+    //     OMI_API_GLOBAL virtual std::size_t get_size() const;
+    // };
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS
@@ -97,7 +103,11 @@ class Int32Attribute : public DataAttribute
             const T_InputIterator& last,
             std::size_t tuple_size = 0,
             bool immutable = true)
-        : DataAttribute(new Int32Definition(first, last, tuple_size), immutable)
+        : DataAttribute(
+                kTypeInt32,
+                immutable,
+                new Int32Storage(first, last, tuple_size)
+        )
     {
     }
 
@@ -143,18 +153,56 @@ class Int32Attribute : public DataAttribute
      *                      retrieved from this attribute and throw_on_error is
      *                      ```false```.
      *
-     * \throw arc::ex::ValueError If this attribute is not valid.
+     * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IndexOutOfBoundsError If this attribute has no values.
      */
     OMI_API_GLOBAL DataType get_value(
             bool throw_on_error = false,
             DataType default_value = 0) const;
 
-    // TODO: get values
+    /*!
+     * \brief Returns the array of values of this attribute.
+     *
+     * \param throw_on_error Whether an exception will be thrown if the value
+     *                       cannot be retrieved.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     */
+    OMI_API_GLOBAL const ArrayType& get_values(bool throw_on_error = false);
 
-    // TODO: set value
+    /*!
+     * \brief Sets the value of this attribute to be a size 1 array holding the
+     *        given value.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throw arc::ex::IllegalActionError If this attribute is immutable.
+     */
+    OMI_API_GLOBAL void set_value(DataType value);
 
-    // TODO: set values
+    /*!
+     * \brief Sets the value of this attribute to be a copy of the array
+     *        specified by the first and last (one past the end) iterators.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throw arc::ex::IllegalActionError If this attribute is immutable.
+     */
+    template<typename T_InputIterator>
+    void set_values(const T_InputIterator& first, const T_InputIterator& last)
+    {
+        check_state();
+        prepare_modifcation();
+        get_storage<Int32Storage>()->m_data =
+            std::vector<DataType>(first, last);
+    }
+
+    /*!
+     * \brief Sets the value of this attribute to be a copy of the data within
+     *        the given vector.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throw arc::ex::IllegalActionError If this attribute is immutable.
+     */
+    OMI_API_GLOBAL void set_values(const ArrayType& values);
 
 protected:
 
@@ -165,19 +213,11 @@ protected:
     // override
     OMI_API_GLOBAL virtual bool check_type(Type type) const;
 
-private:
-
-    //--------------------------------------------------------------------------
-    //                          PRIVATE MEMBER FUNCTIONS
-    //--------------------------------------------------------------------------
-
     /*!
-     * \brief Returns the internal storage of this attribute casted to an
-     *        Int32Storage tyoe.
-     *
-     * \throws arc::ex::ValueError If this attribute is not valid.
+     * \brief Convenience function which throws a arc::ex::StateError if this
+     *        attribute is not valid.
      */
-    Int32Storage* get_storage(bool throw_on_error) const;
+    OMI_API_GLOBAL void check_state() const;
 };
 
 } // namespace omi

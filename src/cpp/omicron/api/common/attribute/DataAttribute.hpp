@@ -5,6 +5,8 @@
 #ifndef OMICRON_API_COMMON_ATTRIBUTE_DATAATTRIBUTE_HPP_
 #define OMICRON_API_COMMON_ATTRIBUTE_DATAATTRIBUTE_HPP_
 
+#include <vector>
+
 #include "omicron/api/common/attribute/Attribute.hpp"
 
 
@@ -27,22 +29,124 @@ public:
     static Type kTypeDataBits;
 
     //--------------------------------------------------------------------------
-    //                               PUBLIC STRUCTS
+    //                                  STORAGE
+    //--------------------------------------------------------------------------
+
+    // TODO: Doc
+    class DataStorage : public Attribute::Storage
+    {
+    public:
+
+        //------------------P U B L I C    A T T R I B U T E S------------------
+
+        std::size_t m_tuple_size;
+
+        //-----------------------C O N S T R U C T O R S------------------------
+
+        // TODO: DOC
+        OMI_API_GLOBAL DataStorage(std::size_t tuple_size);
+
+        //-------------------------D E S T R U C T O R--------------------------
+
+        OMI_API_GLOBAL virtual ~DataStorage();
+
+        //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
+
+        // TODO: DOC
+        virtual std::size_t get_size() const = 0;
+    };
+
+    //--------------------------------------------------------------------------
+    //                               TYPED STORAGE
     //--------------------------------------------------------------------------
 
     // TODO: DOC
-    struct DataDefinition : public Attribute::Definition
+    template<typename T_DataType>
+    class TypedDataStorage : public DataStorage
     {
-        std::size_t m_size;
-        std::size_t m_tuple_size;
+    public:
 
-        DataDefinition(Type type, std::size_t tuple_size)
-            : Attribute::Definition(type)
-            , m_size               (0)
-            , m_tuple_size         (tuple_size)
+        //------------------P U B L I C    A T T R I B U T E S------------------
+
+        std::vector<T_DataType> m_data;
+
+        //-----------------------C O N S T R U C T O R S------------------------
+
+        // TODO: DOC
+        TypedDataStorage(std::size_t tuple_size)
+            : DataStorage(tuple_size)
         {
         }
+
+        // TODO: DOC
+        template<typename T_InputIterator>
+        TypedDataStorage(
+                const T_InputIterator& first,
+                const T_InputIterator& last,
+                std::size_t tuple_size)
+            : DataStorage(tuple_size)
+            , m_data     (first, last)
+        {
+        }
+
+        //-------------------------D E S T R U C T O R--------------------------
+
+        virtual ~TypedDataStorage()
+        {
+        }
+
+        //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
+
+        // TODO: DOC
+        virtual Storage* copy_for_overwrite(bool soft)
+        {
+            if(soft)
+            {
+                // soft overwrite - so copy everything
+                return new TypedDataStorage<T_DataType>(
+                    m_data.begin(),
+                    m_data.end(),
+                    m_tuple_size
+                );
+            }
+
+            // just copy the tuple size
+            return new TypedDataStorage<T_DataType>(m_tuple_size);
+        }
+
+        // override
+        virtual std::size_t get_size() const
+        {
+            return m_data.size();
+        }
     };
+
+    //--------------------------------------------------------------------------
+    //                                 DEFINITION
+    //--------------------------------------------------------------------------
+
+    // // TODO: DOC
+    // class DataDefinition : public Attribute::Definition
+    // {
+    // public:
+
+    //     //------------------------C O N S T R U C T O R-------------------------
+
+    //     // TODO: DOC
+    //     OMI_API_GLOBAL DataDefinition(Type type, bool immutable);
+
+    //     //-------------------------D E S T R U C T O R--------------------------
+
+    //     OMI_API_GLOBAL virtual ~DataDefinition();
+
+    //     //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
+
+    //     // TODO: DOC
+    //     OMI_API_GLOBAL virtual std::size_t get_size() const;
+
+    //     // TODO: DOC
+    //     OMI_API_GLOBAL std::size_t get_tuple_size() const;
+    // };
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS
@@ -88,6 +192,14 @@ public:
     // TODO: doc
     OMI_API_GLOBAL std::size_t get_tuple_size() const;
 
+    /*!
+     * \brief Sets the tuple size of this attribute.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throw arc::ex::IllegalActionError If this attribute is immutable.
+     */
+    OMI_API_GLOBAL void set_tuple_size(std::size_t tuple_size);
+
 protected:
 
     //--------------------------------------------------------------------------
@@ -95,7 +207,10 @@ protected:
     //--------------------------------------------------------------------------
 
     // override
-    OMI_API_GLOBAL DataAttribute(Definition* def, bool immutable = true);
+    OMI_API_GLOBAL DataAttribute(Definition* def);
+
+    // override
+    OMI_API_GLOBAL DataAttribute(Type type, bool immutable, Storage* storage);
 
     //--------------------------------------------------------------------------
     //                         PROTECTED MEMBER FUNCTIONS

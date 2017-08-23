@@ -33,3 +33,7 @@ echo omi_al
 echo ----------------
 msbuild ..\Omicron.sln /v:n /p:Configuration=omi_al
 
+echo ----------------
+echo tests
+echo ----------------
+msbuild ..\Omicron.sln /v:n /p:Configuration=tests

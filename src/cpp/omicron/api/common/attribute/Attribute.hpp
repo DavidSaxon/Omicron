@@ -5,6 +5,8 @@
 #ifndef OMICRON_API_COMMON_ATTRIBUTE_ATTRIBUTE_HPP_
 #define OMICRON_API_COMMON_ATTRIBUTE_ATTRIBUTE_HPP_
 
+#include <cstddef>
+
 #include <arcanecore/base/Types.hpp>
 #include <arcanecore/base/lang/Restrictors.hpp>
 
@@ -39,46 +41,78 @@ public:
     OMI_API_GLOBAL static Type kTypeNull;
 
     //--------------------------------------------------------------------------
-    //                               PUBLIC STRUCT
+    //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    // TODO: Doc
-    struct Storage
+    // TODO: DOC
+    class Storage
         : private arc::lang::Noncopyable
         , private arc::lang::Nonmovable
         , private arc::lang::Noncomparable
     {
+    public:
+
+        //------------------P U B L I C    A T T R I B U T E S------------------
+
+        // TODO: DOC
         std::size_t m_ref_count;
+        // TODO: DOC
+        std::size_t m_immutable_ref_count;
 
-        Storage()
-            : m_ref_count(1)
-        {
-        }
+        //------------------------C O N S T R U C T O R-------------------------
 
-        virtual ~Storage()
-        {
-        }
+        // TODO: DOC
+        OMI_API_GLOBAL Storage();
 
-        // TODO: new copy
+        //-------------------------D E S T R U C T O R--------------------------
+
+        OMI_API_GLOBAL virtual ~Storage();
+
+        //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
+
+        // TODO: DOC
+        OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft);
     };
 
-    // TODO: DOC
-    struct Definition
+    //--------------------------------------------------------------------------
+    //                                 DEFINITION
+    //--------------------------------------------------------------------------
+
+    // TODO: THIS THING CAN BE PRIVATE?
+    class Definition
     {
     public:
 
+        //------------------P U B L I C    A T T R I B U T E S------------------
+
         std::size_t m_ref_count;
         Type m_type;
-        Storage* m_storage;
+        bool m_immutable;
+        mutable Storage* m_storage;
 
-        Definition(Type type)
+        //------------------------C O N S T R U C T O R-------------------------
+
+        // TODO: DOC
+        Definition(
+                Type type,
+                bool immutable,
+                Storage* storage)
             : m_ref_count(1)
             , m_type     (type)
-            , m_storage  (nullptr)
+            , m_immutable(immutable)
+            , m_storage  (storage)
         {
+            // increase immutable reference count of storage?
+            if(m_immutable && m_storage != nullptr)
+            {
+                ++m_storage->m_immutable_ref_count;
+            }
         }
 
-        virtual ~Definition()
+        //-------------------------D E S T R U C T O R--------------------------
+
+        // TODO: DOC
+        OMI_API_GLOBAL virtual ~Definition()
         {
             // decrease the reference count of the storage
             if(m_storage != nullptr)
@@ -90,14 +124,24 @@ public:
                 else
                 {
                     --m_storage->m_ref_count;
+                    // decrease immutable reference count?
+                    if(m_immutable)
+                    {
+                        --m_storage->m_immutable_ref_count;
+                    }
                 }
             }
         }
 
-        virtual bool prepare_write()
-        {
-            return false;
-        }
+    protected:
+
+        //--------P R O T E C T E D    M E M B E R    F U N C T I O N S---------
+
+        /*!
+         * \brief Sets the storage object of this definition (and handles
+         *        special reference counting for managing copy-on-write).
+         */
+        OMI_API_GLOBAL void set_storage(Storage* storage);
     };
 
     //--------------------------------------------------------------------------
@@ -148,33 +192,27 @@ public:
     OMI_API_GLOBAL void assign(const Attribute& other);
 
     // TODO: doc
-    OMI_API_GLOBAL Attribute as_mutable() const;
-
-    // TODO: doc
     OMI_API_GLOBAL Attribute as_immutable() const;
 
+    // TODO: doc
+    OMI_API_GLOBAL Attribute as_mutable() const;
+
 protected:
-
-    //--------------------------------------------------------------------------
-    //                            PROTECTED ATTRIBUTES
-    //--------------------------------------------------------------------------
-
-    // The internal definition of attribute
-    Definition* m_def;
-    // Whether this attribute immutable
-    bool m_immutable;
 
     //--------------------------------------------------------------------------
     //                           PROTECTED CONSTRUCTORS
     //--------------------------------------------------------------------------
 
+    // TODO: this doesn't have to take the definition - just need a null
+    //       constructor
     /*!
      * \brief Super constructor which assigns the internal definition to the
      *        given object **without** reference counting it.
-     *
-     * \param immutable Whether this attribute will be immutable or not.
      */
-    OMI_API_GLOBAL Attribute(Definition* def, bool immutable = true);
+    OMI_API_GLOBAL Attribute(Definition* def);
+
+    // TODO: DOC
+    OMI_API_GLOBAL Attribute(Type type, bool immutable, Storage* storage);
 
     //--------------------------------------------------------------------------
     //                         PROTECTED MEMBER FUNCTIONS
@@ -197,6 +235,28 @@ protected:
      *        deleted.
      */
     OMI_API_GLOBAL void decrease_ref();
+
+    /*!
+     * \brief Returns the storage object of this attribute's definition casted
+     *        as a pointer to the given type.
+     */
+    template<typename T_StorageType>
+    T_StorageType* get_storage() const
+    {
+        return static_cast<T_StorageType*>(m_def->m_storage);
+    }
+
+    // TODO: DOC: throws IllegalActionError
+    OMI_API_GLOBAL void prepare_modifcation(bool soft = false);
+
+private:
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE ATTRIBUTES
+    //--------------------------------------------------------------------------
+
+    // The internal definition of attribute
+    Definition* m_def;
 };
 
 

@@ -44,6 +44,8 @@ add_definitions(${OpenGL_DEFINITIONS})
 add_subdirectory(src/cpp/omicron/api/__buildsys)
 # omicron runtime
 add_subdirectory(src/cpp/omicron/runtime/__buildsys)
+# tests
+add_subdirectory(tests/cpp/__buildsys)
 # OpenAL subsystem
 add_subdirectory(src/cpp/builtin_subsystems/omi_al/__buildsys)
 # Bullet subsystem
