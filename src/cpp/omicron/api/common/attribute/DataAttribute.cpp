@@ -30,38 +30,6 @@ OMI_API_GLOBAL DataAttribute::DataStorage::~DataStorage()
 }
 
 //------------------------------------------------------------------------------
-//                                   DEFINITION
-//------------------------------------------------------------------------------
-
-//----------------------------C O N S T R U C T O R-----------------------------
-
-// OMI_API_GLOBAL DataAttribute::DataDefinition::DataDefinition(
-//         Type type,
-//         bool immutable)
-//     : Attribute::Definition(type, immutable)
-// {
-// }
-
-//-----------------------------D E S T R U C T O R------------------------------
-
-// OMI_API_GLOBAL DataAttribute::DataDefinition::~DataDefinition()
-// {
-// }
-
-// //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
-
-// OMI_API_GLOBAL std::size_t DataAttribute::DataDefinition::get_size() const
-// {
-//     return get_storage<DataStorage>()->get_size();
-// }
-
-// OMI_API_GLOBAL
-// std::size_t DataAttribute::DataDefinition::get_tuple_size() const
-// {
-//     return get_storage<DataStorage>()->m_tuple_size;
-// }
-
-//------------------------------------------------------------------------------
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 

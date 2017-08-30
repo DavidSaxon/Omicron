@@ -44,43 +44,10 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    typedef DataAttribute::TypedDataStorage<DataType> Int32Storage;
-
-    //--------------------------------------------------------------------------
-    //                                 DEFINITION
-    //--------------------------------------------------------------------------
-
-    // // TODO: DOC
-    // class Int32Definition : public DataAttribute::DataDefinition
-    // {
-    // public:
-
-    //     //-----------------------C O N S T R U C T O R S------------------------
-
-    //     // TODO: DOC
-    //     OMI_API_GLOBAL Int32Definition(std::size_t tuple_size, bool immutable);
-
-    //     // TODO: DOC
-    //     template<typename T_InputIterator>
-    //     Int32Definition(
-    //             const T_InputIterator& first,
-    //             const T_InputIterator& last,
-    //             std::size_t tuple_size,
-    //             bool immutable)
-    //         : DataAttribute::DataDefinition(kTypeInt32, immutable)
-    //     {
-    //         set_storage(new Int32Storage(first, last, tuple_size));
-    //     }
-
-    //     //-------------------------D E S T R U C T O R--------------------------
-
-    //     OMI_API_GLOBAL virtual ~Int32Definition();
-
-    //     //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
-
-    //     // override
-    //     OMI_API_GLOBAL virtual std::size_t get_size() const;
-    // };
+    typedef DataAttribute::TypedDataStorage<
+            Int32Attribute,
+            DataType
+    > Int32Storage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS
@@ -98,7 +65,7 @@ public:
 
     // TODO: doc
     template<typename T_InputIterator>
-    OMI_API_GLOBAL Int32Attribute(
+    Int32Attribute(
             const T_InputIterator& first,
             const T_InputIterator& last,
             std::size_t tuple_size = 0,
@@ -113,7 +80,7 @@ public:
 
     // TODO: doc
     OMI_API_GLOBAL Int32Attribute(
-            const std::vector<DataType>& values,
+            const ArrayType& values,
             std::size_t tuple_size = 0,
             bool immutable = true);
 
@@ -137,8 +104,11 @@ public:
     OMI_API_GLOBAL virtual ~Int32Attribute();
 
     //--------------------------------------------------------------------------
-    //                                 OPERATORS
+    //                          PUBLIC STATIC FUNCTIONS
     //--------------------------------------------------------------------------
+
+    // TODO: DOC
+    OMI_API_GLOBAL static arc::str::UTF8String get_type_string();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS

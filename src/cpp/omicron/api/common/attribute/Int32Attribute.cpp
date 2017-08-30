@@ -26,7 +26,7 @@ static Int32Attribute::ArrayType g_empty;
 //------------------------------------------------------------------------------
 
 OMI_API_GLOBAL Attribute::Type Int32Attribute::kTypeInt32 =
-    DataAttribute::kTypeDataBits & (typeid(arc::int32).hash_code() >> 8);
+    DataAttribute::kTypeDataBits | (typeid(arc::int32).hash_code() >> 8);
 
 //------------------------------------------------------------------------------
 //                                   DEFINITION
@@ -74,7 +74,7 @@ OMI_API_GLOBAL Int32Attribute::Int32Attribute(DataType value, bool immutable)
 }
 
 OMI_API_GLOBAL Int32Attribute::Int32Attribute(
-        const std::vector<DataType>& values,
+        const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
     : DataAttribute(
@@ -103,6 +103,15 @@ OMI_API_GLOBAL Int32Attribute::Int32Attribute(const Int32Attribute& other)
 
 OMI_API_GLOBAL Int32Attribute::~Int32Attribute()
 {
+}
+
+//------------------------------------------------------------------------------
+//                            PUBLIC STATIC FUNCTIONS
+//------------------------------------------------------------------------------
+
+OMI_API_GLOBAL arc::str::UTF8String Int32Attribute::get_type_string()
+{
+    return "Int32Attribute";
 }
 
 //------------------------------------------------------------------------------
@@ -168,7 +177,6 @@ OMI_API_GLOBAL void Int32Attribute::set_value(DataType value)
     prepare_modifcation();
     Int32Storage* storage = get_storage<Int32Storage>();
     storage->m_data = {value};
-    storage->m_tuple_size = 0;
 }
 
 OMI_API_GLOBAL void Int32Attribute::set_values(const ArrayType& values)

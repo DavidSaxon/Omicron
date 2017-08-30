@@ -51,9 +51,9 @@ public:
         OMI_API_GLOBAL virtual ~DataStorage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
-
         // TODO: DOC
         virtual std::size_t get_size() const = 0;
+
     };
 
     //--------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public:
     //--------------------------------------------------------------------------
 
     // TODO: DOC
-    template<typename T_DataType>
+    template<typename T_BaseType, typename T_DataType>
     class TypedDataStorage : public DataStorage
     {
     public:
@@ -103,7 +103,7 @@ public:
             if(soft)
             {
                 // soft overwrite - so copy everything
-                return new TypedDataStorage<T_DataType>(
+                return new TypedDataStorage<T_BaseType, T_DataType>(
                     m_data.begin(),
                     m_data.end(),
                     m_tuple_size
@@ -111,7 +111,63 @@ public:
             }
 
             // just copy the tuple size
-            return new TypedDataStorage<T_DataType>(m_tuple_size);
+            return new TypedDataStorage<T_BaseType, T_DataType>(m_tuple_size);
+        }
+
+        // override
+        virtual bool equals(const Attribute::Storage* other)
+        {
+            // cast
+            const TypedDataStorage<T_BaseType, T_DataType>* casted =
+                dynamic_cast<const TypedDataStorage<T_BaseType, T_DataType>*>(
+                    other
+                );
+            if(casted == nullptr)
+            {
+                return false;
+            }
+
+            // check tuple size
+            if(m_tuple_size != casted->m_tuple_size)
+            {
+                return false;
+            }
+
+            // check data size
+            if(m_data.size() != casted->m_data.size())
+            {
+                return false;
+            }
+
+            // check data
+            for(std::size_t i = 0; i < m_data.size(); ++i)
+            {
+                if(m_data[i] != casted->m_data[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // override
+        virtual void string_repr(arc::str::UTF8String& s) const
+        {
+            // get name
+            s << T_BaseType::get_type_string();
+            // tuple size
+            s << "(" << m_tuple_size << "): [";
+            // values
+            for(std::size_t i = 0; i < m_data.size(); ++i)
+            {
+                s << m_data[i];
+                if(i < m_data.size() - 1)
+                {
+                    s << ", ";
+                }
+            }
+            s << "]";
         }
 
         // override
@@ -120,33 +176,6 @@ public:
             return m_data.size();
         }
     };
-
-    //--------------------------------------------------------------------------
-    //                                 DEFINITION
-    //--------------------------------------------------------------------------
-
-    // // TODO: DOC
-    // class DataDefinition : public Attribute::Definition
-    // {
-    // public:
-
-    //     //------------------------C O N S T R U C T O R-------------------------
-
-    //     // TODO: DOC
-    //     OMI_API_GLOBAL DataDefinition(Type type, bool immutable);
-
-    //     //-------------------------D E S T R U C T O R--------------------------
-
-    //     OMI_API_GLOBAL virtual ~DataDefinition();
-
-    //     //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
-
-    //     // TODO: DOC
-    //     OMI_API_GLOBAL virtual std::size_t get_size() const;
-
-    //     // TODO: DOC
-    //     OMI_API_GLOBAL std::size_t get_tuple_size() const;
-    // };
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

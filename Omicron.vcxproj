@@ -59,6 +59,8 @@
   <ItemGroup Condition="'$(Configuration)'=='tests'">
     <ClCompile Include="tests\cpp\TestsMain.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Attribute_TestSuite.cpp" />
+    <ClCompile Include="tests\cpp\omicron\api\common\attribute\Int32Attribute_TestSuite.cpp" />
+
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_qt'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtBootstrap.cpp" />

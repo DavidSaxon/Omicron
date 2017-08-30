@@ -9,9 +9,10 @@
 
 #include <arcanecore/base/Types.hpp>
 #include <arcanecore/base/lang/Restrictors.hpp>
+#include <arcanecore/base/str/UTF8String.hpp>
+
 
 #include "omicron/api/API.hpp"
-
 
 namespace omi
 {
@@ -19,7 +20,18 @@ namespace omi
 // TODO: DOC
 // TODO: DOC immutable -> mutable && immutable -> mutable
 class Attribute
+    : private arc::lang::Nonmovable
 {
+private:
+
+    //--------------------------------------------------------------------------
+    //                                  FRIENDS
+    //--------------------------------------------------------------------------
+
+    friend OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+            arc::str::UTF8String&,
+            const Attribute&);
+
 public:
 
     //--------------------------------------------------------------------------
@@ -71,77 +83,13 @@ public:
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
         // TODO: DOC
-        OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft);
-    };
-
-    //--------------------------------------------------------------------------
-    //                                 DEFINITION
-    //--------------------------------------------------------------------------
-
-    // TODO: THIS THING CAN BE PRIVATE?
-    class Definition
-    {
-    public:
-
-        //------------------P U B L I C    A T T R I B U T E S------------------
-
-        std::size_t m_ref_count;
-        Type m_type;
-        bool m_immutable;
-        mutable Storage* m_storage;
-
-        //------------------------C O N S T R U C T O R-------------------------
+        virtual bool equals(const Storage* other) = 0;
 
         // TODO: DOC
-        Definition(
-                Type type,
-                bool immutable,
-                Storage* storage)
-            : m_ref_count(1)
-            , m_type     (type)
-            , m_immutable(immutable)
-            , m_storage  (storage)
-        {
-            // increase immutable reference count of storage?
-            if(m_immutable && m_storage != nullptr)
-            {
-                ++m_storage->m_immutable_ref_count;
-            }
-        }
-
-        //-------------------------D E S T R U C T O R--------------------------
+        virtual Storage* copy_for_overwrite(bool soft) = 0;
 
         // TODO: DOC
-        OMI_API_GLOBAL virtual ~Definition()
-        {
-            // decrease the reference count of the storage
-            if(m_storage != nullptr)
-            {
-                if(m_storage->m_ref_count <= 1)
-                {
-                    delete m_storage;
-                }
-                else
-                {
-                    --m_storage->m_ref_count;
-                    // decrease immutable reference count?
-                    if(m_immutable)
-                    {
-                        --m_storage->m_immutable_ref_count;
-                    }
-                }
-            }
-        }
-
-    protected:
-
-        //--------P R O T E C T E D    M E M B E R    F U N C T I O N S---------
-
-        /*!
-         * \brief Sets the storage object of this definition (and handles
-         *        special reference counting for managing copy-on-write).
-         */
-        OMI_API_GLOBAL void set_storage(Storage* storage);
+        virtual void string_repr(arc::str::UTF8String& s) const = 0;
     };
 
     //--------------------------------------------------------------------------
@@ -169,6 +117,21 @@ public:
     //--------------------------------------------------------------------------
     //                                 OPERATORS
     //--------------------------------------------------------------------------
+
+    /*!
+     * \brief Assignment operator.
+     */
+    OMI_API_GLOBAL Attribute& operator=(const Attribute& other);
+
+    /*!
+     * \brief Equality operator.
+     */
+    OMI_API_GLOBAL bool operator==(const Attribute& other);
+
+    /*!
+     * \brief Inequality operator.
+     */
+    OMI_API_GLOBAL bool operator!=(const Attribute& other);
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -198,6 +161,16 @@ public:
     OMI_API_GLOBAL Attribute as_mutable() const;
 
 protected:
+
+    //--------------------------------------------------------------------------
+    //                                 DEFINITION
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief The internal definition object of attributes - contains the
+     *        copy-on-write storage object and manages reference counting.
+     */
+    class Definition;
 
     //--------------------------------------------------------------------------
     //                           PROTECTED CONSTRUCTORS
@@ -243,7 +216,7 @@ protected:
     template<typename T_StorageType>
     T_StorageType* get_storage() const
     {
-        return static_cast<T_StorageType*>(m_def->m_storage);
+        return static_cast<T_StorageType*>(get_untyped_storage());
     }
 
     // TODO: DOC: throws IllegalActionError
@@ -257,8 +230,33 @@ private:
 
     // The internal definition of attribute
     Definition* m_def;
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    // Returns the storage of this attribute as is
+    OMI_API_GLOBAL Storage* get_untyped_storage() const;
 };
 
+//------------------------------------------------------------------------------
+//                               EXTERNAL OPERATORS
+//------------------------------------------------------------------------------
+
+/*!
+ * \brief Appends a string representation of the Attribute to the given
+ *        UTF8String.
+ */
+OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+        arc::str::UTF8String& s,
+        const omi::Attribute& a);
+
+/*!
+ * \brief Appends a string representation of the Attribute to the given stream.
+ */
+OMI_API_GLOBAL std::ostream& operator<<(
+        std::ostream& s,
+        const omi::Attribute& a);
 
 } // namespace omi
 
