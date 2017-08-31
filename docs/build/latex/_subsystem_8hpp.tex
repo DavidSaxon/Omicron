@@ -1,0 +1,51 @@
+\hypertarget{_subsystem_8hpp}{}\section{/home/david/\+Dropbox/\+Development/\+Omicron/\+Omicron/src/cpp/omicron/subsystem/\+Subsystem.hpp File Reference}
+\label{_subsystem_8hpp}\index{/home/david/\+Dropbox/\+Development/\+Omicron/\+Omicron/src/cpp/omicron/subsystem/\+Subsystem.\+hpp@{/home/david/\+Dropbox/\+Development/\+Omicron/\+Omicron/src/cpp/omicron/subsystem/\+Subsystem.\+hpp}}
+{\ttfamily \#include $<$arcanecore/base/\+Exceptions.\+hpp$>$}\\*
+{\ttfamily \#include $<$arcanecore/base/lang/\+Restrictors.\+hpp$>$}\\*
+{\ttfamily \#include $<$arcanecore/base/str/\+String\+Operations.\+hpp$>$}\\*
+{\ttfamily \#include $<$arcanecore/base/str/\+U\+T\+F8\+String.\+hpp$>$}\\*
+{\ttfamily \#include $<$arcanecore/io/dl/\+D\+L\+Operations.\+hpp$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classomi_1_1ss_1_1_subsystem}{omi\+::ss\+::\+Subsystem}
+\begin{DoxyCompactList}\small\item\em T\+O\+DO\+: \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceomi}{omi}
+\begin{DoxyCompactList}\small\item\em The global namespace of the Omicron engine. \end{DoxyCompactList}\item 
+ \hyperlink{namespaceomi_1_1ss}{omi\+::ss}
+\begin{DoxyCompactList}\small\item\em Library for implementing Omicron Subsystems. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{_subsystem_8hpp_a61901a289b7e47d2ff82a43e543acdd2}{O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM}(subsystem)
+\begin{DoxyCompactList}\small\item\em Macro that should be used exactly once in a subsystem D\+SO in order to provided the needed symbols for Omicron to register the subsystem. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+David Saxon 
+\end{DoxyAuthor}
+
+
+\subsection{Macro Definition Documentation}
+\index{Subsystem.\+hpp@{Subsystem.\+hpp}!O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM@{O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM}}
+\index{O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM@{O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM}!Subsystem.\+hpp@{Subsystem.\+hpp}}
+\subsubsection[{\texorpdfstring{O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM}{OSS_REGISTER_SUBSYSTEM}}]{\setlength{\rightskip}{0pt plus 5cm}\#define O\+S\+S\+\_\+\+R\+E\+G\+I\+S\+T\+E\+R\+\_\+\+S\+U\+B\+S\+Y\+S\+T\+EM(
+\begin{DoxyParamCaption}
+\item[{}]{subsystem}
+\end{DoxyParamCaption}
+)}\hypertarget{_subsystem_8hpp_a61901a289b7e47d2ff82a43e543acdd2}{}\label{_subsystem_8hpp_a61901a289b7e47d2ff82a43e543acdd2}
+
+
+Macro that should be used exactly once in a subsystem D\+SO in order to provided the needed symbols for Omicron to register the subsystem. 
+
+This macro should be used in the global namespace.
+
+
+\begin{DoxyParams}{Parameters}
+{\em subsystem} & The class name of the subsystem object the library is registering. \\
+\hline
+\end{DoxyParams}

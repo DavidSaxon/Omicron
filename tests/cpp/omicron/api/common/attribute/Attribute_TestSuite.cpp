@@ -70,7 +70,7 @@ ARC_TEST_UNIT(as_immutable)
     omi::Attribute a;
     ARC_CHECK_THROW(
         a.as_immutable(),
-        arc::ex::IllegalActionError
+        arc::ex::StateError
     );
 }
 
@@ -83,7 +83,7 @@ ARC_TEST_UNIT(as_mutable)
     omi::Attribute a;
     ARC_CHECK_THROW(
         a.as_mutable(),
-        arc::ex::IllegalActionError
+        arc::ex::StateError
     );
 }
 

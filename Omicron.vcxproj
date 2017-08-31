@@ -36,8 +36,17 @@
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_api'">
     <ClCompile Include="src\cpp\omicron\api\common\attribute\Attribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\BoolAttribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\ByteAttribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\common\attribute\DataAttribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\DoubleAttribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\FloatAttribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\Int16Attribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\common\attribute\Int32Attribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\Int64Attribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\MapAttribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\PathAttribute.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\common\attribute\StringAttribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\config\ConfigGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\asset\AssetGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\asset\AssetLibrary.cpp" />
@@ -60,6 +69,7 @@
     <ClCompile Include="tests\cpp\TestsMain.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Attribute_TestSuite.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Int32Attribute_TestSuite.cpp" />
+    <ClCompile Include="tests\cpp\omicron\api\common\attribute\MapAttribute_TestSuite.cpp" />
 
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_qt'">

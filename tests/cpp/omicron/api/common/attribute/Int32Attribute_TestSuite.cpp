@@ -20,10 +20,8 @@ ARC_TEST_UNIT(default_constructor)
     ARC_CHECK_TRUE(a.is_immutable());
     ARC_CHECK_EQUAL(a.get_size(), 0);
     ARC_CHECK_EQUAL(a.get_tuple_size(), 0);
-    ARC_CHECK_EQUAL(a.get_value(), 0);
-    ARC_CHECK_EQUAL(a.get_value(false, 12), 12);
     ARC_CHECK_THROW(
-        a.get_value(true),
+        a.get_value(),
         arc::ex::IndexOutOfBoundsError
     );
     ARC_CHECK_TRUE(a.get_values().empty());
@@ -900,10 +898,36 @@ ARC_TEST_UNIT(as_mutable)
         omi::Int32Attribute b = a.as_mutable();
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_FALSE(b.is_immutable());
+        b.set_tuple_size(2);
+        ARC_CHECK_NOT_EQUAL(a, b);
+        ARC_CHECK_NOT_EQUAL(a.get_tuple_size(), b.get_tuple_size());
+        ARC_CHECK_ITER_EQUAL(a.get_values(), b.get_values());
         a.set_tuple_size(2);
         ARC_CHECK_EQUAL(a, b);
-        a.set_value(8);
+        ARC_CHECK_EQUAL(a.get_tuple_size(), b.get_tuple_size());
+        ARC_CHECK_ITER_EQUAL(a.get_values(), b.get_values());
+        a.set_tuple_size(0);
+        ARC_CHECK_NOT_EQUAL(a, b);
+        ARC_CHECK_NOT_EQUAL(a.get_tuple_size(), b.get_tuple_size());
+        ARC_CHECK_ITER_EQUAL(a.get_values(), b.get_values());
+    }
+    {
+        omi::Int32Attribute a(12, false);
+        omi::Int32Attribute b = a.as_mutable();
         ARC_CHECK_EQUAL(a, b);
+        ARC_CHECK_FALSE(b.is_immutable());
+        b.set_value(6);
+        ARC_CHECK_NOT_EQUAL(a, b);
+        ARC_CHECK_EQUAL(a.get_tuple_size(), b.get_tuple_size());
+        ARC_CHECK_ITER_NOT_EQUAL(a.get_values(), b.get_values());
+        a.set_value(6);
+        ARC_CHECK_EQUAL(a, b);
+        ARC_CHECK_EQUAL(a.get_tuple_size(), b.get_tuple_size());
+        ARC_CHECK_ITER_EQUAL(a.get_values(), b.get_values());
+        a.set_value(-2);
+        ARC_CHECK_NOT_EQUAL(a, b);
+        ARC_CHECK_EQUAL(a.get_tuple_size(), b.get_tuple_size());
+        ARC_CHECK_ITER_NOT_EQUAL(a.get_values(), b.get_values());
     }
     {
         omi::Int32Attribute a(12, true);

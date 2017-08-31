@@ -3,6 +3,7 @@ set(TESTS_SRC
 
     ../omicron/api/common/attribute/Attribute_TestSuite.cpp
     ../omicron/api/common/attribute/Int32Attribute_TestSuite.cpp
+    ../omicron/api/common/attribute/MapAttribute_TestSuite.cpp
 )
 
 # build the tests executable

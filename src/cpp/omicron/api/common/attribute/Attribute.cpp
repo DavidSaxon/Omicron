@@ -19,8 +19,7 @@ OMI_API_GLOBAL Attribute::Type Attribute::kTypeNull = 0;
 //----------------------------C O N S T R U C T O R-----------------------------
 
 OMI_API_GLOBAL Attribute::Storage::Storage()
-    : m_ref_count          (1)
-    , m_immutable_ref_count(0)
+    : m_ref_count(1)
 {
 }
 
@@ -47,7 +46,6 @@ public:
 
     //--------------------------C O N S T R U C T O R---------------------------
 
-    // TODO: DOC
     Definition(
             Type type,
             bool immutable,
@@ -57,16 +55,10 @@ public:
         , m_immutable(immutable)
         , m_storage  (storage)
     {
-        // increase immutable reference count of storage?
-        if(m_immutable && m_storage != nullptr)
-        {
-            ++m_storage->m_immutable_ref_count;
-        }
     }
 
     //---------------------------D E S T R U C T O R----------------------------
 
-    // TODO: DOC
     ~Definition()
     {
         // decrease the reference count of the storage
@@ -79,11 +71,6 @@ public:
             else
             {
                 --m_storage->m_ref_count;
-                // decrease immutable reference count?
-                if(m_immutable)
-                {
-                    --m_storage->m_immutable_ref_count;
-                }
             }
         }
     }
@@ -194,12 +181,7 @@ OMI_API_GLOBAL void Attribute::assign(const Attribute& other)
 OMI_API_GLOBAL Attribute Attribute::as_immutable() const
 {
     // error on invalid attributes
-    if(!is_valid())
-    {
-        throw arc::ex::IllegalActionError(
-            "as_immutable() cannot be used on invalid attributes"
-        );
-    }
+    check_state("as_immutable() used on an invalid attribute");
 
     // no need to do anything if this is already immutable
     if(m_def->m_immutable)
@@ -219,18 +201,7 @@ OMI_API_GLOBAL Attribute Attribute::as_immutable() const
 OMI_API_GLOBAL Attribute Attribute::as_mutable() const
 {
     // error on invalid attributes
-    if(!is_valid())
-    {
-        throw arc::ex::IllegalActionError(
-            "as_mutable() cannot be used on invalid attributes"
-        );
-    }
-
-    // no need to do anything if this is already mutable
-    if(!m_def->m_immutable)
-    {
-        return *this;
-    }
+    check_state("as_mutable() used on an invalid attribute");
 
     // increase the reference count of the current storage
     if(m_def->m_storage != nullptr)
@@ -297,22 +268,47 @@ OMI_API_GLOBAL void Attribute::prepare_modifcation(bool soft)
         );
     }
 
-    // is the storage used by any immutable definitions?
-    if(m_def->m_storage->m_immutable_ref_count > 0)
+    // is the storage used by any other definitions?
+    if(m_def->m_storage->m_ref_count > 1)
     {
+        // decrease the current reference count
+        --m_def->m_storage->m_ref_count;
         // need to copy for rewrite
-        Storage* new_storage = m_def->m_storage->copy_for_overwrite(soft);
-        // decrease the reference count of the current storage
-        if(m_def->m_storage->m_ref_count <= 1)
+        m_def->m_storage = m_def->m_storage->copy_for_overwrite(soft);
+    }
+}
+
+OMI_API_GLOBAL void Attribute::check_state(
+        const arc::str::UTF8String& message) const
+{
+    if(!is_valid())
+    {
+        throw arc::ex::StateError(message);
+    }
+}
+
+/*!
+ * \brief Appends the string representation of this attribute (using the
+ *        given indentation amount) to the provided string.
+ */
+OMI_API_GLOBAL void Attribute::string_repr(
+        arc::str::UTF8String& s,
+        std::size_t indentation) const
+{
+    // null storage?
+    if(m_def->m_storage == nullptr)
+    {
+        // indent?
+        if(indentation > 0)
         {
-            delete m_def->m_storage;
+            s += (arc::str::UTF8String(" ") * indentation);
         }
-        else
-        {
-            --m_def->m_storage->m_ref_count;
-        }
-        // assign new storage
-        m_def->m_storage = new_storage;
+        s += "NullAttribute";
+    }
+    else
+    {
+        // get from storage
+        m_def->m_storage->string_repr(indentation, s);
     }
 }
 
@@ -333,17 +329,7 @@ OMI_API_GLOBAL arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
         const omi::Attribute& a)
 {
-    // null storage?
-    if(a.m_def->m_storage == nullptr)
-    {
-        s += "NullAttribute";
-    }
-    else
-    {
-        // get from storage
-        a.m_def->m_storage->string_repr(s);
-    }
-
+    a.string_repr(s, 0);
     return s;
 }
 

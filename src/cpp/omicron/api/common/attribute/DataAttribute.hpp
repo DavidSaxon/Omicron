@@ -13,7 +13,17 @@
 namespace omi
 {
 
-// TODO: DOC
+/*!
+ * \brief The DataAttribute class is the base class that all data attribute
+ *        types inherit from.
+ *
+ * A DataAttribute is a generic container for zero or more instances of an
+ * specific type.
+ * DataAttribute's also hold a meta-data field: tuple size which can be used to
+ * define the size that values should be grouped into. This field is not
+ * enforced however so isn't required to match the number of values in the
+ * Attribute. A tuple size of 0 denotes the data is not grouped in any way.
+ */
 class DataAttribute : public Attribute
 {
 public:
@@ -32,18 +42,26 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    // TODO: Doc
+    /*!
+     * \brief The Abstract base class of internal storage type of
+     *        DataAttributes.
+     */
     class DataStorage : public Attribute::Storage
     {
     public:
 
         //------------------P U B L I C    A T T R I B U T E S------------------
 
+        /*!
+         * \brief The tuple size of the data.
+         */
         std::size_t m_tuple_size;
 
         //-----------------------C O N S T R U C T O R S------------------------
 
-        // TODO: DOC
+        /*!
+         * \brief Creates new empty DataStorage with the given tuple size.
+         */
         OMI_API_GLOBAL DataStorage(std::size_t tuple_size);
 
         //-------------------------D E S T R U C T O R--------------------------
@@ -51,16 +69,30 @@ public:
         OMI_API_GLOBAL virtual ~DataStorage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
-        // TODO: DOC
-        virtual std::size_t get_size() const = 0;
 
+        /*!
+         * \brief Returns the number of values in this DataStorage.
+         */
+        virtual std::size_t get_size() const = 0;
     };
 
     //--------------------------------------------------------------------------
     //                               TYPED STORAGE
     //--------------------------------------------------------------------------
 
-    // TODO: DOC
+    /*!
+     * \brief Type specific implementation of DataStorage.
+     *
+     * This implementation should be used by classes that inherit from
+     * DataAttribute.
+     *
+     * \tparam T_BaseType The attribute that is using this storage, this class
+     *                    should provide a static function named get_type_string
+     *                    which returns the name of the attribute as a
+     *                    arc::str::UTF8String.
+     * \tparam T_DataType The data type of the attribute and hence the data
+     *                    type this storage will hold.
+     */
     template<typename T_BaseType, typename T_DataType>
     class TypedDataStorage : public DataStorage
     {
@@ -68,17 +100,29 @@ public:
 
         //------------------P U B L I C    A T T R I B U T E S------------------
 
+        /*!
+         * \brief The internal data of this storage.
+         */
         std::vector<T_DataType> m_data;
 
         //-----------------------C O N S T R U C T O R S------------------------
 
-        // TODO: DOC
+        /*!
+         * \brief Creates new empty TypedDataStorage with the given tuple size
+         */
         TypedDataStorage(std::size_t tuple_size)
             : DataStorage(tuple_size)
         {
         }
 
-        // TODO: DOC
+        /*!
+         * \brief Creates new TypedDataStorage using a copy of the copy
+         *        described by the given iterators.
+         *
+         * \param first The starting iterator of the data.
+         * \param last The iterator one-past-the-end of the data.
+         * \param tuple_size The tuple size of the data.
+         */
         template<typename T_InputIterator>
         TypedDataStorage(
                 const T_InputIterator& first,
@@ -96,23 +140,6 @@ public:
         }
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
-
-        // TODO: DOC
-        virtual Storage* copy_for_overwrite(bool soft)
-        {
-            if(soft)
-            {
-                // soft overwrite - so copy everything
-                return new TypedDataStorage<T_BaseType, T_DataType>(
-                    m_data.begin(),
-                    m_data.end(),
-                    m_tuple_size
-                );
-            }
-
-            // just copy the tuple size
-            return new TypedDataStorage<T_BaseType, T_DataType>(m_tuple_size);
-        }
 
         // override
         virtual bool equals(const Attribute::Storage* other)
@@ -152,8 +179,32 @@ public:
         }
 
         // override
-        virtual void string_repr(arc::str::UTF8String& s) const
+        virtual Storage* copy_for_overwrite(bool soft)
         {
+            if(soft)
+            {
+                // soft overwrite - so copy everything
+                return new TypedDataStorage<T_BaseType, T_DataType>(
+                    m_data.begin(),
+                    m_data.end(),
+                    m_tuple_size
+                );
+            }
+
+            // just copy the tuple size
+            return new TypedDataStorage<T_BaseType, T_DataType>(m_tuple_size);
+        }
+
+        // override
+        virtual void string_repr(
+                std::size_t indentation,
+                arc::str::UTF8String& s) const
+        {
+            // indentation?
+            if(indentation > 0)
+            {
+                s << (arc::str::UTF8String(" ") * indentation);
+            }
             // get name
             s << T_BaseType::get_type_string();
             // tuple size
@@ -208,17 +259,21 @@ public:
     OMI_API_GLOBAL ~DataAttribute();
 
     //--------------------------------------------------------------------------
-    //                                 OPERATORS
-    //--------------------------------------------------------------------------
-
-    //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // TODO: doc
+    /*!
+     * \brief Returns the number of values this attribute holds.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     */
     OMI_API_GLOBAL std::size_t get_size() const;
 
-    // TODO: doc
+    /*!
+     * \brief Returns the tuple size of this attribute.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     */
     OMI_API_GLOBAL std::size_t get_tuple_size() const;
 
     /*!

@@ -1,0 +1,78 @@
+\hypertarget{class_p_x_subsystem}{}\section{P\+X\+Subsystem Class Reference}
+\label{class_p_x_subsystem}\index{P\+X\+Subsystem@{P\+X\+Subsystem}}
+
+
+T\+O\+DO.  
+
+
+
+
+{\ttfamily \#include $<$P\+X\+Subsystem.\+hpp$>$}
+
+Inheritance diagram for P\+X\+Subsystem\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_p_x_subsystem}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_p_x_subsystem_a8c051bb5e7277c6754647a53885b6348}{startup} ()
+\begin{DoxyCompactList}\small\item\em Startups up this subsystem. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_p_x_subsystem_adabd11441f7c81b81aba456f6d825279}{shutdown} ()
+\begin{DoxyCompactList}\small\item\em Performs shutdown of this subsystem. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_p_x_subsystem_ae2dba562627b2cc26cbc880942fc5a9b}{setup\+\_\+rendering} ()\hypertarget{class_p_x_subsystem_ae2dba562627b2cc26cbc880942fc5a9b}{}\label{class_p_x_subsystem_ae2dba562627b2cc26cbc880942fc5a9b}
+
+\begin{DoxyCompactList}\small\item\em Is called once a valid GL context has been established to setup rendering. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_p_x_subsystem_af83fe51fbfbabd65a3d261bd62bfbfb9}{render} ()\hypertarget{class_p_x_subsystem_af83fe51fbfbabd65a3d261bd62bfbfb9}{}\label{class_p_x_subsystem_af83fe51fbfbabd65a3d261bd62bfbfb9}
+
+\begin{DoxyCompactList}\small\item\em Is called to render the current frame. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+T\+O\+DO. 
+
+\subsection{Member Function Documentation}
+\index{P\+X\+Subsystem@{P\+X\+Subsystem}!startup@{startup}}
+\index{startup@{startup}!P\+X\+Subsystem@{P\+X\+Subsystem}}
+\subsubsection[{\texorpdfstring{startup()}{startup()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void P\+X\+Subsystem\+::startup (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_p_x_subsystem_a8c051bb5e7277c6754647a53885b6348}{}\label{class_p_x_subsystem_a8c051bb5e7277c6754647a53885b6348}
+
+
+Startups up this subsystem. 
+
+\begin{DoxyWarning}{Warning}
+This function should not be called manually.
+\end{DoxyWarning}
+Other than the constructor, this will be the first call made to this object, and will only be called once. 
+
+Reimplemented from \hyperlink{classomi_1_1ss_1_1_subsystem_a4b0ea0b6a120c551d73151f0e0432197}{omi\+::ss\+::\+Subsystem}.
+
+\index{P\+X\+Subsystem@{P\+X\+Subsystem}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!P\+X\+Subsystem@{P\+X\+Subsystem}}
+\subsubsection[{\texorpdfstring{shutdown()}{shutdown()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void P\+X\+Subsystem\+::shutdown (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_p_x_subsystem_adabd11441f7c81b81aba456f6d825279}{}\label{class_p_x_subsystem_adabd11441f7c81b81aba456f6d825279}
+
+
+Performs shutdown of this subsystem. 
+
+\begin{DoxyWarning}{Warning}
+This function should not be called manually.
+\end{DoxyWarning}
+Other than the destructor, once this function has been called, no further calls to this object will be made, and shutdown will only be called once. 
+
+Reimplemented from \hyperlink{classomi_1_1ss_1_1_subsystem_ab5855f3a5a4ec4375d2f2fea1a9bfbc5}{omi\+::ss\+::\+Subsystem}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/david/\+Dropbox/\+Development/\+Omicron/\+Omicron/src/cpp/builtin\+\_\+subsystems/pxtrace/\hyperlink{_p_x_subsystem_8hpp}{P\+X\+Subsystem.\+hpp}\end{DoxyCompactItemize}

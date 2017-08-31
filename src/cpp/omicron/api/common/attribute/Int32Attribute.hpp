@@ -9,10 +9,13 @@
 
 #include "omicron/api/common/attribute/DataAttribute.hpp"
 
+
 namespace omi
 {
 
-// TODO: DOC
+/*!
+ * \brief A DataAttribute that holds signed 32-bit integers.
+ */
 class Int32Attribute : public DataAttribute
 {
 public:
@@ -25,9 +28,9 @@ public:
      * \brief The data type this attribute is storing.
      */
     typedef arc::int32 DataType;
+
     /*!
-     * \brief The array type that is used to return weak references to this
-     *        attribute's data.
+     * \brief The array type that is used to hold this attribute's data.
      */
     typedef std::vector<DataType> ArrayType;
 
@@ -36,7 +39,7 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief The type identifier for int32 attributes.
+     * \brief The type identifier for Int32Attributes.
      */
     OMI_API_GLOBAL static Type kTypeInt32;
 
@@ -44,6 +47,9 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
+    /*!
+     * \brief The storage type used by Int32Attributes.
+     */
     typedef DataAttribute::TypedDataStorage<
             Int32Attribute,
             DataType
@@ -54,16 +60,30 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty int32 attribute.
+     * \brief Constructs a new empty Int32Attribute.
      *
      * \param immutable Whether this attribute is immutable or not.
      */
     OMI_API_GLOBAL Int32Attribute(bool immutable = true);
 
-    // TODO: doc
+    /*!
+     * \brief Constructs a new Int32Attribute with a single value and a tuple
+     *        size of 0.
+     *
+     * \param value The single value of this attribute.
+     * \param immutable Whether this attribute is immutable or not.
+     */
     OMI_API_GLOBAL Int32Attribute(DataType value, bool immutable = true);
 
-    // TODO: doc
+    /*!
+     * \brief Constructs a new Int32Attribute using a copy of the data described
+     *        by the given iterators.
+     *
+     * \param first The starting iterator of the data.
+     * \param last The iterator past-the-end of the data.
+     * \param tuple_size The tuple size of this attribute.
+     * \param immutable Whether this attribute is immutable or not.
+     */
     template<typename T_InputIterator>
     Int32Attribute(
             const T_InputIterator& first,
@@ -78,7 +98,14 @@ public:
     {
     }
 
-    // TODO: doc
+    /*!
+     * \brief Constructs a new Int32Attribute using a copy of the data in the
+     *        given array.
+     *
+     * \param values The data to copy to us as this attribute's data.
+     * \param tuple_size The tuple size of this attribute.
+     * \param immutable Whether this attribute is immutable or not.
+     */
     OMI_API_GLOBAL Int32Attribute(
             const ArrayType& values,
             std::size_t tuple_size = 0,
@@ -87,13 +114,16 @@ public:
     /*!
      * \brief Constructs a new reference count of the given Attribute.
      *
-     * If the given attribute is not a valid int32 attribute this will construct
-     * an invalid Int32Attribute.
+     * If the given attribute is not a valid Int32Attribute this will construct
+     * a null attribute and the reference count will not be increased.
      */
     OMI_API_GLOBAL Int32Attribute(const Attribute& other);
 
     /*!
      * \brief Constructs a new reference count of the given attribute.
+     *
+     * If the given attribute is invalid this will construct a null attribute
+     * and the reference count will not be increased.
      */
     OMI_API_GLOBAL Int32Attribute(const Int32Attribute& other);
 
@@ -107,7 +137,9 @@ public:
     //                          PUBLIC STATIC FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // TODO: DOC
+    /*!
+     * \brief Returns the of this attribute as a string.
+     */
     OMI_API_GLOBAL static arc::str::UTF8String get_type_string();
 
     //--------------------------------------------------------------------------
@@ -117,28 +149,17 @@ public:
     /*!
      * \brief Returns the first integer value of this attribute.
      *
-     * \param throw_on_error Whether an exception will be thrown if the value
-     *                       cannot be retrieved.
-     * \param default_value The value which will be returned if it cannot be
-     *                      retrieved from this attribute and throw_on_error is
-     *                      ```false```.
-     *
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IndexOutOfBoundsError If this attribute has no values.
      */
-    OMI_API_GLOBAL DataType get_value(
-            bool throw_on_error = false,
-            DataType default_value = 0) const;
+    OMI_API_GLOBAL DataType get_value() const;
 
     /*!
      * \brief Returns the array of values of this attribute.
      *
-     * \param throw_on_error Whether an exception will be thrown if the value
-     *                       cannot be retrieved.
-     *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL const ArrayType& get_values(bool throw_on_error = false);
+    OMI_API_GLOBAL const ArrayType& get_values() const;
 
     /*!
      * \brief Sets the value of this attribute to be a size 1 array holding the
@@ -159,7 +180,9 @@ public:
     template<typename T_InputIterator>
     void set_values(const T_InputIterator& first, const T_InputIterator& last)
     {
-        check_state();
+        // valid?
+        check_state("set_values() used on an invalid attribute");
+
         prepare_modifcation();
         get_storage<Int32Storage>()->m_data =
             std::vector<DataType>(first, last);
@@ -167,7 +190,7 @@ public:
 
     /*!
      * \brief Sets the value of this attribute to be a copy of the data within
-     *        the given vector.
+     *        the given array.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
@@ -182,12 +205,6 @@ protected:
 
     // override
     OMI_API_GLOBAL virtual bool check_type(Type type) const;
-
-    /*!
-     * \brief Convenience function which throws a arc::ex::StateError if this
-     *        attribute is not valid.
-     */
-    OMI_API_GLOBAL void check_state() const;
 };
 
 } // namespace omi

@@ -1,0 +1,75 @@
+\hypertarget{classomi__qt_1_1_qt_bootstrap}{}\section{omi\+\_\+qt\+:\+:Qt\+Bootstrap Class Reference}
+\label{classomi__qt_1_1_qt_bootstrap}\index{omi\+\_\+qt\+::\+Qt\+Bootstrap@{omi\+\_\+qt\+::\+Qt\+Bootstrap}}
+
+
+Handles startup and shutdown of the Omicron Qt window subsystem.  
+
+
+
+
+{\ttfamily \#include $<$Qt\+Bootstrap.\+hpp$>$}
+
+Inheritance diagram for omi\+\_\+qt\+:\+:Qt\+Bootstrap\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classomi__qt_1_1_qt_bootstrap}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classomi__qt_1_1_qt_bootstrap_ae86dd5217529263238e51228c248e74f}{startup} ()
+\begin{DoxyCompactList}\small\item\em Starts up this Omicron window subsystem. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classomi__qt_1_1_qt_bootstrap_a80d703cd4cb032ed900c1d77ea0056ab}{shutdown} ()
+\begin{DoxyCompactList}\small\item\em Starts up this Omicron window subsystem. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classomi__qt_1_1_qt_bootstrap_ab603ff5f3f6a7637b7daf143943f5e62}{start\+\_\+main\+\_\+loop} (\hyperlink{namespaceomi_1_1window_1_1ss_af42d2464a170bdfd876a35b9fde16137}{omi\+::window\+::ss\+::\+Engine\+Cycle\+Func} $\ast$engine\+\_\+cycle\+\_\+func)\hypertarget{classomi__qt_1_1_qt_bootstrap_ab603ff5f3f6a7637b7daf143943f5e62}{}\label{classomi__qt_1_1_qt_bootstrap_ab603ff5f3f6a7637b7daf143943f5e62}
+
+\begin{DoxyCompactList}\small\item\em Starts the main loop of Omicron which will be managed by window subsystem and will call the given function every cycle of the main loop. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classomi__qt_1_1_qt_bootstrap}{Qt\+Bootstrap} $\ast$ \hyperlink{classomi__qt_1_1_qt_bootstrap_a01e67a2999547d5c123a6d9296aa5e95}{get\+\_\+instance} ()\hypertarget{classomi__qt_1_1_qt_bootstrap_a01e67a2999547d5c123a6d9296aa5e95}{}\label{classomi__qt_1_1_qt_bootstrap_a01e67a2999547d5c123a6d9296aa5e95}
+
+\begin{DoxyCompactList}\small\item\em Returns the singleton instance of the Omicron Qt bootstrapper. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Handles startup and shutdown of the Omicron Qt window subsystem. 
+
+\subsection{Member Function Documentation}
+\index{omi\+\_\+qt\+::\+Qt\+Bootstrap@{omi\+\_\+qt\+::\+Qt\+Bootstrap}!startup@{startup}}
+\index{startup@{startup}!omi\+\_\+qt\+::\+Qt\+Bootstrap@{omi\+\_\+qt\+::\+Qt\+Bootstrap}}
+\subsubsection[{\texorpdfstring{startup()}{startup()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void omi\+\_\+qt\+::\+Qt\+Bootstrap\+::startup (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{classomi__qt_1_1_qt_bootstrap_ae86dd5217529263238e51228c248e74f}{}\label{classomi__qt_1_1_qt_bootstrap_ae86dd5217529263238e51228c248e74f}
+
+
+Starts up this Omicron window subsystem. 
+
+Other than the Bootstrap\textquotesingle{}s constructor this will be the first call made to this object, and will only be made once. 
+
+Reimplemented from \hyperlink{classomi_1_1window_1_1ss_1_1_bootstrap_a69b71f75e8be1496de09b3c5c647ded2}{omi\+::window\+::ss\+::\+Bootstrap}.
+
+\index{omi\+\_\+qt\+::\+Qt\+Bootstrap@{omi\+\_\+qt\+::\+Qt\+Bootstrap}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!omi\+\_\+qt\+::\+Qt\+Bootstrap@{omi\+\_\+qt\+::\+Qt\+Bootstrap}}
+\subsubsection[{\texorpdfstring{shutdown()}{shutdown()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void omi\+\_\+qt\+::\+Qt\+Bootstrap\+::shutdown (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{classomi__qt_1_1_qt_bootstrap_a80d703cd4cb032ed900c1d77ea0056ab}{}\label{classomi__qt_1_1_qt_bootstrap_a80d703cd4cb032ed900c1d77ea0056ab}
+
+
+Starts up this Omicron window subsystem. 
+
+Other than the Bootstrap\textquotesingle{}s destructor this will be the last call made to this object, and will only be made once. 
+
+Reimplemented from \hyperlink{classomi_1_1window_1_1ss_1_1_bootstrap_a6e1b4cae0710d47c28de0cda82ef9378}{omi\+::window\+::ss\+::\+Bootstrap}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/david/\+Dropbox/\+Development/\+Omicron/\+Omicron/src/cpp/builtin\+\_\+subsystems/omi\+\_\+qt/\hyperlink{_qt_bootstrap_8hpp}{Qt\+Bootstrap.\+hpp}\end{DoxyCompactItemize}

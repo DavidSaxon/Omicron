@@ -19,7 +19,8 @@ Attribute::Type DataAttribute::kTypeDataBits = 1;
 //----------------------------C O N S T R U C T O R-----------------------------
 
 OMI_API_GLOBAL DataAttribute::DataStorage::DataStorage(std::size_t tuple_size)
-    : m_tuple_size(tuple_size)
+    : Attribute::Storage()
+    , m_tuple_size      (tuple_size)
 {
 }
 
@@ -64,20 +65,19 @@ OMI_API_GLOBAL DataAttribute::~DataAttribute()
 
 OMI_API_GLOBAL std::size_t DataAttribute::get_size() const
 {
+    check_state("get_size() used on an invalid attribute");
     return get_storage<DataStorage>()->get_size();
 }
 
 OMI_API_GLOBAL std::size_t DataAttribute::get_tuple_size() const
 {
+    check_state("get_tuple_size() used on an invalid attribute");
     return get_storage<DataStorage>()->m_tuple_size;
 }
 
 OMI_API_GLOBAL void DataAttribute::set_tuple_size(std::size_t tuple_size)
 {
-    if(!is_valid())
-    {
-        throw arc::ex::StateError("Invalid DataAttribute");
-    }
+    check_state("set_tuple_size() used on an invalid attribute");
     // soft modification
     prepare_modifcation(true);
     get_storage<DataStorage>()->m_tuple_size = tuple_size;

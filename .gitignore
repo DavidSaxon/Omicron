@@ -7,4 +7,9 @@ CMakeCache.txt
 Makefile
 cmake_install.cmake
 
-logs
+docs/build/*
+
+logs/
+deploy/*
+
+tests/data/file_system/*

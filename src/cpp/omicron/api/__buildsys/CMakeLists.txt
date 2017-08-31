@@ -1,7 +1,16 @@
 set(API_SRC
     ../common/attribute/Attribute.cpp
+    ../common/attribute/BoolAttribute.cpp
+    ../common/attribute/ByteAttribute.cpp
     ../common/attribute/DataAttribute.cpp
+    ../common/attribute/DoubleAttribute.cpp
+    ../common/attribute/FloatAttribute.cpp
+    ../common/attribute/Int16Attribute.cpp
     ../common/attribute/Int32Attribute.cpp
+    ../common/attribute/Int64Attribute.cpp
+    ../common/attribute/MapAttribute.cpp
+    ../common/attribute/PathAttribute.cpp
+    ../common/attribute/StringAttribute.cpp
 
     ../config/ConfigGlobals.cpp
 
