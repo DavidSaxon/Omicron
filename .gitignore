@@ -11,5 +11,3 @@ docs/build/*
 
 logs/
 deploy/*
-
-tests/data/file_system/*
