@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type FloatAttribute::kTypeFloat =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL FloatAttribute::FloatAttribute(bool immutable)
-    : DataAttribute(kTypeFloat, immutable, new FloatStorage(0))
+OMI_API_GLOBAL FloatAttribute::FloatAttribute()
+    : DataAttribute(kTypeFloat, true, new FloatStorage(0))
 {
 }
 

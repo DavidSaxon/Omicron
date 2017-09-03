@@ -60,11 +60,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty BoolAttribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable BoolAttribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL BoolAttribute(bool immutable = true);
+    OMI_API_GLOBAL BoolAttribute();
 
     /*!
      * \brief Constructs a new BoolAttribute with a single value and a tuple

@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type Int16Attribute::kTypeInt16 =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Int16Attribute::Int16Attribute(bool immutable)
-    : DataAttribute(kTypeInt16, immutable, new Int16Storage(0))
+OMI_API_GLOBAL Int16Attribute::Int16Attribute()
+    : DataAttribute(kTypeInt16, true, new Int16Storage(0))
 {
 }
 

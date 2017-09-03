@@ -62,11 +62,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty StringAttribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable StringAttribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL StringAttribute(bool immutable = true);
+    OMI_API_GLOBAL StringAttribute();
 
     /*!
      * \brief Constructs a new StringAttribute with a single value and a tuple

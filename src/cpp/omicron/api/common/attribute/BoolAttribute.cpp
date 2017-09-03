@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type BoolAttribute::kTypeBool =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL BoolAttribute::BoolAttribute(bool immutable)
-    : DataAttribute(kTypeBool, immutable, new BoolStorage(0))
+OMI_API_GLOBAL BoolAttribute::BoolAttribute()
+    : DataAttribute(kTypeBool, true, new BoolStorage(0))
 {
 }
 

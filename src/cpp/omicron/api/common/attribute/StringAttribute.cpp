@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type StringAttribute::kTypeString =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StringAttribute::StringAttribute(bool immutable)
-    : DataAttribute(kTypeString, immutable, new StringStorage(0))
+OMI_API_GLOBAL StringAttribute::StringAttribute()
+    : DataAttribute(kTypeString, true, new StringStorage(0))
 {
 }
 

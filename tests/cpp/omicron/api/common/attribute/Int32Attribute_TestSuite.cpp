@@ -2,7 +2,9 @@
 
 ARC_TEST_MODULE(omi.api.common.Int32Attribute)
 
+#include <omicron/api/common/attribute/FloatAttribute.hpp>
 #include <omicron/api/common/attribute/Int32Attribute.hpp>
+#include <omicron/api/common/attribute/MapAttribute.hpp>
 
 
 namespace
@@ -678,8 +680,235 @@ ARC_TEST_UNIT(equality_operator)
         ARC_CHECK_FALSE(d == e);
         ARC_CHECK_TRUE(d != e);
     }
+    {
+        omi::Int32Attribute a({1, 5, -8, 4}, 2, true);
+        omi::FloatAttribute b({1.0F, 5.0F, -8.0F, 4.0F}, 2, true);
+        ARC_CHECK_FALSE(a == b);
+        ARC_CHECK_TRUE(a != b);
+        omi::Attribute c(a);
+        ARC_CHECK_FALSE(b == c);
+        ARC_CHECK_TRUE(b != c);
+        omi::DataAttribute d(b);
+        ARC_CHECK_FALSE(c == d);
+        ARC_CHECK_TRUE(c != d);
+        omi::Int32Attribute e(d);
+        ARC_CHECK_FALSE(d == e);
+        ARC_CHECK_TRUE(d != e);
+    }
+    {
+        omi::MapAttribute::DataType map_data =
+            {{"key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)}};
 
-    // TODO: need to test against different types (float and group)
+        omi::Int32Attribute a({1, 5, -8, 4}, 2, true);
+        omi::MapAttribute b(map_data, false);
+        ARC_CHECK_FALSE(a == b);
+        ARC_CHECK_TRUE(a != b);
+        omi::DataAttribute c(a);
+        ARC_CHECK_FALSE(b == c);
+        ARC_CHECK_TRUE(b != c);
+        omi::Attribute d(b);
+        ARC_CHECK_FALSE(c == d);
+        ARC_CHECK_TRUE(c != d);
+        omi::Int32Attribute e(d);
+        ARC_CHECK_FALSE(d == e);
+        ARC_CHECK_TRUE(d != e);
+    }
+}
+
+//------------------------------------------------------------------------------
+//                               INVALID ATTRIBUTE
+//------------------------------------------------------------------------------
+
+ARC_TEST_UNIT(invalid)
+{
+    {
+        omi::Attribute b;
+        omi::Int32Attribute a(b);
+        ARC_CHECK_FALSE(a.is_valid());
+        ARC_CHECK_THROW(
+            a.as_immutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.as_mutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_tuple_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_tuple_size(4),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_value(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_values(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_value(4),
+            arc::ex::StateError
+        );
+        std::vector<omi::Int32Attribute::DataType> new_values = {1, 2, 3, 4};
+        ARC_CHECK_THROW(
+            a.set_values(new_values.begin(), new_values.end()),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_values(new_values),
+            arc::ex::StateError
+        );
+    }
+    {
+        omi::FloatAttribute b(3.14F);
+        omi::Int32Attribute a(b);
+        ARC_CHECK_FALSE(a.is_valid());
+        ARC_CHECK_THROW(
+            a.as_immutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.as_mutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_tuple_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_tuple_size(4),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_value(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_values(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_value(4),
+            arc::ex::StateError
+        );
+        std::vector<omi::Int32Attribute::DataType> new_values = {1, 2, 3, 4};
+        ARC_CHECK_THROW(
+            a.set_values(new_values.begin(), new_values.end()),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_values(new_values),
+            arc::ex::StateError
+        );
+    }
+    {
+        omi::Int32Attribute b(3);
+        omi::FloatAttribute c(b);
+        omi::Int32Attribute a(c);
+        ARC_CHECK_FALSE(a.is_valid());
+        ARC_CHECK_THROW(
+            a.as_immutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.as_mutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_tuple_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_tuple_size(4),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_value(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_values(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_value(4),
+            arc::ex::StateError
+        );
+        std::vector<omi::Int32Attribute::DataType> new_values = {1, 2, 3, 4};
+        ARC_CHECK_THROW(
+            a.set_values(new_values.begin(), new_values.end()),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_values(new_values),
+            arc::ex::StateError
+        );
+    }
+    {
+        omi::MapAttribute::DataType map_data =
+            {{"key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)}};
+
+        omi::MapAttribute b(map_data, false);
+        omi::Int32Attribute a(b);
+        ARC_CHECK_FALSE(a.is_valid());
+        ARC_CHECK_THROW(
+            a.as_immutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.as_mutable(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_tuple_size(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_tuple_size(4),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_value(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.get_values(),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_value(4),
+            arc::ex::StateError
+        );
+        std::vector<omi::Int32Attribute::DataType> new_values = {1, 2, 3, 4};
+        ARC_CHECK_THROW(
+            a.set_values(new_values.begin(), new_values.end()),
+            arc::ex::StateError
+        );
+        ARC_CHECK_THROW(
+            a.set_values(new_values),
+            arc::ex::StateError
+        );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -986,8 +1215,5 @@ ARC_TEST_UNIT(as_mutable)
         ARC_CHECK_ITER_NOT_EQUAL(a.get_values(), b.get_values());
     }
 }
-
-// TODO: check invalid - as immutable and as mutable should throw exceptions
-//      -> copying to another type (group or float) and back should be invalid
 
 } // namespace

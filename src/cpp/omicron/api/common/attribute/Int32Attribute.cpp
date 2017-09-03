@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type Int32Attribute::kTypeInt32 =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Int32Attribute::Int32Attribute(bool immutable)
-    : DataAttribute(kTypeInt32, immutable, new Int32Storage(0))
+OMI_API_GLOBAL Int32Attribute::Int32Attribute()
+    : DataAttribute(kTypeInt32, true, new Int32Storage(0))
 {
 }
 

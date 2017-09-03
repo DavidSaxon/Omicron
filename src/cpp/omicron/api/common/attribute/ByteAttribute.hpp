@@ -60,11 +60,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty ByteAttribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable ByteAttribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL ByteAttribute(bool immutable = true);
+    OMI_API_GLOBAL ByteAttribute();
 
     /*!
      * \brief Constructs a new ByteAttribute with a single value and a tuple

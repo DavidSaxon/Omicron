@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type DoubleAttribute::kTypeDouble =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(bool immutable)
-    : DataAttribute(kTypeDouble, immutable, new DoubleStorage(0))
+OMI_API_GLOBAL DoubleAttribute::DoubleAttribute()
+    : DataAttribute(kTypeDouble, true, new DoubleStorage(0))
 {
 }
 

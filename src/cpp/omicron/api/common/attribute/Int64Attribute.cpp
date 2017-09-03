@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type Int64Attribute::kTypeInt64 =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Int64Attribute::Int64Attribute(bool immutable)
-    : DataAttribute(kTypeInt64, immutable, new Int64Storage(0))
+OMI_API_GLOBAL Int64Attribute::Int64Attribute()
+    : DataAttribute(kTypeInt64, true, new Int64Storage(0))
 {
 }
 

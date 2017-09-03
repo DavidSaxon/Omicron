@@ -144,7 +144,13 @@ public:
          * \brief Compares whether this storage has equality with the other
          *        given storage pointer.
          */
-        virtual bool equals(const Storage* other) = 0;
+        virtual bool equals(const Storage* other) const = 0;
+
+        /*!
+         * \brief Compares whether this storage is less than the other given
+         *        storage.
+         */
+        virtual bool less_than(const Storage* other) const = 0;
 
         /*!
          * \brief Makes a copy of this storage with the intention that the
@@ -206,12 +212,17 @@ public:
     /*!
      * \brief Equality operator.
      */
-    OMI_API_GLOBAL bool operator==(const Attribute& other);
+    OMI_API_GLOBAL bool operator==(const Attribute& other) const;
 
     /*!
      * \brief Inequality operator.
      */
-    OMI_API_GLOBAL bool operator!=(const Attribute& other);
+    OMI_API_GLOBAL bool operator!=(const Attribute& other) const;
+
+    /*!
+     * \brief Less than operator.
+     */
+    OMI_API_GLOBAL bool operator<(const Attribute& other) const;
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS

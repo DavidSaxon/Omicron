@@ -30,7 +30,7 @@ OMI_API_GLOBAL MapAttribute::MapStorage::~MapStorage()
 
 //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
 
-OMI_API_GLOBAL bool MapAttribute::MapStorage::equals(const Storage* other)
+OMI_API_GLOBAL bool MapAttribute::MapStorage::equals(const Storage* other) const
 {
     // cast
     const MapStorage* casted = dynamic_cast<const MapStorage*>(other);
@@ -61,6 +61,19 @@ OMI_API_GLOBAL bool MapAttribute::MapStorage::equals(const Storage* other)
     return true;
 }
 
+OMI_API_GLOBAL bool MapAttribute::MapStorage::less_than(
+        const Storage* other) const
+{
+    // cast
+    const MapStorage* casted = dynamic_cast<const MapStorage*>(other);
+    if(casted == nullptr)
+    {
+        return true;
+    }
+    // hmmm
+    return m_data.size() < casted->m_data.size();
+}
+
 OMI_API_GLOBAL Attribute::Storage* MapAttribute::MapStorage::copy_for_overwrite(
         bool soft)
 {
@@ -78,11 +91,9 @@ OMI_API_GLOBAL void MapAttribute::MapStorage::string_repr(
         arc::str::UTF8String& s) const
 {
     // indentation?
-    if(indentation > 0)
-    {
-        s << (arc::str::UTF8String(" ") * indentation);
-    }
-    s << "MapAttribute";
+    arc::str::UTF8String indent_str = " ";
+    indent_str *= indentation;
+    s << indent_str << "MapAttribute";
     // empty map?
     if(m_data.empty())
     {
@@ -93,11 +104,9 @@ OMI_API_GLOBAL void MapAttribute::MapStorage::string_repr(
         // next level of indentation
         std::size_t next_indentation = indentation + 4;
         // build the indentation string once
-        arc::str::UTF8String indent_str = " ";
-        indent_str *= next_indentation;
         for(auto entry : m_data)
         {
-            s << "\n" << next_indentation << entry.first << ":\n";
+            s << "\n" << indent_str << "- " << entry.first << ":\n";
             entry.second.string_repr(s, next_indentation);
         }
     }
@@ -192,7 +201,26 @@ OMI_API_GLOBAL bool MapAttribute::has(const arc::str::UTF8String& name) const
     check_state("has() used on an invalid attribute");
 
     const DataType& data = get_data();
-    return data.find(name) != data.end();
+    // nested?
+    std::size_t delimiter = name.find_first(".");
+    if(delimiter == arc::str::npos)
+    {
+        return data.find(name) != data.end();
+    }
+    else
+    {
+        auto f_data = data.find(name.substring(0, delimiter));
+        if(f_data == data.end())
+        {
+            return false;
+        }
+        omi::MapAttribute sub = f_data->second;
+        if(!sub.is_valid())
+        {
+            return false;
+        }
+        return sub.has(name.substring(delimiter + 1, name.get_length()));
+    }
 }
 
 OMI_API_GLOBAL const Attribute& MapAttribute::get(
@@ -202,14 +230,40 @@ OMI_API_GLOBAL const Attribute& MapAttribute::get(
     check_state("get() used on an invalid attribute");
 
     const DataType& data = get_data();
-    auto f_data = data.find(name);
-    if(f_data == data.end())
+    // nested?
+    std::size_t delimiter = name.find_first(".");
+    if(delimiter == arc::str::npos)
     {
-        throw arc::ex::KeyError(
-            "No entry in MapAttribute under name \"" + name + "\""
-        );
+        auto f_data = data.find(name);
+        if(f_data == data.end())
+        {
+            throw arc::ex::KeyError(
+                "No entry in MapAttribute under name \"" + name + "\""
+            );
+        }
+        return f_data->second;
     }
-    return f_data->second;
+    else
+    {
+        auto f_data = data.find(name.substring(0, delimiter));
+        if(f_data == data.end())
+        {
+            throw arc::ex::KeyError(
+                "No entry in MapAttribute under name \"" +
+                name.substring(0, delimiter) + "\""
+            );
+        }
+        omi::MapAttribute sub = f_data->second;
+        if(!sub.is_valid())
+        {
+            throw arc::ex::KeyError(
+                "No nested MapAttribute in MapAttribute under name \"" +
+                name.substring(0, delimiter) + "\""
+            );
+
+        }
+        return sub.get(name.substring(delimiter + 1, name.get_length()));
+    }
 }
 
 OMI_API_GLOBAL void MapAttribute::insert(
@@ -219,24 +273,81 @@ OMI_API_GLOBAL void MapAttribute::insert(
     // valid?
     check_state("insert() used on an invalid attribute");
     prepare_modifcation();
-    get_storage<MapStorage>()->m_data[name] = attrribute;
+
+    DataType& data = get_storage<MapStorage>()->m_data;
+    // nested?
+    std::size_t delimiter = name.find_first(".");
+    if(delimiter == arc::str::npos)
+    {
+        get_storage<MapStorage>()->m_data[name] = attrribute;
+    }
+    else
+    {
+        auto f_data = data.find(name.substring(0, delimiter));
+        if(f_data == data.end())
+        {
+            throw arc::ex::KeyError(
+                "No entry in MapAttribute under name \"" +
+                name.substring(0, delimiter) + "\""
+            );
+        }
+        omi::MapAttribute sub = f_data->second;
+        if(!sub.is_valid())
+        {
+            throw arc::ex::KeyError(
+                "No nested MapAttribute in MapAttribute under name \"" +
+                name.substring(0, delimiter) + "\""
+            );
+
+        }
+        sub.insert(
+            name.substring(delimiter + 1, name.get_length()),
+            attrribute
+        );
+    }
 }
 
 OMI_API_GLOBAL void MapAttribute::erase(const arc::str::UTF8String& name)
 {
     // valid?
     check_state("erase() used on an invalid attribute");
-    prepare_modifcation();
+    prepare_modifcation(true);
 
     DataType& data = get_storage<MapStorage>()->m_data;
-    auto f_data = data.find(name);
-    if(f_data == data.end())
+    // nested?
+    std::size_t delimiter = name.find_first(".");
+    if(delimiter == arc::str::npos)
     {
-        throw arc::ex::KeyError(
-            "No entry in MapAttribute under name \"" + name + "\""
-        );
+        auto f_data = data.find(name);
+        if(f_data == data.end())
+        {
+            throw arc::ex::KeyError(
+                "No entry in MapAttribute under name \"" + name + "\""
+            );
+        }
+        data.erase(f_data);
     }
-    data.erase(f_data);
+    else
+    {
+        auto f_data = data.find(name.substring(0, delimiter));
+        if(f_data == data.end())
+        {
+            throw arc::ex::KeyError(
+                "No entry in MapAttribute under name \"" +
+                name.substring(0, delimiter) + "\""
+            );
+        }
+        omi::MapAttribute sub = f_data->second;
+        if(!sub.is_valid())
+        {
+            throw arc::ex::KeyError(
+                "No nested MapAttribute in MapAttribute under name \"" +
+                name.substring(0, delimiter) + "\""
+            );
+
+        }
+        sub.erase(name.substring(delimiter + 1, name.get_length()));
+    }
 }
 
 OMI_API_GLOBAL void MapAttribute::set_data(const DataType& data)
@@ -253,6 +364,15 @@ OMI_API_GLOBAL void MapAttribute::clear()
     check_state("clear() used on an invalid attribute");
     prepare_modifcation();
     get_storage<MapStorage>()->m_data.clear();
+}
+
+//------------------------------------------------------------------------------
+//                           PROTECTED MEMBER FUNCTIONS
+//------------------------------------------------------------------------------
+
+OMI_API_GLOBAL bool MapAttribute::check_type(Type type) const
+{
+    return type == kTypeMap;
 }
 
 } // namespace omi

@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type ByteAttribute::kTypeByte =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL ByteAttribute::ByteAttribute(bool immutable)
-    : DataAttribute(kTypeByte, immutable, new ByteStorage(0))
+OMI_API_GLOBAL ByteAttribute::ByteAttribute()
+    : DataAttribute(kTypeByte, true, new ByteStorage(0))
 {
 }
 

@@ -60,11 +60,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty Int32Attribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable Int32Attribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL Int32Attribute(bool immutable = true);
+    OMI_API_GLOBAL Int32Attribute();
 
     /*!
      * \brief Constructs a new Int32Attribute with a single value and a tuple

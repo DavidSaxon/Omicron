@@ -5,7 +5,7 @@
 #ifndef OMICRON_API_COMMON_ATTRIBUTE_MAPATTRIBUTE_HPP_
 #define OMICRON_API_COMMON_ATTRIBUTE_MAPATTRIBUTE_HPP_
 
-#include <map>
+#include <unordered_map>
 
 #include "omicron/api/common/attribute/Attribute.hpp"
 
@@ -37,7 +37,7 @@ public:
     /*!
      * \brief The type used to store MapAttribute's data.
      */
-    typedef std::map<arc::str::UTF8String, Attribute> DataType;
+    typedef std::unordered_map<arc::str::UTF8String, Attribute> DataType;
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC ATTRIBUTES
@@ -91,7 +91,10 @@ public:
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
         // override
-        OMI_API_GLOBAL virtual bool equals(const Storage* other);
+        OMI_API_GLOBAL virtual bool equals(const Storage* other) const;
+
+        // override
+        OMI_API_GLOBAL virtual bool less_than(const Storage* other) const;
 
         // override
         OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft);
@@ -279,6 +282,15 @@ public:
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
     OMI_API_GLOBAL void clear();
+
+protected:
+
+    //--------------------------------------------------------------------------
+    //                         PROTECTED MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    // override
+    OMI_API_GLOBAL virtual bool check_type(Type type) const;
 };
 
 } // namespace omi

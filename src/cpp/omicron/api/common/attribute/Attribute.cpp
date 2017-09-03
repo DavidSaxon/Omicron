@@ -110,7 +110,7 @@ OMI_API_GLOBAL Attribute& Attribute::operator=(const Attribute& other)
     return *this;
 }
 
-OMI_API_GLOBAL bool Attribute::operator==(const Attribute& other)
+OMI_API_GLOBAL bool Attribute::operator==(const Attribute& other) const
 {
     // fast fail if types aren't the same
     if(get_type() != other.get_type())
@@ -131,9 +131,35 @@ OMI_API_GLOBAL bool Attribute::operator==(const Attribute& other)
     return m_def->m_storage->equals(other.m_def->m_storage);
 }
 
-OMI_API_GLOBAL bool Attribute::operator!=(const Attribute& other)
+OMI_API_GLOBAL bool Attribute::operator!=(const Attribute& other) const
 {
     return !((*this) == other);
+}
+
+OMI_API_GLOBAL bool Attribute::operator<(const Attribute& other) const
+{
+    // check types first
+    if(get_type() != other.get_type())
+    {
+        return get_type() < other.get_type();
+    }
+    // both have null storage?
+    if(m_def->m_storage == nullptr && other.m_def->m_storage == nullptr)
+    {
+        return true;
+    }
+    // this has null storage
+    if(m_def->m_storage == nullptr)
+    {
+        return true;
+    }
+    // other has null storage
+    if(other.m_def->m_storage == nullptr)
+    {
+        return false;
+    }
+    // use storage less than
+    return m_def->m_storage->less_than(other.m_def->m_storage);
 }
 
 //------------------------------------------------------------------------------

@@ -32,8 +32,8 @@ OMI_API_GLOBAL Attribute::Type PathAttribute::kTypePath =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL PathAttribute::PathAttribute(bool immutable)
-    : DataAttribute(kTypePath, immutable, new PathStorage(0))
+OMI_API_GLOBAL PathAttribute::PathAttribute()
+    : DataAttribute(kTypePath, true, new PathStorage(0))
 {
 }
 

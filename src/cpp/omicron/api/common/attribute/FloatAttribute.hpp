@@ -60,11 +60,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty FloatAttribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable FloatAttribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL FloatAttribute(bool immutable = true);
+    OMI_API_GLOBAL FloatAttribute();
 
     /*!
      * \brief Constructs a new FloatAttribute with a single value and a tuple

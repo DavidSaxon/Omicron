@@ -142,7 +142,7 @@ public:
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
         // override
-        virtual bool equals(const Attribute::Storage* other)
+        virtual bool equals(const Attribute::Storage* other) const
         {
             // cast
             const TypedDataStorage<T_BaseType, T_DataType>* casted =
@@ -176,6 +176,22 @@ public:
             }
 
             return true;
+        }
+
+        // override
+        virtual bool less_than(const Storage* other) const
+        {
+            // cast
+            const TypedDataStorage<T_BaseType, T_DataType>* casted =
+                dynamic_cast<const TypedDataStorage<T_BaseType, T_DataType>*>(
+                    other
+                );
+            if(casted == nullptr)
+            {
+                return true;
+            }
+
+            return m_data < casted->m_data;
         }
 
         // override

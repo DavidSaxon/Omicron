@@ -60,11 +60,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty DoubleAttribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable DoubleAttribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL DoubleAttribute(bool immutable = true);
+    OMI_API_GLOBAL DoubleAttribute();
 
     /*!
      * \brief Constructs a new DoubleAttribute with a single value and a tuple

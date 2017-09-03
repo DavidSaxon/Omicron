@@ -62,11 +62,10 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new empty PathAttribute.
-     *
-     * \param immutable Whether this attribute is immutable or not.
+     * \brief Constructs a new empty immutable PathAttribute with a tuple size
+     *        of 0.
      */
-    OMI_API_GLOBAL PathAttribute(bool immutable = true);
+    OMI_API_GLOBAL PathAttribute();
 
     /*!
      * \brief Constructs a new PathAttribute with a single value and a tuple
