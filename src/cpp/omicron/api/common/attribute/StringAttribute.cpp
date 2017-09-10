@@ -3,6 +3,7 @@
 #include <typeinfo>
 
 #include <arcanecore/base/Exceptions.hpp>
+#include <arcanecore/crypt/hash/Spooky.hpp>
 
 
 namespace omi
@@ -27,6 +28,52 @@ static StringAttribute::ArrayType g_empty;
 OMI_API_GLOBAL Attribute::Type StringAttribute::kTypeString =
     DataAttribute::kTypeDataBits |
     (typeid(StringAttribute::DataType).hash_code() >> 8);
+
+//------------------------------------------------------------------------------
+//                                    STORAGE
+//------------------------------------------------------------------------------
+
+//---------------------------C O N S T R U C T O R S----------------------------
+
+OMI_API_GLOBAL StringAttribute::StringStorage::StringStorage(
+        std::size_t tuple_size)
+    : TypedDataStorage<StringAttribute, DataType>(tuple_size)
+{
+}
+
+//-----------------------------D E S T R U C T O R------------------------------
+
+OMI_API_GLOBAL StringAttribute::StringStorage::~StringStorage()
+{
+}
+
+//---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
+
+OMI_API_GLOBAL Attribute::Hash StringAttribute::StringStorage::get_hash(
+        arc::uint64 seed) const
+{
+    // hash need recomputing?
+    if(m_cached_hash.part1 == 0 && m_cached_hash.part2 == 0)
+    {
+        // start with seed and tuple size
+        m_cached_hash.part1 = seed;
+        m_cached_hash.part2 = m_tuple_size;
+
+        // hash each string
+        for(const DataType& d : m_data)
+        {
+            arc::crypt::hash::spooky_128(
+                static_cast<const void*>(d.get_raw()),
+                d.get_byte_length(),
+                m_cached_hash.part1,
+                m_cached_hash.part2,
+                m_cached_hash.part1,
+                m_cached_hash.part2
+            );
+        }
+    }
+    return m_cached_hash;
+}
 
 //------------------------------------------------------------------------------
 //                                  CONSTRUCTORS

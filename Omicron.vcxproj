@@ -36,7 +36,6 @@
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_api'">
     <ClCompile Include="src\cpp\omicron\api\common\attribute\Attribute.cpp" />
-    <ClCompile Include="src\cpp\omicron\api\common\attribute\BoolAttribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\common\attribute\ByteAttribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\common\attribute\DataAttribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\common\attribute\DoubleAttribute.cpp" />
@@ -70,7 +69,6 @@
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Attribute_TestSuite.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Int32Attribute_TestSuite.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\MapAttribute_TestSuite.cpp" />
-
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_qt'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtBootstrap.cpp" />
@@ -249,7 +247,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Users\David\AppData\Local\Programs\Python\Python36-32\libs;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='tests|Win32'">
@@ -266,7 +264,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Users\David\AppData\Local\Programs\Python\Python36-32\libs;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;arcanecore_test.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;arcanecore_test.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omicron_api|Win32'">
@@ -284,7 +282,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'">
@@ -301,7 +299,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>D:\Libraries\qt5-5.5.0-vs2013\qt5-x86-shared-release\lib;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'">
@@ -318,7 +316,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='pxtrace|Win32'">
@@ -335,7 +333,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;glew32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;glew32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_bullet|Win32'">
@@ -352,7 +350,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_al|Win32'">
@@ -369,7 +367,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

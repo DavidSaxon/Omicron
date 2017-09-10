@@ -3,6 +3,7 @@
 #include <typeinfo>
 
 #include <arcanecore/base/Exceptions.hpp>
+#include <arcanecore/crypt/hash/Spooky.hpp>
 
 
 namespace omi
@@ -27,6 +28,56 @@ static PathAttribute::ArrayType g_empty;
 OMI_API_GLOBAL Attribute::Type PathAttribute::kTypePath =
     DataAttribute::kTypeDataBits |
     (typeid(PathAttribute::DataType).hash_code() >> 8);
+
+//------------------------------------------------------------------------------
+//                                    STORAGE
+//------------------------------------------------------------------------------
+
+//---------------------------C O N S T R U C T O R S----------------------------
+
+OMI_API_GLOBAL PathAttribute::PathStorage::PathStorage(
+        std::size_t tuple_size)
+    : TypedDataStorage<PathAttribute, DataType>(tuple_size)
+{
+}
+
+//-----------------------------D E S T R U C T O R------------------------------
+
+OMI_API_GLOBAL PathAttribute::PathStorage::~PathStorage()
+{
+}
+
+//---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
+
+OMI_API_GLOBAL Attribute::Hash PathAttribute::PathStorage::get_hash(
+        arc::uint64 seed) const
+{
+    // hash need recomputing?
+    if(m_cached_hash.part1 == 0 && m_cached_hash.part2 == 0)
+    {
+        // start with seed and tuple size
+        m_cached_hash.part1 = seed;
+        m_cached_hash.part2 = m_tuple_size;
+
+        // hash each string in each path
+        for(const DataType& d : m_data)
+        {
+            // for(const arc::str::UTF8String& s : d)
+            for(std::size_t i = 0; i < d.get_length(); ++i)
+            {
+                arc::crypt::hash::spooky_128(
+                    static_cast<const void*>(d[i].get_raw()),
+                    d[i].get_byte_length(),
+                    m_cached_hash.part1,
+                    m_cached_hash.part2,
+                    m_cached_hash.part1,
+                    m_cached_hash.part2
+                );
+            }
+        }
+    }
+    return m_cached_hash;
+}
 
 //------------------------------------------------------------------------------
 //                                  CONSTRUCTORS

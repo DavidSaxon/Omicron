@@ -20,6 +20,7 @@ ARC_TEST_UNIT(default_constructor)
     ARC_CHECK_EQUAL(a.get_type(), omi::Int32Attribute::kTypeInt32);
     ARC_CHECK_TRUE(a.is_valid());
     ARC_CHECK_TRUE(a.is_immutable());
+    ARC_CHECK_TRUE(a.is_pure_immutable());
     ARC_CHECK_EQUAL(a.get_size(), 0);
     ARC_CHECK_EQUAL(a.get_tuple_size(), 0);
     ARC_CHECK_THROW(
@@ -58,6 +59,7 @@ ARC_TEST_UNIT(value_constructor)
         ARC_CHECK_EQUAL(a.get_type(), omi::Int32Attribute::kTypeInt32);
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 1);
         ARC_CHECK_EQUAL(a.get_tuple_size(), 0);
         ARC_CHECK_EQUAL(a.get_value(), 17);
@@ -94,6 +96,7 @@ ARC_TEST_UNIT(value_constructor)
         ARC_CHECK_EQUAL(a.get_type(), omi::Int32Attribute::kTypeInt32);
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_FALSE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_mutable());
         ARC_CHECK_EQUAL(a.get_size(), 1);
         ARC_CHECK_EQUAL(a.get_tuple_size(), 0);
         ARC_CHECK_EQUAL(a.get_value(), 21);
@@ -912,6 +915,64 @@ ARC_TEST_UNIT(invalid)
 }
 
 //------------------------------------------------------------------------------
+//                                      HASH
+//------------------------------------------------------------------------------
+
+ARC_TEST_UNIT(hash)
+{
+    {
+        omi::Int32Attribute a;
+        ARC_CHECK_EQUAL(a.get_hash(), a.get_hash());
+        omi::Int32Attribute b;
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        omi::Int32Attribute c = a.as_mutable();
+        c.set_tuple_size(2);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), c.get_hash());
+    }
+    {
+        omi::Int32Attribute a(12, true);
+        omi::Int32Attribute b(12, false);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        b.set_value(8);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        omi::Int32Attribute c = a.as_mutable();
+        ARC_CHECK_NOT_EQUAL(b.get_hash(), c.get_hash());
+        c.set_value(8);
+        ARC_CHECK_EQUAL(b.get_hash(), c.get_hash());
+    }
+    {
+        omi::Int32Attribute a;
+        omi::Int32Attribute b(12);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        omi::Int32Attribute c = a.as_mutable();
+        c.set_value(12);
+        ARC_CHECK_EQUAL(b.get_hash(), c.get_hash());
+    }
+    {
+        omi::Int32Attribute a(45, false);
+        omi::Int32Attribute b(0, false);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        b.set_value(45);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        a.set_tuple_size(2);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        b.set_tuple_size(2);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+    }
+    {
+        omi::Int32Attribute a({4, -8, 1, 3}, 2, false);
+        omi::Int32Attribute b({4, -8, 1, 3}, 2, false);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        a.set_values({1, 4, 7, 8});
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        b.set_values({1, 4, 7});
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        a.set_values({1, 4, 7});
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+    }
+}
+
+//------------------------------------------------------------------------------
 //                             STRING REPRESENTATION
 //------------------------------------------------------------------------------
 
@@ -1053,6 +1114,7 @@ ARC_TEST_UNIT(as_immutable)
         omi::Int32Attribute b = a.as_immutable();
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_TRUE(b.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_immutable());
         ARC_CHECK_THROW(
             a.set_value(8),
             arc::ex::IllegalActionError
@@ -1127,6 +1189,7 @@ ARC_TEST_UNIT(as_mutable)
         omi::Int32Attribute b = a.as_mutable();
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_FALSE(b.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_mutable());
         b.set_tuple_size(2);
         ARC_CHECK_NOT_EQUAL(a, b);
         ARC_CHECK_NOT_EQUAL(a.get_tuple_size(), b.get_tuple_size());

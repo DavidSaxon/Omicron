@@ -1,6 +1,7 @@
 #include "omicron/api/common/attribute/DataAttribute.hpp"
 
 #include <arcanecore/base/Exceptions.hpp>
+#include <arcanecore/crypt/hash/Spooky.hpp>
 
 
 namespace omi
@@ -28,6 +29,50 @@ OMI_API_GLOBAL DataAttribute::DataStorage::DataStorage(std::size_t tuple_size)
 
 OMI_API_GLOBAL DataAttribute::DataStorage::~DataStorage()
 {
+}
+
+//---------------P U B L I C    M E M B E R    F  U N C T I O N S---------------
+
+OMI_API_GLOBAL bool DataAttribute::DataStorage::is_data_pure_immutable() const
+{
+    // mutability not relevant
+    return true;
+}
+
+OMI_API_GLOBAL bool DataAttribute::DataStorage::is_data_pure_mutable() const
+{
+    // mutability not relevant
+    return true;
+}
+
+OMI_API_GLOBAL Attribute::Storage*
+DataAttribute::DataStorage::as_pure_immutable()
+{
+    ++m_ref_count;
+    return this;
+}
+
+OMI_API_GLOBAL
+Attribute::Storage* DataAttribute::DataStorage::as_pure_mutable()
+{
+    ++m_ref_count;
+    return this;
+}
+
+OMI_API_GLOBAL void DataAttribute::DataStorage::compute_hash(
+        const void* data,
+        std::size_t length,
+        arc::uint64 seed,
+        Hash& out_hash) const
+{
+    arc::crypt::hash::spooky_128(
+        data,
+        length,
+        out_hash.part1,
+        out_hash.part2,
+        seed,
+        m_tuple_size
+    );
 }
 
 //------------------------------------------------------------------------------

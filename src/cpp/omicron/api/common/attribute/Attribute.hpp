@@ -103,6 +103,118 @@ public:
     OMI_API_GLOBAL static Type kTypeNull;
 
     //--------------------------------------------------------------------------
+    //                                    HASH
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief Represents a 128-bit hash of an attribute.
+     *
+     * Attribute hashes can be used to cheaply determine whether an attribute
+     * has changed since the last time it was inspected.
+     */
+    class Hash
+    {
+    public:
+
+        //------------------P U B L I C    A T T R I B U T E S------------------
+
+        /*!
+         * \brief The first 64-bits of the hash.
+         */
+        arc::uint64 part1;
+        /*!
+         * \brief The second 64-bits of the hash.
+         */
+        arc::uint64 part2;
+
+        //-----------------------C O N S T R U C T O R S------------------------
+
+        /*!
+         * \brief Creates a new zero'd hash.
+         */
+        Hash()
+            : part1(0)
+            , part2(0)
+        {
+        }
+
+        /*!
+         * \brief Creates a new 128-bit hash from the 2 64-bit values.
+         */
+        Hash(arc::uint64 in_part1, arc::uint64 in_part2)
+            : part1(in_part1)
+            , part2(in_part2)
+        {
+        }
+
+        /*!
+         * \brief Copy constructor.
+         */
+        Hash(const Hash& other)
+            : part1(other.part1)
+            , part2(other.part2)
+        {
+        }
+
+        /*!
+         * \brief Move constructor.
+         */
+        Hash(Hash&& other)
+            : part1(other.part1)
+            , part2(other.part2)
+        {
+            other.part1 = 0;
+            other.part2 = 0;
+        }
+
+        //-------------------------D E S T R U C T O R--------------------------
+
+        ~Hash()
+        {
+        }
+
+        //--------------------------O P E R A T O R S---------------------------
+
+        /*!
+         * \brief Assignment operator.
+         */
+        Hash& operator=(const Hash& other)
+        {
+            part1 = other.part1;
+            part2 = other.part2;
+            return *this;
+        }
+
+        /*!
+         * \brief Move assignment operator.
+         */
+        Hash& operator=(Hash&& other)
+        {
+            part1 = other.part1;
+            part2 = other.part2;
+            other.part1 = 0;
+            other.part2 = 0;
+            return *this;
+        }
+
+        /*!
+         * \brief Equality operator.
+         */
+        bool operator==(const Hash& other) const
+        {
+            return part1 == other.part1 && part2 == other.part2;
+        }
+
+        /*!
+         * \brief Inequality operator.
+         */
+        bool operator!=(const Hash& other) const
+        {
+            return !((*this) == other);
+        }
+    };
+
+    //--------------------------------------------------------------------------
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
@@ -151,6 +263,39 @@ public:
          *        storage.
          */
         virtual bool less_than(const Storage* other) const = 0;
+
+        /*!
+         * \brief Returns whether the data of this storage is pure immutable.
+         */
+        virtual bool is_data_pure_immutable() const = 0;
+
+        /*!
+         * \brief Returns whether the data of this storage is pure mutable.
+         */
+        virtual bool is_data_pure_mutable() const = 0;
+
+        /*!
+         * \brief Returns a pure immutable version of this storage.
+         */
+        virtual Storage* as_pure_immutable() = 0;
+
+        /*!
+         * \brief Returns a pure mutable version of this storage.
+         */
+        virtual Storage* as_pure_mutable() = 0;
+
+        /*!
+         * \brief Returns a hash of this storage.
+         *
+         * \param seed The seed to use for the hash - note this can be ignored
+         *             if this storage already has a cached hash.
+         */
+        virtual Hash get_hash(arc::uint64 seed) const = 0;
+
+        /*!
+         * \brief Invalidates any cached hash data.
+         */
+        virtual void invalidate_hash() = 0;
 
         /*!
          * \brief Makes a copy of this storage with the intention that the
@@ -257,6 +402,30 @@ public:
     OMI_API_GLOBAL bool is_immutable() const;
 
     /*!
+     * \brief Returns whether this attribute and all of its descendants are
+     *        immutable.
+     */
+    OMI_API_GLOBAL bool is_pure_immutable() const;
+
+    /*!
+     * \brief Returns whether this attribute and all of its descendants are
+     *        mutable.
+     */
+    OMI_API_GLOBAL bool is_pure_mutable() const;
+
+    /*!
+     * \brief Returns a hash that represents this attribute.
+     *
+     * This hash is dependent on the values of this attribute and the ancestors
+     * of the attribute (i.e. the contents of MapAttributes and
+     * ArrayAttributes).
+     *
+     * \note The hash may be calculated at the time this function is called if
+     *       the currently stored hash is out of date (lazy computation).
+     */
+    OMI_API_GLOBAL Hash get_hash() const;
+
+    /*!
      * \brief Attempts to a new reference count of the given Attribute.
      *
      * If the given attribute is not a valid attribute type to copy from this
@@ -287,6 +456,26 @@ public:
      * \throws arc::ex::StateError If this attribute is invalid.
      */
     OMI_API_GLOBAL Attribute as_mutable() const;
+
+    /*!
+     * \brief Returns a pure immutable version of this attribute.
+     *
+     * Pure immutable attributes are attributes that are immutable and all of
+     * their descendant attributes are also immutable.
+     *
+     * \throws arc::ex::StateError If this attribute is invalid.
+     */
+    OMI_API_GLOBAL Attribute as_pure_immutable() const;
+
+    /*!
+     * \brief Returns a pure mutable version of this attribute.
+     *
+     * Pure mutable attributes are attributes that are mutable and all of their
+     * descendant attributes are also mutable.
+     *
+     * \throws arc::ex::StateError If this attribute is invalid.
+     */
+    OMI_API_GLOBAL Attribute as_pure_mutable() const;
 
     /*!
      * \brief Appends the string representation of this attribute (using the
@@ -409,6 +598,22 @@ OMI_API_GLOBAL arc::str::UTF8String& operator<<(
 OMI_API_GLOBAL std::ostream& operator<<(
         std::ostream& s,
         const omi::Attribute& a);
+
+/*!
+ * \brief Appends a string representation of the Attribute Hash to the given
+ *        UTF8String.
+ */
+OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+        arc::str::UTF8String& s,
+        const omi::Attribute::Hash& h);
+
+/*!
+ * \brief Appends a string representation of the Attribute Hash to the given
+ *        stream.
+ */
+OMI_API_GLOBAL std::ostream& operator<<(
+        std::ostream& s,
+        const omi::Attribute::Hash& h);
 
 } // namespace omi
 

@@ -1,6 +1,5 @@
 set(API_SRC
     ../common/attribute/Attribute.cpp
-    ../common/attribute/BoolAttribute.cpp
     ../common/attribute/ByteAttribute.cpp
     ../common/attribute/DataAttribute.cpp
     ../common/attribute/DoubleAttribute.cpp
@@ -30,6 +29,7 @@ target_link_libraries(omicron_api
     arcanecore_collate
     arcanecore_config
     arcanecore_log
+    arcanecore_crypt
     arcanecore_io
     arcanecore_base
 )

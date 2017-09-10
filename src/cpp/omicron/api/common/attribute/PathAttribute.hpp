@@ -49,13 +49,51 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    /*!
-     * \brief The storage type used by PathAttributes.
-     */
-    typedef DataAttribute::TypedDataStorage<
-            PathAttribute,
-            DataType
-    > PathStorage;
+    //--------------------------------------------------------------------------
+    //                                  STORAGE
+    //--------------------------------------------------------------------------
+
+    class PathStorage : public TypedDataStorage<PathAttribute, DataType>
+    {
+    public:
+
+        //-----------------------C O N S T R U C T O R S------------------------
+
+        /*!
+         * \brief Creates new empty PathStorage with the given tuple size
+         */
+        OMI_API_GLOBAL PathStorage(std::size_t tuple_size);
+
+        /*!
+         * \brief Creates new PathStorage using a copy of the data described
+         *        by the given iterators.
+         *
+         * \param first The starting iterator of the data.
+         * \param last The iterator one-past-the-end of the data.
+         * \param tuple_size The tuple size of the data.
+         */
+        template<typename T_InputIterator>
+        PathStorage(
+                const T_InputIterator& first,
+                const T_InputIterator& last,
+                std::size_t tuple_size)
+            : TypedDataStorage<PathAttribute, DataType>(
+                first,
+                last,
+                tuple_size
+            )
+        {
+        }
+
+        //-------------------------D E S T R U C T O R--------------------------
+
+        OMI_API_GLOBAL virtual ~PathStorage();
+
+        //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
+
+        // override
+        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const;
+    };
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

@@ -182,6 +182,49 @@ OMI_API_GLOBAL bool Attribute::is_immutable() const
     return m_def->m_immutable || !is_valid();
 }
 
+OMI_API_GLOBAL bool Attribute::is_pure_immutable() const
+{
+    // check mutability first
+    if(!is_immutable())
+    {
+        return false;
+    }
+    // null storage?
+    if(m_def->m_storage == nullptr)
+    {
+        return true;
+    }
+    // check data
+    return m_def->m_storage->is_data_pure_immutable();
+}
+
+OMI_API_GLOBAL bool Attribute::is_pure_mutable() const
+{
+    // check mutability first
+    if(is_immutable())
+    {
+        return false;
+    }
+    // null storage?
+    if(m_def->m_storage == nullptr)
+    {
+        return false;
+    }
+    // check data
+    return m_def->m_storage->is_data_pure_mutable();
+}
+
+OMI_API_GLOBAL Attribute::Hash Attribute::get_hash() const
+{
+    // return null hash?
+    if(m_def == nullptr || m_def->m_storage == nullptr)
+    {
+        return Hash();
+    }
+    // return from storage
+    return m_def->m_storage->get_hash(static_cast<arc::uint64>(m_def->m_type));
+}
+
 OMI_API_GLOBAL void Attribute::assign(const Attribute& other)
 {
     // decrease the reference of the existing definition
@@ -236,6 +279,50 @@ OMI_API_GLOBAL Attribute Attribute::as_mutable() const
     };
     // create a new definition and return it as an attribute
     return Attribute(new Definition(m_def->m_type, false, m_def->m_storage));
+}
+
+OMI_API_GLOBAL Attribute Attribute::as_pure_immutable() const
+{
+    // error on invalid attributes
+    check_state("as_pure_immutable() used on an invalid attribute");
+
+    // already pure immutable?
+    if(is_pure_immutable())
+    {
+        return *this;
+    }
+    // get an immutable version of this attribute - if that's pure then return
+    // it
+    Attribute a0 = as_immutable();
+    if(a0.is_pure_immutable())
+    {
+        return a0;
+    }
+    // return using immutable storage
+    return Attribute(new Definition(
+        m_def->m_type,
+        true,
+        m_def->m_storage->as_pure_immutable()
+    ));
+}
+
+OMI_API_GLOBAL Attribute Attribute::as_pure_mutable() const
+{
+    // error on invalid attributes
+    check_state("as_pure_mutable() used on an invalid attribute");
+
+    // get an mutable version of this attribute - if that's pure then return it
+    Attribute a0 = as_mutable();
+    if(a0.is_pure_mutable())
+    {
+        return a0;
+    }
+    // return using immutable storage
+    return Attribute(new Definition(
+        m_def->m_type,
+        false,
+        m_def->m_storage->as_pure_mutable()
+    ));
 }
 
 //------------------------------------------------------------------------------
@@ -294,6 +381,14 @@ OMI_API_GLOBAL void Attribute::prepare_modifcation(bool soft)
         );
     }
 
+    // throw if null
+    if(m_def->m_storage == nullptr)
+    {
+        throw arc::ex::IllegalActionError(
+            "Null attribute cannot be modified"
+        );
+    }
+
     // is the storage used by any other definitions?
     if(m_def->m_storage->m_ref_count > 1)
     {
@@ -302,6 +397,9 @@ OMI_API_GLOBAL void Attribute::prepare_modifcation(bool soft)
         // need to copy for rewrite
         m_def->m_storage = m_def->m_storage->copy_for_overwrite(soft);
     }
+
+    // invalidate the current hash
+    m_def->m_storage->invalidate_hash();
 }
 
 OMI_API_GLOBAL void Attribute::check_state(
@@ -366,6 +464,22 @@ OMI_API_GLOBAL std::ostream& operator<<(
     arc::str::UTF8String us;
     us << a;
     s << us;
+    return s;
+}
+
+OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+        arc::str::UTF8String& s,
+        const omi::Attribute::Hash& h)
+{
+    s << h.part1 << "::" << h.part2;
+    return s;
+}
+
+OMI_API_GLOBAL std::ostream& operator<<(
+        std::ostream& s,
+        const omi::Attribute::Hash& h)
+{
+    s << h.part1 << "::" << h.part2;
     return s;
 }
 

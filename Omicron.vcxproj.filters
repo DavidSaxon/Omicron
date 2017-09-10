@@ -15,15 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtBootstrap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtGlobals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtMainWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gen\omi_qt\moc_QtBootstrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,10 +25,17 @@
     </ClCompile>
     <ClCompile Include="gen\omi_qt\moc_QtGlobals.cpp" />
     <ClCompile Include="gen\omi_qt\moc_QtMainWindow.cpp" />
-    <ClCompile Include="gen\omi_qt\moc_QtBootstrap.cpp">
+    <ClCompile Include="tests\cpp\TestsMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gen\omi_qt\moc_QtGlobals.cpp" />
-    <ClCompile Include="gen\omi_qt\moc_QtMainWindow.cpp" />
+    <ClCompile Include="tests\cpp\omicron\api\common\attribute\Attribute_TestSuite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\cpp\omicron\api\common\attribute\Int32Attribute_TestSuite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\cpp\omicron\api\common\attribute\MapAttribute_TestSuite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

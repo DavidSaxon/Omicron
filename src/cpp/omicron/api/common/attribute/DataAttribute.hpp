@@ -9,6 +9,9 @@
 
 #include "omicron/api/common/attribute/Attribute.hpp"
 
+// TODO: REMOVE ME
+#include <iostream>
+
 
 namespace omi
 {
@@ -57,6 +60,12 @@ public:
          */
         std::size_t m_tuple_size;
 
+        /*!
+         * \brief The currently cached hash of this storage - if the hash is
+         *        (0, 0) then there is not currently cached hash.
+         */
+        mutable Hash m_cached_hash;
+
         //-----------------------C O N S T R U C T O R S------------------------
 
         /*!
@@ -70,10 +79,31 @@ public:
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
+        // override
+        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const;
+
+        // override
+        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const;
+
+        // override
+        OMI_API_GLOBAL virtual Storage* as_pure_immutable();
+
+        // override
+        OMI_API_GLOBAL virtual Storage* as_pure_mutable();
+
         /*!
          * \brief Returns the number of values in this DataStorage.
          */
         virtual std::size_t get_size() const = 0;
+
+        /*!
+         * \brief Computes the hash of this storage.
+         */
+        OMI_API_GLOBAL void compute_hash(
+                const void* data,
+                std::size_t length,
+                arc::uint64 seed,
+                Hash& out_hash) const;
     };
 
     //--------------------------------------------------------------------------
@@ -116,7 +146,7 @@ public:
         }
 
         /*!
-         * \brief Creates new TypedDataStorage using a copy of the copy
+         * \brief Creates new TypedDataStorage using a copy of the data
          *        described by the given iterators.
          *
          * \param first The starting iterator of the data.
@@ -192,6 +222,39 @@ public:
             }
 
             return m_data < casted->m_data;
+        }
+
+        // override
+        virtual Hash get_hash(arc::uint64 seed) const
+        {
+            // hash need recomputing?
+            if(m_cached_hash.part1 == 0 && m_cached_hash.part2 == 0)
+            {
+                // is there actually anything to hash?
+                if(!m_data.empty())
+                {
+                    compute_hash(
+                        static_cast<const void*>(&m_data[0]),
+                        m_data.size() * sizeof(T_DataType),
+                        seed,
+                        m_cached_hash
+                    );
+                }
+                else
+                {
+                    // use the seed and tuple size since there's nothing to hash
+                    m_cached_hash.part1 = seed;
+                    m_cached_hash.part2 = m_tuple_size;
+                }
+            }
+            return m_cached_hash;
+        }
+
+        // override
+        virtual void invalidate_hash()
+        {
+            m_cached_hash.part1 = 0;
+            m_cached_hash.part2 = 0;
         }
 
         // override

@@ -4,7 +4,6 @@ ARC_TEST_MODULE(omi.api.common.MapAttribute)
 
 #include <cassert>
 
-#include <omicron/api/common/attribute/BoolAttribute.hpp>
 #include <omicron/api/common/attribute/ByteAttribute.hpp>
 #include <omicron/api/common/attribute/DoubleAttribute.hpp>
 #include <omicron/api/common/attribute/FloatAttribute.hpp>
@@ -112,7 +111,7 @@ ARC_TEST_UNIT_FIXTURE(default_constructor, MapAttributeFixture)
     ARC_CHECK_TRUE(a.is_valid());
     ARC_CHECK_TRUE(a.is_immutable());
     ARC_CHECK_EQUAL(a.get_size(), 0);
-    ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), fixture->empty_data));
+    ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), fixture->empty_data));
     ARC_CHECK_ITER_EQUAL(a.get_names(), fixture->empty_names);
     ARC_CHECK_ITER_EQUAL(a.get_attributes(), fixture->empty_attributes);
     ARC_CHECK_FALSE(a.has("test"));
@@ -129,7 +128,7 @@ ARC_TEST_UNIT_FIXTURE(default_constructor, MapAttributeFixture)
         arc::ex::IllegalActionError
     );
     ARC_CHECK_THROW(
-        a.set_data(fixture->empty_data),
+        a.set_values(fixture->empty_data),
         arc::ex::IllegalActionError
     );
     ARC_CHECK_THROW(
@@ -147,11 +146,11 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
     ARC_TEST_MESSAGE("Checking immutable");
     {
         std::vector<arc::str::UTF8String> names =
-            {"int_key", "bool_key", "float_key"};
+            {"int_key", "byte_key", "float_key"};
         std::vector<omi::Attribute> attributes =
         {
             omi::Int32Attribute(4),
-            omi::BoolAttribute(true),
+            omi::ByteAttribute('z'),
             omi::FloatAttribute(3.14F)
         };
         omi::MapAttribute::DataType data = fixture->zip(names, attributes);
@@ -161,21 +160,21 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_TRUE(a.is_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 3);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes)
         );
         ARC_CHECK_FALSE(a.has("test"));
         ARC_CHECK_TRUE(a.has("int_key"));
-        ARC_CHECK_TRUE(a.has("bool_key"));
+        ARC_CHECK_TRUE(a.has("byte_key"));
         ARC_CHECK_TRUE(a.has("float_key"));
         ARC_CHECK_THROW(
             a.get("test"),
             arc::ex::KeyError
         );
         ARC_CHECK_EQUAL(a.get("int_key"),   attributes[0]);
-        ARC_CHECK_EQUAL(a.get("bool_key"),  attributes[1]);
+        ARC_CHECK_EQUAL(a.get("byte_key"),  attributes[1]);
         ARC_CHECK_EQUAL(a.get("float_key"), attributes[2]);
         ARC_CHECK_THROW(
             a.insert("test", omi::Int32Attribute()),
@@ -186,7 +185,7 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
             arc::ex::IllegalActionError
         );
         ARC_CHECK_THROW(
-            a.set_data(fixture->empty_data),
+            a.set_values(fixture->empty_data),
             arc::ex::IllegalActionError
         );
         ARC_CHECK_THROW(
@@ -223,7 +222,7 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_FALSE(a.is_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 2);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data1));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data1));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names1));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes1)
@@ -238,10 +237,10 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
         ARC_CHECK_EQUAL(a.get("byte_key"),  attributes1[0]);
         ARC_CHECK_EQUAL(a.get("int64_key"), attributes1[1]);
 
-        omi::BoolAttribute extra(false);
+        omi::ByteAttribute extra('g');
         a.insert("test", extra);
         ARC_CHECK_EQUAL(a.get_size(), 3);
-        ARC_CHECK_FALSE(fixture->compare_maps(a.get_data(), data1));
+        ARC_CHECK_FALSE(fixture->compare_maps(a.get_values(), data1));
         ARC_CHECK_FALSE(fixture->compare_unordered(a.get_names(), names1));
         ARC_CHECK_FALSE(
             fixture->compare_unordered(a.get_attributes(), attributes1)
@@ -256,9 +255,9 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
             arc::ex::KeyError
         );
 
-        a.set_data(data2.begin(), data2.end());
+        a.set_values(data2.begin(), data2.end());
         ARC_CHECK_EQUAL(a.get_size(), 4);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data2));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data2));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names2));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes2)
@@ -289,7 +288,7 @@ ARC_TEST_UNIT_FIXTURE(iterator_constructor, MapAttributeFixture)
 
         a.clear();
         ARC_CHECK_EQUAL(a.get_size(), 0);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), fixture->empty_data));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), fixture->empty_data));
         ARC_CHECK_ITER_EQUAL(a.get_names(), fixture->empty_names);
         ARC_CHECK_ITER_EQUAL(a.get_attributes(), fixture->empty_attributes);
         ARC_CHECK_FALSE(a.has("test"));
@@ -309,11 +308,11 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
     ARC_TEST_MESSAGE("Checking immutable");
     {
         std::vector<arc::str::UTF8String> names =
-            {"int_key", "bool_key", "float_key"};
+            {"int_key", "byte_key", "float_key"};
         std::vector<omi::Attribute> attributes =
         {
             omi::Int32Attribute(4),
-            omi::BoolAttribute(true),
+            omi::ByteAttribute('6'),
             omi::FloatAttribute(3.14F)
         };
         omi::MapAttribute::DataType data = fixture->zip(names, attributes);
@@ -325,21 +324,21 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_TRUE(a.is_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 3);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes)
         );
         ARC_CHECK_FALSE(a.has("test"));
         ARC_CHECK_TRUE(a.has("int_key"));
-        ARC_CHECK_TRUE(a.has("bool_key"));
+        ARC_CHECK_TRUE(a.has("byte_key"));
         ARC_CHECK_TRUE(a.has("float_key"));
         ARC_CHECK_THROW(
             a.get("test"),
             arc::ex::KeyError
         );
         ARC_CHECK_EQUAL(a.get("int_key"),   attributes[0]);
-        ARC_CHECK_EQUAL(a.get("bool_key"),  attributes[1]);
+        ARC_CHECK_EQUAL(a.get("byte_key"),  attributes[1]);
         ARC_CHECK_EQUAL(a.get("float_key"), attributes[2]);
         ARC_CHECK_THROW(
             a.insert("test", omi::Int32Attribute()),
@@ -350,7 +349,7 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
             arc::ex::IllegalActionError
         );
         ARC_CHECK_THROW(
-            a.set_data(fixture->empty_data),
+            a.set_values(fixture->empty_data),
             arc::ex::IllegalActionError
         );
         ARC_CHECK_THROW(
@@ -392,7 +391,7 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_FALSE(a.is_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 2);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data1));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data1));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names1));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes1)
@@ -407,10 +406,10 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
         ARC_CHECK_EQUAL(a.get("byte_key"),  attributes1[0]);
         ARC_CHECK_EQUAL(a.get("int64_key"), attributes1[1]);
 
-        omi::BoolAttribute extra(false);
+        omi::ByteAttribute extra('h');
         a.insert("test", extra);
         ARC_CHECK_EQUAL(a.get_size(), 3);
-        ARC_CHECK_FALSE(fixture->compare_maps(a.get_data(), data1));
+        ARC_CHECK_FALSE(fixture->compare_maps(a.get_values(), data1));
         ARC_CHECK_FALSE(fixture->compare_unordered(a.get_names(), names1));
         ARC_CHECK_FALSE(
             fixture->compare_unordered(a.get_attributes(), attributes1)
@@ -425,9 +424,9 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
             arc::ex::KeyError
         );
 
-        a.set_data(data2.begin(), data2.end());
+        a.set_values(data2.begin(), data2.end());
         ARC_CHECK_EQUAL(a.get_size(), 4);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data2));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data2));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names2));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes2)
@@ -458,7 +457,7 @@ ARC_TEST_UNIT_FIXTURE(copy_constructor, MapAttributeFixture)
 
         a.clear();
         ARC_CHECK_EQUAL(a.get_size(), 0);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), fixture->empty_data));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), fixture->empty_data));
         ARC_CHECK_ITER_EQUAL(a.get_names(), fixture->empty_names);
         ARC_CHECK_ITER_EQUAL(a.get_attributes(), fixture->empty_attributes);
         ARC_CHECK_FALSE(a.has("test"));
@@ -478,11 +477,11 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
     ARC_TEST_MESSAGE("Checking immutable");
     {
         std::vector<arc::str::UTF8String> names =
-            {"int_key", "bool_key", "float_key"};
+            {"int_key", "byte_key", "float_key"};
         std::vector<omi::Attribute> attributes =
         {
             omi::Int32Attribute(4),
-            omi::BoolAttribute(true),
+            omi::ByteAttribute('d'),
             omi::FloatAttribute(3.14F)
         };
         omi::MapAttribute::DataType data = fixture->zip(names, attributes);
@@ -495,21 +494,21 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_TRUE(a.is_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 3);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes)
         );
         ARC_CHECK_FALSE(a.has("test"));
         ARC_CHECK_TRUE(a.has("int_key"));
-        ARC_CHECK_TRUE(a.has("bool_key"));
+        ARC_CHECK_TRUE(a.has("byte_key"));
         ARC_CHECK_TRUE(a.has("float_key"));
         ARC_CHECK_THROW(
             a.get("test"),
             arc::ex::KeyError
         );
         ARC_CHECK_EQUAL(a.get("int_key"),   attributes[0]);
-        ARC_CHECK_EQUAL(a.get("bool_key"),  attributes[1]);
+        ARC_CHECK_EQUAL(a.get("byte_key"),  attributes[1]);
         ARC_CHECK_EQUAL(a.get("float_key"), attributes[2]);
         ARC_CHECK_THROW(
             a.insert("test", omi::Int32Attribute()),
@@ -520,7 +519,7 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
             arc::ex::IllegalActionError
         );
         ARC_CHECK_THROW(
-            a.set_data(fixture->empty_data),
+            a.set_values(fixture->empty_data),
             arc::ex::IllegalActionError
         );
         ARC_CHECK_THROW(
@@ -563,7 +562,7 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
         ARC_CHECK_TRUE(a.is_valid());
         ARC_CHECK_FALSE(a.is_immutable());
         ARC_CHECK_EQUAL(a.get_size(), 2);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data1));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data1));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names1));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes1)
@@ -578,10 +577,10 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
         ARC_CHECK_EQUAL(a.get("byte_key"),  attributes1[0]);
         ARC_CHECK_EQUAL(a.get("int64_key"), attributes1[1]);
 
-        omi::BoolAttribute extra(false);
+        omi::ByteAttribute extra('s');
         a.insert("test", extra);
         ARC_CHECK_EQUAL(a.get_size(), 3);
-        ARC_CHECK_FALSE(fixture->compare_maps(a.get_data(), data1));
+        ARC_CHECK_FALSE(fixture->compare_maps(a.get_values(), data1));
         ARC_CHECK_FALSE(fixture->compare_unordered(a.get_names(), names1));
         ARC_CHECK_FALSE(
             fixture->compare_unordered(a.get_attributes(), attributes1)
@@ -596,9 +595,9 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
             arc::ex::KeyError
         );
 
-        a.set_data(data2.begin(), data2.end());
+        a.set_values(data2.begin(), data2.end());
         ARC_CHECK_EQUAL(a.get_size(), 4);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), data2));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), data2));
         ARC_CHECK_TRUE(fixture->compare_unordered(a.get_names(), names2));
         ARC_CHECK_TRUE(
             fixture->compare_unordered(a.get_attributes(), attributes2)
@@ -629,7 +628,7 @@ ARC_TEST_UNIT_FIXTURE(assignment_operator, MapAttributeFixture)
 
         a.clear();
         ARC_CHECK_EQUAL(a.get_size(), 0);
-        ARC_CHECK_TRUE(fixture->compare_maps(a.get_data(), fixture->empty_data));
+        ARC_CHECK_TRUE(fixture->compare_maps(a.get_values(), fixture->empty_data));
         ARC_CHECK_ITER_EQUAL(a.get_names(), fixture->empty_names);
         ARC_CHECK_ITER_EQUAL(a.get_attributes(), fixture->empty_attributes);
         ARC_CHECK_FALSE(a.has("test"));
@@ -785,7 +784,7 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.get_data(),
+            a.get_values(),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -805,7 +804,7 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.insert("test", omi::BoolAttribute(true)),
+            a.insert("test", omi::ByteAttribute('j')),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -818,11 +817,11 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             {"int64_key", omi::Int64Attribute(4758257078353)}
         };
         ARC_CHECK_THROW(
-            a.set_data(new_data.begin(), new_data.end()),
+            a.set_values(new_data.begin(), new_data.end()),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.set_data(new_data),
+            a.set_values(new_data),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -847,7 +846,7 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.get_data(),
+            a.get_values(),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -867,7 +866,7 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.insert("test", omi::BoolAttribute(true)),
+            a.insert("test", omi::ByteAttribute('j')),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -880,11 +879,11 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             {"int64_key", omi::Int64Attribute(4758257078353)}
         };
         ARC_CHECK_THROW(
-            a.set_data(new_data.begin(), new_data.end()),
+            a.set_values(new_data.begin(), new_data.end()),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.set_data(new_data),
+            a.set_values(new_data),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -917,7 +916,7 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.get_data(),
+            a.get_values(),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -937,7 +936,7 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.insert("test", omi::BoolAttribute(true)),
+            a.insert("test", omi::ByteAttribute('y')),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
@@ -950,17 +949,342 @@ ARC_TEST_UNIT_FIXTURE(invalid, MapAttributeFixture)
             {"int64_key", omi::Int64Attribute(4758257078353)}
         };
         ARC_CHECK_THROW(
-            a.set_data(new_data.begin(), new_data.end()),
+            a.set_values(new_data.begin(), new_data.end()),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
-            a.set_data(new_data),
+            a.set_values(new_data),
             arc::ex::StateError
         );
         ARC_CHECK_THROW(
             a.clear(),
             arc::ex::StateError
         );
+    }
+}
+
+//------------------------------------------------------------------------------
+//                                      HASH
+//------------------------------------------------------------------------------
+
+ARC_TEST_UNIT(hash)
+{
+    {
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)},
+            {"string_key", omi::StringAttribute("Hello world", false)}
+        };
+
+        omi::MapAttribute a;
+        ARC_CHECK_EQUAL(a.get_hash(), a.get_hash());
+        omi::MapAttribute b;
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        omi::MapAttribute c = a.as_mutable();
+        ARC_CHECK_EQUAL(a.get_hash(), c.get_hash());
+        c.set_values(map_data1);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), c.get_hash());
+    }
+    {
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)},
+            {"string_key", omi::StringAttribute("Hello world", true)}
+        };
+
+        omi::MapAttribute::DataType map_data2 = {
+            {"byte_key", omi::ByteAttribute('x')},
+            {"int64_key", omi::Int64Attribute(4758257078353)}
+        };
+
+        omi::MapAttribute a(map_data1, true);
+        omi::MapAttribute b(map_data1, false);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        b.set_values(map_data2);
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        b.set_values(map_data1);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        b.erase("byte_key");
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        b.set_values(map_data1);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        b.insert("byte_key", omi::ByteAttribute('x'));
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+        b.set_values(map_data1);
+        b.insert("string_key", omi::StringAttribute("Hello world", false));
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        omi::StringAttribute str_attr = b["string_key"];
+        str_attr.set_value("different!");
+        ARC_CHECK_NOT_EQUAL(a.get_hash(), b.get_hash());
+    }
+    {
+        omi::MapAttribute::DataType map_data0 = {
+            {"byte_key", omi::ByteAttribute('x')},
+            {"int64_key", omi::Int64Attribute(4758257078353)}
+        };
+
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)},
+            {"string_key", omi::StringAttribute("Hello world", false)}
+        };
+
+        omi::MapAttribute::DataType map_data2 = {
+            {"byte_key", omi::ByteAttribute('x', false)},
+            {"int64_key", omi::Int64Attribute(4758257078353)},
+            {"map_key", omi::MapAttribute(map_data1, false)}
+        };
+
+        omi::MapAttribute::DataType map_data3 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"map_key", omi::MapAttribute(map_data2, false)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)}
+        };
+
+        omi::MapAttribute a(map_data3, false);
+        omi::MapAttribute b(map_data3, true);
+        ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
+        omi::Attribute::Hash hash1 = a.get_hash();
+        a.insert("string_key", omi::StringAttribute({"hello", "world"}, 0));
+        omi::Attribute::Hash hash2 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        a.erase("map_key.int64_key");
+        hash1 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        omi::ByteAttribute byte_attr = a["map_key.byte_key"];
+        byte_attr.set_values({'x', 'y'});
+        hash2 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        omi::StringAttribute str_attr = a["map_key.map_key.string_key"];
+        str_attr.set_tuple_size(2);
+        hash1 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        str_attr.set_tuple_size(2);
+        hash2 = a.get_hash();
+        ARC_CHECK_EQUAL(hash1, hash2);
+        omi::MapAttribute sub_map = a["map_key.map_key"];
+        sub_map.set_values(map_data0);
+        hash1 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        a.insert("map_key.map_key", omi::MapAttribute(map_data1, false));
+        hash2 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        sub_map = a["map_key.map_key"];
+        sub_map.clear();
+        hash1 = a.get_hash();
+        ARC_CHECK_NOT_EQUAL(hash1, hash2);
+        hash2 = a.get_hash();
+        ARC_CHECK_EQUAL(hash1, hash2);
+    }
+}
+
+//------------------------------------------------------------------------------
+//                                 PURE IMMUTABLE
+//------------------------------------------------------------------------------
+
+ARC_TEST_UNIT_FIXTURE(pure_immutable, MapAttributeFixture)
+{
+    {
+        omi::MapAttribute a;
+        ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_immutable());
+        omi::MapAttribute b = a.as_pure_immutable();
+        ARC_CHECK_TRUE(b.is_immutable());
+        ARC_CHECK_TRUE(b.is_pure_immutable());
+    }
+    {
+        omi::MapAttribute::DataType map_data = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, false)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)},
+            {"string_key", omi::StringAttribute("Hello world", false)}
+        };
+        omi::MapAttribute a(map_data, true);
+        ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_FALSE(a.is_pure_immutable());
+        omi::MapAttribute b = a.as_pure_immutable();
+        ARC_CHECK_TRUE(b.is_immutable());
+        ARC_CHECK_TRUE(b.is_pure_immutable());
+        ARC_CHECK_TRUE(b["int32_key"].is_immutable());
+        ARC_CHECK_TRUE(b["byte_key"].is_immutable());
+        ARC_CHECK_TRUE(b["int16_key"].is_immutable());
+        ARC_CHECK_TRUE(b["string_key"].is_immutable());
+    }
+    {
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)},
+            {"string_key", omi::StringAttribute("Hello world", true)}
+        };
+
+        omi::MapAttribute::DataType map_data2 = {
+            {"byte_key", omi::ByteAttribute('x', true)},
+            {"int64_key", omi::Int64Attribute(4758257078353)},
+            {"map_key", omi::MapAttribute(map_data1, true)}
+        };
+
+        omi::MapAttribute::DataType map_data3 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"map_key", omi::MapAttribute(map_data2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)}
+        };
+
+        omi::MapAttribute a(map_data3, true);
+        ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_immutable());
+        omi::MapAttribute b = a.as_pure_immutable();
+        ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_immutable());
+
+        omi::MapAttribute c(map_data3, false);
+        ARC_CHECK_FALSE(c.is_immutable());
+        ARC_CHECK_FALSE(c.is_pure_immutable());
+        omi::MapAttribute d = c.as_pure_immutable();
+        ARC_CHECK_TRUE(d.is_immutable());
+        ARC_CHECK_TRUE(d.is_pure_immutable());
+    }
+    {
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, false)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, false)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, false)},
+            {"string_key", omi::StringAttribute("Hello world", false)}
+        };
+
+        omi::MapAttribute::DataType map_data2 = {
+            {"byte_key", omi::ByteAttribute('x', true)},
+            {"int64_key", omi::Int64Attribute(4758257078353, false)},
+            {"map_key", omi::MapAttribute(map_data1, true)}
+        };
+
+        omi::MapAttribute::DataType map_data3 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, false)},
+            {"map_key", omi::MapAttribute(map_data2, false)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, false)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, false)}
+        };
+
+        omi::MapAttribute a(map_data3, true);
+        ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_FALSE(a.is_pure_immutable());
+        omi::MapAttribute b = a.as_pure_immutable();
+        ARC_CHECK_TRUE(b.is_immutable());
+        ARC_CHECK_TRUE(b.is_pure_immutable());
+        ARC_CHECK_TRUE(b["int32_key"].is_immutable());
+        ARC_CHECK_TRUE(b["map_key"].is_immutable());
+        ARC_CHECK_TRUE(b["map_key.int64_key"].is_immutable());
+        ARC_CHECK_TRUE(b["map_key.map_key"].is_immutable());
+        ARC_CHECK_TRUE(b["map_key.map_key.byte_key"].is_immutable());
+        ARC_CHECK_TRUE(b["map_key.map_key.string_key"].is_immutable());
+    }
+}
+
+//------------------------------------------------------------------------------
+//                                  PURE MUTABLE
+//------------------------------------------------------------------------------
+
+ARC_TEST_UNIT_FIXTURE(pure_mutable, MapAttributeFixture)
+{
+    {
+        omi::MapAttribute a;
+        ARC_CHECK_TRUE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_immutable());
+        omi::MapAttribute b = a.as_pure_mutable();
+        ARC_CHECK_FALSE(b.is_immutable());
+        ARC_CHECK_TRUE(b.is_pure_mutable());
+    }
+    {
+        omi::MapAttribute::DataType map_data = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, false)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, false)},
+            {"string_key", omi::StringAttribute("Hello world", true)}
+        };
+        omi::MapAttribute a(map_data, false);
+        ARC_CHECK_FALSE(a.is_immutable());
+        ARC_CHECK_FALSE(a.is_pure_mutable());
+        omi::MapAttribute b = a.as_pure_mutable();
+        ARC_CHECK_FALSE(b.is_immutable());
+        ARC_CHECK_TRUE(b.is_pure_mutable());
+        ARC_CHECK_FALSE(b["int32_key"].is_immutable());
+        ARC_CHECK_FALSE(b["byte_key"].is_immutable());
+        ARC_CHECK_FALSE(b["int16_key"].is_immutable());
+        ARC_CHECK_FALSE(b["string_key"].is_immutable());
+    }
+    {
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, false)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, false)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, false)},
+            {"string_key", omi::StringAttribute("Hello world", false)}
+        };
+
+        omi::MapAttribute::DataType map_data2 = {
+            {"byte_key", omi::ByteAttribute('x', false)},
+            {"int64_key", omi::Int64Attribute(4758257078353, false)},
+            {"map_key", omi::MapAttribute(map_data1, false)}
+        };
+
+        omi::MapAttribute::DataType map_data3 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, false)},
+            {"map_key", omi::MapAttribute(map_data2, false)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, false)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, false)}
+        };
+
+        omi::MapAttribute a(map_data3, false);
+        ARC_CHECK_FALSE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_mutable());
+        omi::MapAttribute b = a.as_pure_mutable();
+        ARC_CHECK_FALSE(a.is_immutable());
+        ARC_CHECK_TRUE(a.is_pure_mutable());
+
+        omi::MapAttribute c(map_data3, true);
+        ARC_CHECK_TRUE(c.is_immutable());
+        ARC_CHECK_FALSE(c.is_pure_mutable());
+        omi::MapAttribute d = c.as_pure_mutable();
+        ARC_CHECK_FALSE(d.is_immutable());
+        ARC_CHECK_TRUE(d.is_pure_mutable());
+    }
+    {
+        omi::MapAttribute::DataType map_data1 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)},
+            {"string_key", omi::StringAttribute("Hello world", true)}
+        };
+
+        omi::MapAttribute::DataType map_data2 = {
+            {"byte_key", omi::ByteAttribute('x', false)},
+            {"int64_key", omi::Int64Attribute(4758257078353, true)},
+            {"map_key", omi::MapAttribute(map_data1, false)}
+        };
+
+        omi::MapAttribute::DataType map_data3 = {
+            {"int32_key", omi::Int32Attribute({1, 5, -8, 4}, 2, true)},
+            {"map_key", omi::MapAttribute(map_data2, true)},
+            {"byte_key", omi::ByteAttribute({'x', 'y'}, 0, true)},
+            {"int16_key", omi::Int16Attribute({1, 5, -8, 4}, 4, true)}
+        };
+
+        omi::MapAttribute a(map_data3, false);
+        ARC_CHECK_FALSE(a.is_immutable());
+        ARC_CHECK_FALSE(a.is_pure_mutable());
+        omi::MapAttribute b = a.as_pure_mutable();
+        ARC_CHECK_FALSE(b.is_immutable());
+        ARC_CHECK_TRUE(b.is_pure_mutable());
+        ARC_CHECK_FALSE(b["int32_key"].is_immutable());
+        ARC_CHECK_FALSE(b["map_key"].is_immutable());
+        ARC_CHECK_FALSE(b["map_key.int64_key"].is_immutable());
+        ARC_CHECK_FALSE(b["map_key.map_key"].is_immutable());
+        ARC_CHECK_FALSE(b["map_key.map_key.byte_key"].is_immutable());
+        ARC_CHECK_FALSE(b["map_key.map_key.string_key"].is_immutable());
     }
 }
 
@@ -1293,10 +1617,10 @@ ARC_TEST_UNIT(as_immutable)
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_TRUE(b.is_immutable());
         ARC_CHECK_THROW(
-            b.set_data(map_data2),
+            b.set_values(map_data2),
             arc::ex::IllegalActionError
         );
-        a.set_data(map_data2);
+        a.set_values(map_data2);
         ARC_CHECK_NOT_EQUAL(a, b);
         ARC_CHECK_EQUAL(a.get_size(), 4);
         ARC_CHECK_EQUAL(b.get_size(), 2);
@@ -1401,11 +1725,11 @@ ARC_TEST_UNIT(as_mutable)
         omi::MapAttribute b = a.as_mutable();
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_FALSE(b.is_immutable());
-        b.set_data(map_data2);
+        b.set_values(map_data2);
         ARC_CHECK_NOT_EQUAL(a, b);
         ARC_CHECK_EQUAL(a.get_size(), 2);
         ARC_CHECK_EQUAL(b.get_size(), 4);
-        a.set_data(map_data2);
+        a.set_values(map_data2);
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_EQUAL(a.get_size(), 4);
         ARC_CHECK_EQUAL(b.get_size(), 4);
@@ -1427,12 +1751,12 @@ ARC_TEST_UNIT(as_mutable)
         omi::MapAttribute b = a.as_mutable();
         ARC_CHECK_EQUAL(a, b);
         ARC_CHECK_FALSE(b.is_immutable());
-        b.set_data(map_data2);
+        b.set_values(map_data2);
         ARC_CHECK_NOT_EQUAL(a, b);
         ARC_CHECK_EQUAL(a.get_size(), 2);
         ARC_CHECK_EQUAL(b.get_size(), 4);
         ARC_CHECK_THROW(
-            a.set_data(map_data2),
+            a.set_values(map_data2),
             arc::ex::IllegalActionError
         );
     }

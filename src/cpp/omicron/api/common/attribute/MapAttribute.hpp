@@ -25,6 +25,11 @@ namespace omi
  * check if the MapAttribute has another MapAttribute under the name
  * ```"group"``` and that this MapAttribute has an attribute under the name
  * ```"attr1"```.
+ *
+ * \note Immutable MapAttributes only guarantee that that structure of this map
+ *       immutable. If a map has mutable child attributes they can still be
+ *       modified. In order to have a pure immutable MapAttribute, itself and
+ *       all of its ancestors must be immutable.
  */
 class MapAttribute : public Attribute
 {
@@ -66,6 +71,17 @@ public:
          */
         DataType m_data;
 
+        /*!
+         * \brief The currently cached hash of this storage - if the hash is
+         *        (0, 0) then there is not currently cached hash.
+         */
+        mutable Hash m_cached_hash;
+        /*!
+         * \brief The last checked hashes of the sub-attributes, these are
+         *        checked to see if the hash is out of date.
+         */
+        mutable std::unordered_map<arc::str::UTF8String, Hash> m_sub_hashes;
+
         //-----------------------C O N S T R U C T O R S------------------------
 
         /*!
@@ -95,6 +111,24 @@ public:
 
         // override
         OMI_API_GLOBAL virtual bool less_than(const Storage* other) const;
+
+        // override
+        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const;
+
+        // override
+        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const;
+
+        // override
+        OMI_API_GLOBAL virtual Storage* as_pure_immutable();
+
+        // override
+        OMI_API_GLOBAL virtual Storage* as_pure_mutable();
+
+        // override
+        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const;
+
+        // override
+        OMI_API_GLOBAL virtual void invalidate_hash();
 
         // override
         OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft);
@@ -165,6 +199,33 @@ public:
     OMI_API_GLOBAL virtual ~MapAttribute();
 
     //--------------------------------------------------------------------------
+    //                                 OPERATORS
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief Returns the attribute in this MapAttribute under the given name.
+     *
+     * \note Supports nested naming syntax.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throws arc::ex::KeyError If there is not attribute under the given name
+     *                           in this MapAttribute.
+     */
+    OMI_API_GLOBAL const Attribute& operator[](
+            const arc::str::UTF8String& name) const;
+
+    /*!
+     * \brief Returns the attribute in this MapAttribute under the given name.
+     *
+     * \note Supports nested naming syntax.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throws arc::ex::KeyError If there is not attribute under the given name
+     *                           in this MapAttribute.
+     */
+    OMI_API_GLOBAL Attribute& operator[](const arc::str::UTF8String& name);
+
+    //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
@@ -183,7 +244,7 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL const DataType& get_data() const;
+    OMI_API_GLOBAL const DataType& get_values() const;
 
     /*!
      * \brief Returns the names (keys) of the entries in this MapAttribute.
@@ -221,6 +282,17 @@ public:
     OMI_API_GLOBAL const Attribute& get(const arc::str::UTF8String& name) const;
 
     /*!
+     * \brief Returns the attribute in this MapAttribute under the given name.
+     *
+     * \note Supports nested naming syntax.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throws arc::ex::KeyError If there is not attribute under the given name
+     *                           in this MapAttribute.
+     */
+    OMI_API_GLOBAL Attribute& get(const arc::str::UTF8String& name);
+
+    /*!
      * \brief Inserts the given attribute into the map under the provided name.
      *
      * \note If an attribute already exists under the name, it will be
@@ -255,12 +327,12 @@ public:
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
     template<typename T_InputIterator>
-    void set_data(
+    void set_values(
             const T_InputIterator& first,
             const T_InputIterator& last)
     {
         // valid?
-        check_state("set_data() used on an invalid attribute");
+        check_state("set_values() used on an invalid attribute");
         prepare_modifcation();
         get_storage<MapStorage>()->m_data = DataType(first, last);
     }
@@ -272,7 +344,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_data(const DataType& data);
+    OMI_API_GLOBAL void set_values(const DataType& data);
 
     /*!
      * \brief Clears the contents of this MapAttribute - effectively replacing
