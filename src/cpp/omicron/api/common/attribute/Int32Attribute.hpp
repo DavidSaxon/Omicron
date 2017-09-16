@@ -146,7 +146,7 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Returns the first integer value of this attribute.
+     * \brief Returns the first value of this attribute.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IndexOutOfBoundsError If this attribute has no values.

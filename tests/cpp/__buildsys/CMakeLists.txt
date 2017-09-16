@@ -1,6 +1,7 @@
 set(TESTS_SRC
     ../TestsMain.cpp
 
+    ../omicron/api/common/attribute/ArrayAttribute_TestSuite.cpp
     ../omicron/api/common/attribute/Attribute_TestSuite.cpp
     ../omicron/api/common/attribute/Int32Attribute_TestSuite.cpp
     ../omicron/api/common/attribute/MapAttribute_TestSuite.cpp

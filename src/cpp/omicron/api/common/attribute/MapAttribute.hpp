@@ -26,8 +26,8 @@ namespace omi
  * ```"group"``` and that this MapAttribute has an attribute under the name
  * ```"attr1"```.
  *
- * \note Immutable MapAttributes only guarantee that that structure of this map
- *       immutable. If a map has mutable child attributes they can still be
+ * \note Immutable MapAttributes only guarantee that that structure of the map
+ *       is immutable. If a map has mutable child attributes they can still be
  *       modified. In order to have a pure immutable MapAttribute, itself and
  *       all of its ancestors must be immutable.
  */
@@ -90,7 +90,7 @@ public:
         OMI_API_GLOBAL MapStorage();
 
         /*!
-         * \brief Creates new a MapStorage using a copy of that data described
+         * \brief Creates new MapStorage using a copy of that data described
          *        by the given iterators as the initial data.
          */
         template<typename T_InputIterator>
@@ -237,9 +237,16 @@ public:
     OMI_API_GLOBAL std::size_t get_size() const;
 
     /*!
+     * \brief Returns whether this MapAttribute has no entries.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     */
+    OMI_API_GLOBAL bool is_empty() const;
+
+    /*!
      * \brief Returns the internal map structure of this MapAttribute.
      *
-     * \note Using this structure is this fastest way to iterator over the
+     * \note Using this structure is this fastest way to iterate over the
      *       contents of this attribute.
      *
      * \throw arc::ex::StateError If this attribute is not valid.

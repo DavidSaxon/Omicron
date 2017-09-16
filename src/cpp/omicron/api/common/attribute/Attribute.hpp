@@ -35,7 +35,7 @@ namespace omi
  *                   base attribute type omi::Attribute, these attributes are
  *                   are a null type but always valid.
  *  - DataAttribute: The most common attribute type which contains zero or more
- *                   values of specific type, e.g. FloatAttribute,
+ *                   values of a specific type, e.g. FloatAttribute,
  *                   Int32Attribute, etc.
  *  - ArrayAttribute: An attribute that contains an ordered array of zero or
  *                    or more attributes.
@@ -448,7 +448,7 @@ public:
     /*!
      * \brief Returns an mutable version of this attribute.
      *
-     * If this attribute is already mutable itself will be returned.
+     * If this attribute is already mutable a new mutable copy will be made.
      * If this attribute is immutable a copy of the storage will not be made for
      * the new mutable attribute, instead the next time the mutable attribute is
      * modified it will take a new copy of the storage.

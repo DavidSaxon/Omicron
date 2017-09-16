@@ -1,5 +1,7 @@
 set(API_SRC
+    ../common/attribute/ArrayAttribute.cpp
     ../common/attribute/Attribute.cpp
+    ../common/attribute/BoolAttribute.cpp
     ../common/attribute/ByteAttribute.cpp
     ../common/attribute/DataAttribute.cpp
     ../common/attribute/DoubleAttribute.cpp

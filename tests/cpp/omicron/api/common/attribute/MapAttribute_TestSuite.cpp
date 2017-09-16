@@ -1405,6 +1405,10 @@ ARC_TEST_UNIT_FIXTURE(get, MapAttributeFixture)
     );
 }
 
+//------------------------------------------------------------------------------
+//                                     INSERT
+//------------------------------------------------------------------------------
+
 ARC_TEST_UNIT_FIXTURE(insert, MapAttributeFixture)
 {
     omi::MapAttribute::DataType map_data1 = {
@@ -1467,6 +1471,10 @@ ARC_TEST_UNIT_FIXTURE(insert, MapAttributeFixture)
     ARC_CHECK_TRUE(a.has("map_key.map_key.string_key"));
     ARC_CHECK_EQUAL(a.get("map_key.map_key.string_key"), str_attr);
 }
+
+//------------------------------------------------------------------------------
+//                                     ERASE
+//------------------------------------------------------------------------------
 
 ARC_TEST_UNIT_FIXTURE(erase, MapAttributeFixture)
 {

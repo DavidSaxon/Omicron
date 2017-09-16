@@ -11,7 +11,7 @@ namespace omi
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-Attribute::Type DataAttribute::kTypeDataBits = 1;
+Attribute::Type DataAttribute::kTypeDataBits = 4;
 
 //------------------------------------------------------------------------------
 //                                    STORAGE

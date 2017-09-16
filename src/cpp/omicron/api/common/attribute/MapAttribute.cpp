@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstring>
+#include <unordered_set>
 
 #include <arcanecore/base/Exceptions.hpp>
 #include <arcanecore/crypt/hash/Spooky.hpp>
@@ -165,6 +166,22 @@ OMI_API_GLOBAL Attribute::Hash MapAttribute::MapStorage::get_hash(
         m_cached_hash.part2 = 0;
     }
 
+    // find any entries in the hash map that are no longer needed and remove
+    // them
+    std::unordered_set<arc::str::UTF8String> remove_set;
+    for(auto entry : m_sub_hashes)
+    {
+        auto f_attr = m_data.find(entry.first);
+        if(f_attr == m_data.end())
+        {
+            remove_set.insert(entry.first);
+        }
+    }
+    for(const arc::str::UTF8String& r : remove_set)
+    {
+        m_sub_hashes.erase(m_sub_hashes.find(r));
+    }
+
     // hash needs recomputing?
     if(m_cached_hash.part1 == 0 && m_cached_hash.part2 == 0)
     {
@@ -300,6 +317,14 @@ OMI_API_GLOBAL std::size_t MapAttribute::get_size() const
 
     return get_storage<MapStorage>()->m_data.size();
 }
+
+ OMI_API_GLOBAL bool MapAttribute::is_empty() const
+ {
+    // valid?
+    check_state("get_size() used on an invalid attribute");
+
+    return get_storage<MapStorage>()->m_data.empty();
+ }
 
 OMI_API_GLOBAL const MapAttribute::DataType& MapAttribute::get_values() const
 {

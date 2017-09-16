@@ -233,8 +233,9 @@ public:
                 // is there actually anything to hash?
                 if(!m_data.empty())
                 {
+                    const T_DataType& m = m_data[0];
                     compute_hash(
-                        static_cast<const void*>(&m_data[0]),
+                        static_cast<const void*>(&m),
                         m_data.size() * sizeof(T_DataType),
                         seed,
                         m_cached_hash
