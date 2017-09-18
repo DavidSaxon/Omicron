@@ -1,0 +1,6 @@
+{
+    "resource_directory": ["res"],
+    "data_directory": ["data"],
+    "table_of_contents": "resources.toc",
+    "use_real_files": true
+}

@@ -51,10 +51,14 @@
     <ClCompile Include="src\cpp\omicron\api\config\ConfigGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\asset\AssetGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\asset\AssetLibrary.cpp" />
-    <ClCompile Include="src\cpp\omicron\api\asset\resource\OBJResource.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\asset\loaders\OBJLoader.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\asset\types\Geometry.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\res\ResourceGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\res\ResourceId.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\res\ResourceRegistry.cpp" />
     <ClCompile Include="src\cpp\omicron\api\window\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">

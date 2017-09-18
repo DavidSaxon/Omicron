@@ -46,6 +46,13 @@ bool shutdown_routine();
  */
 std::ostream& get_critical_stream();
 
+/*!
+ * \brief Boot routine that is called once the Engine has become live.
+ *
+ * This function is blocking and is called with a valid GL context.
+ */
+bool engine_live_routine();
+
 } // namespace boot
 } // namespace runtime
 } // namespace omi

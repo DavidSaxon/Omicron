@@ -85,8 +85,7 @@ public:
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        // override
-        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const;
+        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const override;
     };
 
     //--------------------------------------------------------------------------
@@ -236,8 +235,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // override
-    OMI_API_GLOBAL virtual bool check_type(Type type) const;
+    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

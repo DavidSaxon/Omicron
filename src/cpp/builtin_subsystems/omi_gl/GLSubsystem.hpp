@@ -5,6 +5,8 @@
 #ifndef OMI_GL_SUBSYSTEM_HPP_
 #define OMI_GL_SUBSYSTEM_HPP_
 
+#include <omicron/api/asset/AssetLibrary.hpp>
+
 #include <omicron/subsystem/Renderer.hpp>
 
 
@@ -39,6 +41,14 @@ public:
 
     // override
     virtual void render();
+
+private:
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE ATTRIBUTES
+    //--------------------------------------------------------------------------
+
+    // TODO: TESTING
 };
 
 #endif

@@ -13,21 +13,56 @@ namespace omi
 namespace asset
 {
 
+// TODO: DOC
 class Geometry : public AbstractAsset
 {
 public:
 
     //--------------------------------------------------------------------------
-    //                            RESOURCE DEFINITION
+    //                                CONSTRUCTOR
     //--------------------------------------------------------------------------
 
-    class Resource : public AbstractAsset::AbstractResource
-    {
+    // TODO: DOC
+    OMI_API_GLOBAL Geometry();
 
-    };
+    //--------------------------------------------------------------------------
+    //                                 DESTRUCTOR
+    //--------------------------------------------------------------------------
 
-    // TODO: only problem with this method is that the resource has to be
-    //       aquired to get the asset
+    OMI_API_GLOBAL virtual ~Geometry();
+
+    //--------------------------------------------------------------------------
+    //                          PUBLIC MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    // override
+    OMI_API_GLOBAL virtual void init(const omi::MapAttribute& data) override;
+
+    // override
+    OMI_API_GLOBAL virtual void release() override;
+
+    /*!
+     * \brief Returns the number of vertices in this geometry.
+     *
+     * \note This number can be different from the size of the position data
+     *        returned by get_positions() since the data may be indexed.
+     */
+    OMI_API_GLOBAL std::size_t get_vertex_size() const;
+
+    /*!
+     * \brief Returns a reference to this geometry's position data for read-only
+     *        purposes.
+     */
+    OMI_API_GLOBAL const std::vector<float>& get_positions() const;
+
+private:
+
+    //--------------------------------------------------------------------------
+    //                            COMPILATION FIREWALL
+    //--------------------------------------------------------------------------
+
+    class GeometryImpl;
+    GeometryImpl* m_impl;
 };
 
 } // namespace asset

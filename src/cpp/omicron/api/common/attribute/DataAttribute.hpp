@@ -79,17 +79,13 @@ public:
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        // override
-        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const;
+        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const override;
 
-        // override
-        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const;
+        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const override;
 
-        // override
-        OMI_API_GLOBAL virtual Storage* as_pure_immutable();
+        OMI_API_GLOBAL virtual Storage* as_pure_immutable() override;
 
-        // override
-        OMI_API_GLOBAL virtual Storage* as_pure_mutable();
+        OMI_API_GLOBAL virtual Storage* as_pure_mutable() override;
 
         /*!
          * \brief Returns the number of values in this DataStorage.
@@ -171,8 +167,7 @@ public:
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        // override
-        virtual bool equals(const Attribute::Storage* other) const
+        virtual bool equals(const Attribute::Storage* other) const override
         {
             // cast
             const TypedDataStorage<T_BaseType, T_DataType>* casted =
@@ -208,8 +203,7 @@ public:
             return true;
         }
 
-        // override
-        virtual bool less_than(const Storage* other) const
+        virtual bool less_than(const Storage* other) const override
         {
             // cast
             const TypedDataStorage<T_BaseType, T_DataType>* casted =
@@ -224,8 +218,7 @@ public:
             return m_data < casted->m_data;
         }
 
-        // override
-        virtual Hash get_hash(arc::uint64 seed) const
+        virtual Hash get_hash(arc::uint64 seed) const override
         {
             // hash need recomputing?
             if(m_cached_hash.part1 == 0 && m_cached_hash.part2 == 0)
@@ -251,15 +244,13 @@ public:
             return m_cached_hash;
         }
 
-        // override
-        virtual void invalidate_hash()
+        virtual void invalidate_hash() override
         {
             m_cached_hash.part1 = 0;
             m_cached_hash.part2 = 0;
         }
 
-        // override
-        virtual Storage* copy_for_overwrite(bool soft)
+        virtual Storage* copy_for_overwrite(bool soft) override
         {
             if(soft)
             {
@@ -275,10 +266,9 @@ public:
             return new TypedDataStorage<T_BaseType, T_DataType>(m_tuple_size);
         }
 
-        // override
         virtual void string_repr(
                 std::size_t indentation,
-                arc::str::UTF8String& s) const
+                arc::str::UTF8String& s) const override
         {
             // indentation?
             if(indentation > 0)
@@ -301,8 +291,7 @@ public:
             s << "]";
         }
 
-        // override
-        virtual std::size_t get_size() const
+        virtual std::size_t get_size() const override
         {
             return m_data.size();
         }
@@ -380,8 +369,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // override
-    OMI_API_GLOBAL virtual bool check_type(Type type) const;
+    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

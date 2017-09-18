@@ -10,8 +10,7 @@ namespace omi
 {
 
 /*!
- * \brief Module for asset management in Omicron (loading and access of
- *        resources).
+ * \brief Module for asset management in Omicron.
  */
 namespace asset
 {

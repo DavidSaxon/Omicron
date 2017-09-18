@@ -6,6 +6,7 @@
 #define OMICRON_API_ASSET_ASSETLIBRARY_HPP_
 
 #include <arcanecore/base/lang/Restrictors.hpp>
+#include <arcanecore/base/str/UTF8String.hpp>
 
 #include "omicron/api/API.hpp"
 
@@ -15,12 +16,13 @@ namespace omi
 namespace asset
 {
 
-/*!
- * \brief Singleton object which is used to load, store, provide access to, and
- *        release game resources.
- *
- * \todo
- */
+//------------------------------------------------------------------------------
+//                              FORWARD DECLARATIONS
+//------------------------------------------------------------------------------
+
+class Geometry;
+
+// TODO: DOC
 class AssetLibrary
     : private arc::lang::Noncopyable
     , private arc::lang::Nonmovable
@@ -28,11 +30,7 @@ class AssetLibrary
 {
 public:
 
-    //--------------------------------------------------------------------------
-    //                                 DESTRUCTOR
-    //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL ~AssetLibrary();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
@@ -47,23 +45,40 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
+    //-----------------------------ENGINE INTERNALS-----------------------------
     // hide from doxygen
     #ifndef IN_DOXYGEN
 
-    //-----------------------------ENGINE INTERNALS-----------------------------
-
     /*!
-     * \brief Initialises Omicron's asset library.
+     * \brief Initialises Omicron's AssetLibrary.
      */
     OMI_API_GLOBAL void startup_routine();
 
     /*!
-     * \brief Shutdowns Omicron's asset library.
+     * \brief Shutdowns Omicron's AssetLibrary.
      */
     OMI_API_GLOBAL void shutdown_routine();
 
     #endif
     // IN_DOXYGEN
+    //--------------------------------------------------------------------------
+
+    // TODO: DOC
+    OMI_API_GLOBAL void load_blocking(const arc::str::UTF8String& id);
+
+    // TODO:
+    // void load_ansyc()
+
+    // TODO: release blocking
+
+    // TODO: release async
+
+    // TODO: DOC
+    // omi::asset::AbstractAsset* get();
+
+    // TODO:
+    OMI_API_GLOBAL omi::asset::Geometry* get_geometry(
+            const arc::str::UTF8String& id);
 
     // TODO: load request packets
 
@@ -96,6 +111,12 @@ private:
      * \brief Constructs the AssetLibrary instance.
      */
     AssetLibrary();
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE DESTRUCTOR
+    //--------------------------------------------------------------------------
+
+    ~AssetLibrary();
 };
 
 } // namespace asset

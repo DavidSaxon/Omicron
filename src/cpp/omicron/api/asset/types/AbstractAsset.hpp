@@ -8,6 +8,7 @@
 #include <arcanecore/base/lang/Restrictors.hpp>
 
 #include "omicron/api/API.hpp"
+#include "omicron/api/common/attribute/MapAttribute.hpp"
 
 
 namespace omi
@@ -24,19 +25,33 @@ class AbstractAsset
 public:
 
     //--------------------------------------------------------------------------
-    //                                INNER TYPES
+    //                                CONSTRUCTOR
     //--------------------------------------------------------------------------
 
-    // TODO: DOC:
-    class AbstractResource
-        : private arc::lang::Noncopyable
-        , private arc::lang::Nonmovable
-        , private arc::lang::Noncomparable
+    // TODO: DOC
+    AbstractAsset()
     {
-        // TODO:
-    };
+    }
 
-    // TODO:
+    //--------------------------------------------------------------------------
+    //                                 DESTRUCTOR
+    //--------------------------------------------------------------------------
+
+    virtual ~AbstractAsset()
+    {
+    }
+
+    //--------------------------------------------------------------------------
+    //                          PUBLIC MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    // TODO: DOC
+    // can throw out
+    // attribute is immutable
+    virtual void init(const omi::MapAttribute& data) = 0;
+
+    // TODO: DOC
+    virtual void release() = 0;
 };
 
 } // namespace asset

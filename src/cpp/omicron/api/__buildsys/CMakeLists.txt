@@ -17,10 +17,16 @@ set(API_SRC
 
     ../asset/AssetGlobals.cpp
     ../asset/AssetLibrary.cpp
+    ../asset/loaders/OBJLoader.cpp
+    ../asset/types/Geometry.cpp
 
     ../report/Logging.cpp
     ../report/ReportBoot.cpp
     ../report/ReportGlobals.cpp
+
+    ../res/ResourceGlobals.cpp
+    ../res/ResourceId.cpp
+    ../res/ResourceRegistry.cpp
 
     ../window/MainWindow.cpp
 )

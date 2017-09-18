@@ -77,19 +77,36 @@ bool Engine::cycle()
     if(!m_setup)
     {
         global::logger->info << "Performing first-frame setup" << std::endl;
-        // TODO: setup rendering
-        // try
-        // {
-        //     m_renderer->setup_rendering();
-        // }
-        // catch(const std::exception& exc)
-        // {
-        //     global::logger->critical
-        //         << "Renderer setup failed with error: " << exc.what()
-        //         << std::endl;
-        //     return false;
-        // }
-        m_setup = true;
+        try
+        {
+            // TODO: setup rendering
+            // try
+            // {
+            //     m_renderer->setup_rendering();
+            // }
+            // catch(const std::exception& exc)
+            // {
+            //     global::logger->critical
+            //         << "Renderer setup failed with error: " << exc.what()
+            //         << std::endl;
+            //     return false;
+            // }
+
+            // engine is now live! run routines
+            if(!omi::runtime::boot::engine_live_routine())
+            {
+                return false;
+            }
+
+            m_setup = true;
+        }
+        catch(const std::exception& exc)
+        {
+            global::logger->critical
+                << "Encountered exception during first-frame setup routines: "
+                << exc.what() << std::endl;
+            return false;
+        }
     }
 
     // TODO:

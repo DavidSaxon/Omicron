@@ -3,13 +3,17 @@
 #include <memory>
 
 #include <arcanecore/col/Accessor.hpp>
+#include <arcanecore/col/Reader.hpp>
 #include <arcanecore/config/Document.hpp>
 #include <arcanecore/config/visitors/Shorthand.hpp>
 
 #include "omicron/api/asset/AssetGlobals.hpp"
+#include "omicron/api/asset/types/Geometry.hpp"
 #include "omicron/api/config/ConfigInline.hpp"
 #include "omicron/api/report/Logging.hpp"
 
+// TODO: REMOVE ME
+#include "omicron/api/asset/loaders/OBJLoader.hpp"
 
 namespace omi
 {
@@ -21,15 +25,14 @@ namespace asset
 //------------------------------------------------------------------------------
 
 class AssetLibrary::AssetLibraryImpl
+    : private arc::lang::Noncopyable
+    , private arc::lang::Nonmovable
+    , private arc::lang::Noncomparable
 {
 private:
 
     //-------------------P R I V A T E    A T T R I B U T E S-------------------
 
-    /*!
-     * \brief Whether the asset library is current initialised or not.
-     */
-    bool m_initialised;
     /*!
      * \brief The config document for the asset library.
      */
@@ -49,7 +52,6 @@ public:
     //--------------------------C O N S T R U C T O R---------------------------
 
     AssetLibraryImpl()
-        : m_initialised(false)
     {
     }
 
@@ -63,12 +65,6 @@ public:
 
     void startup_routine()
     {
-        // skip if the asset library is already initialised
-        if(m_initialised)
-        {
-            return;
-        }
-
         // create the logging profile
         arc::log::Profile profile("OMICRON-ASSET");
         // vend the input from the shared handler
@@ -92,6 +88,15 @@ public:
             &config_compiled
         ));
 
+        // using real files?
+        if(*m_config_data->get("use_real_files", AC_BOOLV))
+        {
+            arc::col::Accessor::force_real_resources = true;
+            global::logger->warning
+                << "Using file-system resources rather than collated "
+                << "resources." << std::endl;
+        }
+
         // get the path to the data directory
         arc::io::sys::Path toc_path(
             *m_config_data->get("data_directory", AC_PATHV)
@@ -105,29 +110,37 @@ public:
 
     void shutdown_routine()
     {
-        // skip if the asset library is not yet initialised
-        if(!m_initialised)
-        {
-            return;
-        }
-
         global::logger->debug << "AssetLibrary shutdown." << std::endl;
+
+        m_config_data.reset();
+    }
+
+    void load_blocking(const arc::str::UTF8String& id)
+    {
+        // TODO: determine the resource type
+        // TODO: total load failure -> how to handle?
+
+        // TODO: look up from table?
+        arc::io::sys::Path resource_path(id.split("/"));
+
+        // TODO: do something with the attributes
+        arc::col::Reader reader(resource_path, m_accessor.get());;
+        omi::asset::OBJLoader::load(reader);
+    }
+
+    omi::asset::Geometry* get_geometry(const arc::str::UTF8String& id)
+    {
+
+
+        // TODO:
+
+        return nullptr;
     }
 };
 
-
 //------------------------------------------------------------------------------
-//                                     HANDLE
+//                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
-
-//-----------------------------D E S T R U C T O R------------------------------
-
-OMI_API_GLOBAL AssetLibrary::~AssetLibrary()
-{
-    delete m_impl;
-}
-
-//---------------P U B L I C    S T A T I C    F U N C T I O N S----------------
 
 OMI_API_GLOBAL AssetLibrary* AssetLibrary::instance()
 {
@@ -135,7 +148,9 @@ OMI_API_GLOBAL AssetLibrary* AssetLibrary::instance()
     return &inst;
 }
 
-//---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
+//------------------------------------------------------------------------------
+//                            PUBLIC MEMBER FUNCTIONS
+//------------------------------------------------------------------------------
 
 OMI_API_GLOBAL void AssetLibrary::startup_routine()
 {
@@ -147,11 +162,33 @@ OMI_API_GLOBAL void AssetLibrary::shutdown_routine()
     m_impl->shutdown_routine();
 }
 
-//--------------------P R I V A T E    C O N S T R U C T O R--------------------
+OMI_API_GLOBAL void AssetLibrary::load_blocking(const arc::str::UTF8String& id)
+{
+    m_impl->load_blocking(id);
+}
+
+OMI_API_GLOBAL omi::asset::Geometry* AssetLibrary::get_geometry(
+        const arc::str::UTF8String& id)
+{
+    return m_impl->get_geometry(id);
+}
+
+//------------------------------------------------------------------------------
+//                              PRIVATE CONSTRUCTOR
+//------------------------------------------------------------------------------
 
 AssetLibrary::AssetLibrary()
     : m_impl(new AssetLibraryImpl())
 {
+}
+
+//------------------------------------------------------------------------------
+//                               PRIVATE DESTRUCTOR
+//------------------------------------------------------------------------------
+
+AssetLibrary::~AssetLibrary()
+{
+    delete m_impl;
 }
 
 } // namespace asset

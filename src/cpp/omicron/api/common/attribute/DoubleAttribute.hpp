@@ -202,8 +202,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // override
-    OMI_API_GLOBAL virtual bool check_type(Type type) const;
+    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

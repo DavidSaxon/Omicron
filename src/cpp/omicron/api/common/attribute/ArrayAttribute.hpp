@@ -93,37 +93,28 @@ public:
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        // override
-        OMI_API_GLOBAL virtual bool equals(const Storage* other) const;
+        OMI_API_GLOBAL virtual bool equals(const Storage* other) const override;
 
-        // override
-        OMI_API_GLOBAL virtual bool less_than(const Storage* other) const;
+        OMI_API_GLOBAL
+        virtual bool less_than(const Storage* other) const override;
 
-        // override
-        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const;
+        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const override;
 
-        // override
-        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const;
+        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const override;
 
-        // override
-        OMI_API_GLOBAL virtual Storage* as_pure_immutable();
+        OMI_API_GLOBAL virtual Storage* as_pure_immutable() override;
 
-        // override
-        OMI_API_GLOBAL virtual Storage* as_pure_mutable();
+        OMI_API_GLOBAL virtual Storage* as_pure_mutable() override;
 
-        // override
-        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const;
+        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const override;
 
-        // override
-        OMI_API_GLOBAL virtual void invalidate_hash();
+        OMI_API_GLOBAL virtual void invalidate_hash() override;
 
-        // override
-        OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft);
+        OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft) override;
 
-        // override
         OMI_API_GLOBAL virtual void string_repr(
                 std::size_t indentation,
-                arc::str::UTF8String& s) const;
+                arc::str::UTF8String& s) const override;
     };
 
     //--------------------------------------------------------------------------
@@ -369,8 +360,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // override
-    OMI_API_GLOBAL virtual bool check_type(Type type) const;
+    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

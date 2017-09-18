@@ -49,6 +49,8 @@ void GLSubsystem::setup_rendering()
 {
     // TODO:
     glClearColor(0.0F, 0.7F, 1.0F, 1.0F);
+
+    // TODO: TESTING: REMOVE ME
 }
 
 void GLSubsystem::render()

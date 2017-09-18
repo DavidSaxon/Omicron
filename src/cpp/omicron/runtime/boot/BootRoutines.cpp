@@ -5,6 +5,7 @@
 
 #include <omicron/api/asset/AssetLibrary.hpp>
 #include <omicron/api/report/ReportBoot.hpp>
+#include <omicron/api/res/ResourceRegistry.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/boot/BootLogging.hpp"
@@ -60,23 +61,21 @@ bool startup_routine()
         omi::report::startup_routine();
         omi::runtime::boot::startup_logging_subroutine();
         os_startup_routine();
+        if(!omi::res::ResourceRegistry::instance()->startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routines of the ResourceRegistry"
+                << std::endl;
+            return false;
+        }
         omi::asset::AssetLibrary::instance()->startup_routine();
         omi::runtime::ss::SubsystemManager::instance()->startup();
-    }
-    // TODO: can we abuse the runtime exception and naming trick like Katana...
-    catch(const arc::ex::ArcException& exc)
-    {
-        get_critical_stream()
-            << "Encountered exception during engine startup routines: ["
-            << exc.get_type() << "] \"" << exc.get_message() << "\""
-            << std::endl;
-        return false;
     }
     catch(const std::exception& exc)
     {
         get_critical_stream()
-            << "Encountered exception during engine startup routines: \""
-            << exc.what() << "\"" << std::endl;
+            << "Encountered exception during engine startup routines: "
+            << exc.what() << std::endl;
         return false;
     }
 
@@ -89,25 +88,30 @@ bool shutdown_routine()
 {
     try
     {
+        bool failure = false;
         omi::runtime::ss::SubsystemManager::instance()->shutdown();
         omi::asset::AssetLibrary::instance()->shutdown_routine();
+        if(!omi::res::ResourceRegistry::instance()->shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routines of the ResourceRegistry"
+                << std::endl;
+            failure = true;
+        }
         omi::runtime::boot::startup_logging_subroutine();
         omi::report::shutdown_routine();
-    }
-    // TODO: can we abuse the runtime exception and naming trick like Katana...
-    catch(const arc::ex::ArcException& exc)
-    {
-        get_critical_stream()
-            << "Encountered exception during engine shutdown routines: ["
-            << exc.get_type() << "] \"" << exc.get_message() << "\""
-            << std::endl;
-        return false;
+
+        // shutdown failed at some point
+        if(failure)
+        {
+            return false;
+        }
     }
     catch(const std::exception& exc)
     {
         get_critical_stream()
-            << "Encountered exception during engine shutdown routines: \""
-            << exc.what() << "\"" << std::endl;
+            << "Encountered exception during engine shutdown routines: "
+            << exc.what() << std::endl;
         return false;
     }
 
@@ -138,6 +142,33 @@ void os_startup_routine()
         SetErrorMode(SEM_FAILCRITICALERRORS);
 
     #endif
+}
+
+bool engine_live_routine()
+{
+    try
+    {
+        // perform a multi-threaded load of the initial engine resources
+        // TODO: should use some sort of "resource pack" to speicify what needs
+        //       to be loaded
+        // TODO: multi-threaded load function
+
+        // TODO: can we move res?
+        // TODO: REMOVE ME
+        omi::asset::AssetLibrary::instance()->load_blocking(
+            "res/builtin/mesh/bunny.obj"
+        );
+    }
+    catch(const std::exception& exc)
+    {
+        get_critical_stream()
+            << "Encountered exception during engine live routines: "
+            << exc.what() << std::endl;
+        return false;
+    }
+
+
+    return true;
 }
 
 } // namespace boot
