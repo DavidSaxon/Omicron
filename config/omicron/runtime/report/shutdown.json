@@ -1,0 +1,9 @@
+// controls reporting done at engine shutdown
+{
+    // prints stats to the the logger on engine shutdown
+    "print_stats":
+    {
+        "enable": true,
+        "query_path": ["dev", "stats_queries", "complete.query"]
+    }
+}

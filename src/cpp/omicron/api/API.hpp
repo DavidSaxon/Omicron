@@ -12,6 +12,14 @@
 namespace omi
 {
 
+// TODO: sort out when there's a proper build system
+#define OMI_API_MODE_DEBUG
+
+//-------------------------------COMPILATION MODE-------------------------------
+#if !defined(OMI_API_MODE_DEBUG) && !defined(OMI_API_MODE_DEVELOPER)
+#define OMI_API_MODE_PRODUCTION
+#endif
+
 //------------------------------EXPORT DEFINITION-------------------------------
 #ifdef ARC_OS_WINDOWS
     #ifdef OMI_API_GLOBAL_EXPORT

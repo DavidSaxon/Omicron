@@ -121,6 +121,28 @@ const Int32Attribute::ArrayType& Int32Attribute::get_values() const
     return get_storage<Int32Storage>()->m_data;
 }
 
+OMI_API_GLOBAL const Int32Attribute::DataType& Int32Attribute::at(
+        std::size_t index) const
+{
+    // valid?
+    check_state("at() used on an invalid attribute");
+
+    // get the storage
+    Int32Storage* storage = get_storage<Int32Storage>();
+
+    // check bounds
+    if(index >= storage->m_data.size())
+    {
+        arc::str::UTF8String error_message;
+        error_message
+            << "Index: " << index << " is greater than or equal to attribute's "
+            << "data size.";
+        throw arc::ex::IndexOutOfBoundsError(error_message);
+    }
+
+    return storage->m_data[index];
+}
+
 OMI_API_GLOBAL void Int32Attribute::set_value(DataType value)
 {
     // valid?
@@ -138,6 +160,32 @@ OMI_API_GLOBAL void Int32Attribute::set_values(const ArrayType& values)
 
     prepare_modifcation();
     get_storage<Int32Storage>()->m_data = values;
+}
+
+OMI_API_GLOBAL void Int32Attribute::set_at(
+        std::size_t index,
+        DataType value)
+{
+    // valid?
+    check_state("at() used on an invalid attribute");
+
+    // get the storage
+    Int32Storage* storage = get_storage<Int32Storage>();
+
+    // check bounds
+    if(index >= storage->m_data.size())
+    {
+        arc::str::UTF8String error_message;
+        error_message
+            << "Index: " << index << " is greater than or equal to attribute's "
+            << "data size.";
+        throw arc::ex::IndexOutOfBoundsError(error_message);
+    }
+
+    // soft modification
+    prepare_modifcation(true);
+
+    storage->m_data[index] = value;
 }
 
 //------------------------------------------------------------------------------

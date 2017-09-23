@@ -2,9 +2,14 @@
 
 #include <arcanecore/base/Exceptions.hpp>
 #include <arcanecore/base/Preproc.hpp>
+#include <arcanecore/config/Document.hpp>
+#include <arcanecore/config/visitors/Shorthand.hpp>
 
 #include <omicron/api/asset/AssetLibrary.hpp>
+#include <omicron/api/config/ConfigInline.hpp>
 #include <omicron/api/report/ReportBoot.hpp>
+#include <omicron/api/report/stats/StatsDatabase.hpp>
+#include <omicron/api/report/stats/StatsQuery.hpp>
 #include <omicron/api/res/ResourceRegistry.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
@@ -39,7 +44,17 @@ static bool initialised = false;
 /*!
  * \brief Initialises operating system specific functionality.
  */
-void os_startup_routine();
+static void os_startup_routine();
+
+/*!
+ * \brief Performs reporting on shutdown.
+ */
+static void shutdown_reports();
+
+/*!
+ * \brief Prints stats to the logger.
+ */
+static void print_stats(const arc::io::sys::Path& query_path);
 
 //------------------------------------------------------------------------------
 //                                   FUNCTIONS
@@ -89,6 +104,7 @@ bool shutdown_routine()
     try
     {
         bool failure = false;
+        shutdown_reports();
         omi::runtime::ss::SubsystemManager::instance()->shutdown();
         omi::asset::AssetLibrary::instance()->shutdown_routine();
         if(!omi::res::ResourceRegistry::instance()->shutdown_routine())
@@ -132,7 +148,7 @@ std::ostream& get_critical_stream()
     return std::cerr;
 }
 
-void os_startup_routine()
+static void os_startup_routine()
 {
     global::logger->debug
         << "Initialising Operating System specific functionality." << std::endl;
@@ -153,10 +169,9 @@ bool engine_live_routine()
         //       to be loaded
         // TODO: multi-threaded load function
 
-        // TODO: can we move res?
         // TODO: REMOVE ME
-        omi::asset::AssetLibrary::instance()->load_blocking(
-            "res/builtin/mesh/bunny.obj"
+        omi::res::ResourceRegistry::instance()->load_blocking(
+            omi::res::get_id("res/builtin/mesh/bunny.obj")
         );
     }
     catch(const std::exception& exc)
@@ -169,6 +184,40 @@ bool engine_live_routine()
 
 
     return true;
+}
+
+static void shutdown_reports()
+{
+    // build the path to the configuration data for shutdown reporting
+    arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
+    config_path << "report" << "shutdown.json";
+
+    // built-in memory data
+    static const arc::str::UTF8String config_compiled(
+        OMICRON_CONFIG_INLINE_RUNTIME_REPORT_SHUTDOWN
+    );
+
+    // construct the document
+    arc::config::Document m_config_data(config_path, &config_compiled);
+
+    // print stats?
+    if(*m_config_data.get("print_stats.enable", AC_BOOLV))
+    {
+        // get the path to the query
+        arc::io::sys::Path query_path =
+            *m_config_data.get("print_stats.query_path", AC_PATHV);
+        print_stats(query_path);
+    }
+}
+
+static void print_stats(const arc::io::sys::Path& query_path)
+{
+    // build the query
+    omi::report::StatsQuery query(query_path);
+    // execute
+    omi::report::StatsDatabase::instance()->execute_query(query);
+    // dump the results
+    // TODO:
 }
 
 } // namespace boot

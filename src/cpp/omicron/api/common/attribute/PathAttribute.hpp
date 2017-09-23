@@ -200,6 +200,15 @@ public:
     OMI_API_GLOBAL const ArrayType& get_values() const;
 
     /*!
+     * \brief Returns the single value at the given index.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throw arc::ex::IndexOutOfBoundsError If the index is out of this
+     *                                       attribute's bounds.
+     */
+    OMI_API_GLOBAL const DataType& at(std::size_t index) const;
+
+    /*!
      * \brief Sets the value of this attribute to be a size 1 array holding the
      *        given value.
      *
@@ -234,6 +243,16 @@ public:
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
     OMI_API_GLOBAL void set_values(const ArrayType& values);
+
+    /*!
+     * \brief Sets the single value at the given index.
+     *
+     * \throw arc::ex::StateError If this attribute is not valid.
+     * \throw arc::ex::IllegalActionError If this attribute is immutable.
+     * \throw arc::ex::IndexOutOfBoundsError If the index is out of this
+     *                                       attribute's bounds.
+     */
+    OMI_API_GLOBAL void set_at(std::size_t index, DataType value);
 
 protected:
 

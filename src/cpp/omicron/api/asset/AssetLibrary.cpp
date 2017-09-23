@@ -12,8 +12,6 @@
 #include "omicron/api/config/ConfigInline.hpp"
 #include "omicron/api/report/Logging.hpp"
 
-// TODO: REMOVE ME
-#include "omicron/api/asset/loaders/OBJLoader.hpp"
 
 namespace omi
 {
@@ -115,17 +113,9 @@ public:
         m_config_data.reset();
     }
 
+    // TODO: REMOVE ME
     void load_blocking(const arc::str::UTF8String& id)
     {
-        // TODO: determine the resource type
-        // TODO: total load failure -> how to handle?
-
-        // TODO: look up from table?
-        arc::io::sys::Path resource_path(id.split("/"));
-
-        // TODO: do something with the attributes
-        arc::col::Reader reader(resource_path, m_accessor.get());;
-        omi::asset::OBJLoader::load(reader);
     }
 
     omi::asset::Geometry* get_geometry(const arc::str::UTF8String& id)
