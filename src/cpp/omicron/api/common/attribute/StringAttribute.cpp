@@ -37,7 +37,7 @@ OMI_API_GLOBAL Attribute::Type StringAttribute::kTypeString =
 
 OMI_API_GLOBAL StringAttribute::StringStorage::StringStorage(
         std::size_t tuple_size)
-    : TypedDataStorage<StringAttribute, DataType>(tuple_size)
+    : TypedDataStorage<DataType>(tuple_size)
 {
 }
 

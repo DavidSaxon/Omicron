@@ -49,7 +49,7 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    class StringStorage : public TypedDataStorage<StringAttribute, DataType>
+    class StringStorage : public TypedDataStorage<DataType>
     {
     public:
 
@@ -73,7 +73,7 @@ public:
                 const T_InputIterator& first,
                 const T_InputIterator& last,
                 std::size_t tuple_size)
-            : TypedDataStorage<StringAttribute, DataType>(
+            : TypedDataStorage<DataType>(
                 first,
                 last,
                 tuple_size

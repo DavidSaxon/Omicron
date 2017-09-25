@@ -50,10 +50,7 @@ public:
     /*!
      * \brief The storage type used by ByteAttributes.
      */
-    typedef DataAttribute::TypedDataStorage<
-            ByteAttribute,
-            DataType
-    > ByteStorage;
+    typedef DataAttribute::TypedDataStorage<DataType> ByteStorage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

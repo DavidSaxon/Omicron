@@ -37,7 +37,7 @@ OMI_API_GLOBAL Attribute::Type PathAttribute::kTypePath =
 
 OMI_API_GLOBAL PathAttribute::PathStorage::PathStorage(
         std::size_t tuple_size)
-    : TypedDataStorage<PathAttribute, DataType>(tuple_size)
+    : TypedDataStorage<DataType>(tuple_size)
 {
 }
 

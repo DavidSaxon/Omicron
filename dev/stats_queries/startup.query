@@ -1,0 +1,5 @@
+// Information about engine startup
+Lifecycle.Start At
+Lifecycle.Active Time (ms)
+Lifecycle.Startup.*
+Resources.Loads

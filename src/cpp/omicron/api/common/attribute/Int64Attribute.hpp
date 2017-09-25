@@ -50,10 +50,7 @@ public:
     /*!
      * \brief The storage type used by Int64Attributes.
      */
-    typedef DataAttribute::TypedDataStorage<
-            Int64Attribute,
-            DataType
-    > Int64Storage;
+    typedef DataAttribute::TypedDataStorage<DataType> Int64Storage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

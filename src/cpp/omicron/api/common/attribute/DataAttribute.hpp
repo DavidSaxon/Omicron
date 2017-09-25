@@ -112,14 +112,10 @@ public:
      * This implementation should be used by classes that inherit from
      * DataAttribute.
      *
-     * \tparam T_BaseType The attribute that is using this storage, this class
-     *                    should provide a static function named get_type_string
-     *                    which returns the name of the attribute as a
-     *                    arc::str::UTF8String.
      * \tparam T_DataType The data type of the attribute and hence the data
      *                    type this storage will hold.
      */
-    template<typename T_BaseType, typename T_DataType>
+    template<typename T_DataType>
     class TypedDataStorage : public DataStorage
     {
     public:
@@ -170,8 +166,8 @@ public:
         virtual bool equals(const Attribute::Storage* other) const override
         {
             // cast
-            const TypedDataStorage<T_BaseType, T_DataType>* casted =
-                dynamic_cast<const TypedDataStorage<T_BaseType, T_DataType>*>(
+            const TypedDataStorage<T_DataType>* casted =
+                dynamic_cast<const TypedDataStorage<T_DataType>*>(
                     other
                 );
             if(casted == nullptr)
@@ -206,8 +202,8 @@ public:
         virtual bool less_than(const Storage* other) const override
         {
             // cast
-            const TypedDataStorage<T_BaseType, T_DataType>* casted =
-                dynamic_cast<const TypedDataStorage<T_BaseType, T_DataType>*>(
+            const TypedDataStorage<T_DataType>* casted =
+                dynamic_cast<const TypedDataStorage<T_DataType>*>(
                     other
                 );
             if(casted == nullptr)
@@ -255,7 +251,7 @@ public:
             if(soft)
             {
                 // soft overwrite - so copy everything
-                return new TypedDataStorage<T_BaseType, T_DataType>(
+                return new TypedDataStorage<T_DataType>(
                     m_data.begin(),
                     m_data.end(),
                     m_tuple_size
@@ -263,7 +259,7 @@ public:
             }
 
             // just copy the tuple size
-            return new TypedDataStorage<T_BaseType, T_DataType>(m_tuple_size);
+            return new TypedDataStorage<T_DataType>(m_tuple_size);
         }
 
         virtual void string_repr(
@@ -275,10 +271,7 @@ public:
             {
                 s << (arc::str::UTF8String(" ") * indentation);
             }
-            // get name
-            s << T_BaseType::get_type_string();
-            // tuple size
-            s << "(" << m_tuple_size << "): [";
+            s << "[";
             // values
             for(std::size_t i = 0; i < m_data.size(); ++i)
             {

@@ -22,7 +22,11 @@ namespace report
 
 class StatsQuery;
 
-// TODO: DOC
+/*!
+ * \brief Singleton object responsible for holding all of Omicron's various
+ *        runtime statistics and providing methods for querying the stat of
+ *        statistics.
+ */
 class StatsDatabase
     : private arc::lang::Noncopyable
     , private arc::lang::Nonmovable
@@ -53,6 +57,8 @@ public:
      *             reference count the original attribute can be held onto, and
      *             modified in order to update the statistic within the
      *             database.
+     * \param description An optional description about what this statistic is
+     *                    measuring.
      *
      * \throw arc::ex::KeyError If there is already a statistic with the given
      *                          name.
@@ -61,7 +67,8 @@ public:
      */
     OMI_API_GLOBAL void define_entry(
             const arc::str::UTF8String& name,
-            omi::DataAttribute attr);
+            omi::DataAttribute attr,
+            const arc::str::UTF8String& description = "");
 
     /*!
      * \brief Returns the attribute for the statistic with the given name.
@@ -74,17 +81,25 @@ public:
     OMI_API_GLOBAL const omi::DataAttribute& get_entry(
             const arc::str::UTF8String& name) const;
 
-    // TOOD: get names
+    /*!
+     * \brief Returns the description of the statistic with the given name.
+     *
+     * If there is no description for the name, an empty string will be
+     * returned.
+     */
+    OMI_API_GLOBAL const arc::str::UTF8String& get_description(
+            const arc::str::UTF8String& name) const;
+
+    /*!
+     * \brief Returns an array of all the names of the entries in the
+     *        StatsDatabase.
+     */
+    OMI_API_GLOBAL std::vector<arc::str::UTF8String> get_names() const;
 
     /*!
      * \brief Executes the given query on the StatsDatabase.
      */
     OMI_API_GLOBAL void execute_query(StatsQuery& query) const;
-
-
-    // TODO: text dump
-
-    // TODO:
 
 private:
 

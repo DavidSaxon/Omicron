@@ -13,12 +13,93 @@ namespace runtime
 {
 
 //------------------------------------------------------------------------------
-//                                   DESTRUCTOR
+//                                 IMPLEMENTATION
 //------------------------------------------------------------------------------
 
-Engine::~Engine()
+class Engine::EngineImpl
+    : private arc::lang::Noncopyable
+    , private arc::lang::Nonmovable
+    , private arc::lang::Noncomparable
 {
-}
+public:
+
+    //--------------------------C O N S T R U C T O R---------------------------
+
+    EngineImpl()
+    {
+    }
+
+    //---------------------------D E S T R U C T O R----------------------------
+
+    ~EngineImpl()
+    {
+    }
+
+    //-------------P U B L I C    M E M B E R    F U N C T I O N S--------------
+
+    int execute()
+    {
+        if(!omi::runtime::boot::startup_routine())
+        {
+            omi::runtime::boot::get_critical_stream()
+                << "Engine startup failed. Aborting" << std::endl;
+            return -1;
+        }
+
+        // TODO: need to do first time window setup somewhere...
+        omi::window::MainWindow* main_window =
+            omi::window::MainWindow::instance();
+        main_window->set_mode(omi::window::kModeFullscreen);
+
+        // get the subsystem manager
+        ss::SubsystemManager* ss_manager = ss::SubsystemManager::instance();
+
+        global::logger->info << "Starting main loop" << std::endl;
+        // start the main loop
+        ss_manager->start_main_loop(&cycle_static);
+
+        if(!omi::runtime::boot::shutdown_routine())
+        {
+            omi::runtime::boot::get_critical_stream()
+                << "Engine shutdown did not complete successfully" << std::endl;
+            return -1;
+        }
+
+        return 0;
+    }
+
+private:
+
+    //------------P R I V A T E    S T A T I C    F U N C T I O N S-------------
+
+    // callback function to execute a single cycle of the Omicron engine
+    static bool cycle_static()
+    {
+        return Engine::instance()->m_impl->cycle();
+    }
+
+    //------------P R I V A T E    M E M B E R    F U N C T I O N S-------------
+
+    // performs a single cycle of the Omicron engine
+    bool cycle()
+    {
+        // first frame setup
+        if(!omi::runtime::boot::first_frame_routine())
+        {
+            return false;
+        }
+
+        // TODO:
+        // render the frame
+        // m_renderer->render();
+
+        return true;
+    }
+};
+
+//------------------------------------------------------------------------------
+//                                   DESTRUCTOR
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 //                            PUBLIC STATIC FUNCTIONS
@@ -30,90 +111,13 @@ Engine* Engine::instance()
     return &inst;
 }
 
-bool Engine::cycle_static()
-{
-    return Engine::instance()->cycle();
-}
-
 //------------------------------------------------------------------------------
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
 int Engine::execute()
 {
-    if(!omi::runtime::boot::startup_routine())
-    {
-        omi::runtime::boot::get_critical_stream()
-            << "Engine startup failed. Aborting" << std::endl;
-        return -1;
-    }
-
-    // TODO: need to do first time window setup somewhere...
-    omi::window::MainWindow* main_window =
-        omi::window::MainWindow::instance();
-    main_window->set_mode(omi::window::kModeFullscreen);
-
-    // get the subsystem manager
-    ss::SubsystemManager* ss_manager = ss::SubsystemManager::instance();
-
-    global::logger->info << "Starting main loop" << std::endl;
-    // start the main loop
-    ss_manager->start_main_loop(&Engine::cycle_static);
-
-    m_setup = false;
-    if(!omi::runtime::boot::shutdown_routine())
-    {
-        omi::runtime::boot::get_critical_stream()
-            << "Engine startup failed. Aborting" << std::endl;
-        return -1;
-    }
-
-    return 0;
-}
-
-bool Engine::cycle()
-{
-    // perform first time setup
-    if(!m_setup)
-    {
-        global::logger->info << "Performing first-frame setup" << std::endl;
-        try
-        {
-            // TODO: setup rendering
-            // try
-            // {
-            //     m_renderer->setup_rendering();
-            // }
-            // catch(const std::exception& exc)
-            // {
-            //     global::logger->critical
-            //         << "Renderer setup failed with error: " << exc.what()
-            //         << std::endl;
-            //     return false;
-            // }
-
-            // engine is now live! run routines
-            if(!omi::runtime::boot::engine_live_routine())
-            {
-                return false;
-            }
-
-            m_setup = true;
-        }
-        catch(const std::exception& exc)
-        {
-            global::logger->critical
-                << "Encountered exception during first-frame setup routines: "
-                << exc.what() << std::endl;
-            return false;
-        }
-    }
-
-    // TODO:
-    // render the frame
-    // m_renderer->render();
-
-    return true;
+    return m_impl->execute();
 }
 
 //------------------------------------------------------------------------------
@@ -121,8 +125,17 @@ bool Engine::cycle()
 //------------------------------------------------------------------------------
 
 Engine::Engine()
-    : m_setup(false)
+    : m_impl(new EngineImpl())
 {
+}
+
+//------------------------------------------------------------------------------
+//                               PRIVATE DESTRUCTOR
+//------------------------------------------------------------------------------
+
+Engine::~Engine()
+{
+    delete m_impl;
 }
 
 } // namespace runtime

@@ -34,21 +34,21 @@ OMI_API_GLOBAL StatsQuery::StatsQuery(const arc::io::sys::Path& path)
         }
     }
     // assign to the match strings
-    m_strings = MatchStrings(lines.begin(), lines.end());
+    m_patterns = PatternArray(lines.begin(), lines.end());
 }
 
 OMI_API_GLOBAL StatsQuery::StatsQuery(const StatsQuery& other)
-    : m_strings(other.m_strings)
-    , m_result (other.m_result)
+    : m_patterns(other.m_patterns)
+    , m_result  (other.m_result)
 {
 }
 
 OMI_API_GLOBAL StatsQuery::StatsQuery(StatsQuery&& other)
-    : m_strings(other.m_strings)
-    , m_result (other.m_result)
+    : m_patterns(other.m_patterns)
+    , m_result  (other.m_result)
 {
-    other.m_strings = MatchStrings();
-    other.m_result  = Result();
+    other.m_patterns = PatternArray();
+    other.m_result   = Result();
 }
 
 //------------------------------------------------------------------------------
@@ -65,17 +65,17 @@ OMI_API_GLOBAL StatsQuery::~StatsQuery()
 
 OMI_API_GLOBAL StatsQuery& StatsQuery::operator=(const StatsQuery& other)
 {
-    m_strings = other.m_strings;
-    m_result  = other.m_result;
+    m_patterns = other.m_patterns;
+    m_result   = other.m_result;
     return *this;
 }
 
 OMI_API_GLOBAL StatsQuery& StatsQuery::operator=(StatsQuery&& other)
 {
-    m_strings = other.m_strings;
-    m_result  = other.m_result;
-    other.m_strings = MatchStrings();
-    other.m_result  = Result();
+    m_patterns = other.m_patterns;
+    m_result   = other.m_result;
+    other.m_patterns = PatternArray();
+    other.m_result   = Result();
     return *this;
 }
 
@@ -83,14 +83,14 @@ OMI_API_GLOBAL StatsQuery& StatsQuery::operator=(StatsQuery&& other)
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL const StatsQuery::MatchStrings& StatsQuery::get_strings() const
+OMI_API_GLOBAL const StatsQuery::PatternArray& StatsQuery::get_patterns() const
 {
-    return m_strings;
+    return m_patterns;
 }
 
-OMI_API_GLOBAL void StatsQuery::add(const arc::str::UTF8String& s)
+OMI_API_GLOBAL void StatsQuery::add_pattern(const arc::str::UTF8String& s)
 {
-    m_strings.push_back(s);
+    m_patterns.push_back(s);
 }
 
 OMI_API_GLOBAL const StatsQuery::Result& StatsQuery::get_result() const
@@ -100,7 +100,7 @@ OMI_API_GLOBAL const StatsQuery::Result& StatsQuery::get_result() const
 
 OMI_API_GLOBAL void StatsQuery::clear()
 {
-    m_strings.clear();
+    m_patterns.clear();
     m_result.clear();
 }
 

@@ -981,7 +981,7 @@ ARC_TEST_UNIT(string_representation)
     {
         omi::Int32Attribute a;
         arc::str::UTF8String s;
-        arc::str::UTF8String r("Int32Attribute(0): []");
+        arc::str::UTF8String r("[]");
         s << a;
         ARC_CHECK_EQUAL(s, r);
         omi::DataAttribute b(a);
@@ -996,7 +996,7 @@ ARC_TEST_UNIT(string_representation)
     {
         omi::Int32Attribute a(17, true);
         arc::str::UTF8String s;
-        arc::str::UTF8String r("Int32Attribute(0): [17]");
+        arc::str::UTF8String r("[17]");
         s << a;
         ARC_CHECK_EQUAL(s, r);
         omi::DataAttribute b(a);
@@ -1011,7 +1011,7 @@ ARC_TEST_UNIT(string_representation)
     {
         omi::Int32Attribute a(-5, false);
         arc::str::UTF8String s;
-        arc::str::UTF8String r("Int32Attribute(0): [-5]");
+        arc::str::UTF8String r("[-5]");
         s << a;
         ARC_CHECK_EQUAL(s, r);
         omi::DataAttribute b(a);
@@ -1026,7 +1026,7 @@ ARC_TEST_UNIT(string_representation)
     {
         omi::Int32Attribute a({4, -1, 0, 546}, 2, true);
         arc::str::UTF8String s;
-        arc::str::UTF8String r("Int32Attribute(2): [4, -1, 0, 546]");
+        arc::str::UTF8String r("[4, -1, 0, 546]");
         s << a;
         ARC_CHECK_EQUAL(s, r);
         omi::DataAttribute b(a);
@@ -1041,7 +1041,7 @@ ARC_TEST_UNIT(string_representation)
     {
         omi::Int32Attribute a({0, 22, -12, 44, 94, 8}, 3, false);
         arc::str::UTF8String s;
-        arc::str::UTF8String r("Int32Attribute(3): [0, 22, -12, 44, 94, 8]");
+        arc::str::UTF8String r("[0, 22, -12, 44, 94, 8]");
         s << a;
         ARC_CHECK_EQUAL(s, r);
         omi::DataAttribute b(a);

@@ -1182,6 +1182,7 @@ ARC_TEST_UNIT_FIXTURE(pure_immutable, MapAttributeFixture)
         ARC_CHECK_TRUE(b["map_key.map_key"].is_immutable());
         ARC_CHECK_TRUE(b["map_key.map_key.byte_key"].is_immutable());
         ARC_CHECK_TRUE(b["map_key.map_key.string_key"].is_immutable());
+
     }
 }
 

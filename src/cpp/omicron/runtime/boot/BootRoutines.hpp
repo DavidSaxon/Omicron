@@ -31,6 +31,13 @@ namespace boot
 bool startup_routine();
 
 /*!
+ * \brief Performs setup of the first frame.
+ *
+ * This setup is performed with a valid GL context.
+ */
+bool first_frame_routine();
+
+/*!
  * \brief Performs the shutdown subroutines of Omicron.
  *
  * \return Whether shutdown completed successfully.
@@ -45,13 +52,6 @@ bool shutdown_routine();
  * logging has been initialised.
  */
 std::ostream& get_critical_stream();
-
-/*!
- * \brief Boot routine that is called once the Engine has become live.
- *
- * This function is blocking and is called with a valid GL context.
- */
-bool engine_live_routine();
 
 } // namespace boot
 } // namespace runtime

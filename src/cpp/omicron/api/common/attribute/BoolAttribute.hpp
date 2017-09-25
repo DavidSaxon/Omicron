@@ -47,7 +47,7 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    class BoolStorage : public TypedDataStorage<BoolAttribute, DataType>
+    class BoolStorage : public TypedDataStorage<DataType>
     {
     public:
 
@@ -71,7 +71,7 @@ public:
                 const T_InputIterator& first,
                 const T_InputIterator& last,
                 std::size_t tuple_size)
-            : TypedDataStorage<BoolAttribute, DataType>(
+            : TypedDataStorage<DataType>(
                 first,
                 last,
                 tuple_size

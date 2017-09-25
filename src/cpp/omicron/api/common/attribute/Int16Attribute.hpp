@@ -50,10 +50,7 @@ public:
     /*!
      * \brief The storage type used by Int16Attributes.
      */
-    typedef DataAttribute::TypedDataStorage<
-            Int16Attribute,
-            DataType
-    > Int16Storage;
+    typedef DataAttribute::TypedDataStorage<DataType> Int16Storage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

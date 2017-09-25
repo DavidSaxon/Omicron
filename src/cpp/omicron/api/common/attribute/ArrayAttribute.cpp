@@ -218,25 +218,21 @@ OMI_API_GLOBAL void ArrayAttribute::ArrayStorage::string_repr(
         arc::str::UTF8String& s) const
 {
     // indentation?
-    arc::str::UTF8String indent_str = " ";
-    indent_str *= indentation;
-    s << indent_str << "ArrayAttribute";
-    // empty array?
-    if(m_data.empty())
+    if(indentation > 0)
     {
-        s << ": []";
+        s << (arc::str::UTF8String(" ") * indentation);
     }
-    else
+    s << "[";
+    // values
+    for(std::size_t i = 0; i < m_data.size(); ++i)
     {
-        // next level of indentation
-        std::size_t next_indentation = indentation + 4;
-        // build the indentation string once
-        for(std::size_t i = 0; i < m_data.size(); ++i)
+        s << m_data[i];
+        if(i < m_data.size() - 1)
         {
-            s << "\n" << indent_str << "- " << i << ":\n";
-            m_data[i].string_repr(s, next_indentation);
+            s << ", ";
         }
     }
+    s << "]";
 }
 
 //------------------------------------------------------------------------------

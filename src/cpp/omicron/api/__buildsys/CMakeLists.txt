@@ -23,6 +23,7 @@ set(API_SRC
     ../report/ReportBoot.cpp
     ../report/ReportGlobals.cpp
     ../report/stats/StatsDatabase.cpp
+    ../report/stats/StatsOperations.cpp
     ../report/stats/StatsQuery.cpp
 
     ../res/ResourceGlobals.cpp

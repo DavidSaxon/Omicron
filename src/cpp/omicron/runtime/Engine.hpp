@@ -33,12 +33,6 @@ class Engine
 public:
 
     //--------------------------------------------------------------------------
-    //                                 DESTRUCTOR
-    //--------------------------------------------------------------------------
-
-    ~Engine();
-
-    //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
     //--------------------------------------------------------------------------
 
@@ -46,14 +40,6 @@ public:
      * \brief Returns the singleton instance of the Omicron engine.
      */
     static Engine* instance();
-
-
-    /*!
-     * \brief Performs a cycle of execution of the Omicron engine.
-     *
-     * Is called by the input subsystem.
-     */
-    static bool cycle_static();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -66,35 +52,28 @@ public:
      */
     int execute();
 
-    /*!
-     * \brief Performs a cycle of execution of the Omicron engine.
-     *
-     * Is called by the cycle_static function.
-     */
-    bool cycle();
-
 private:
-
-    //--------------------------------------------------------------------------
-    //                             PRIVATE ATTRIBUTES
-    //--------------------------------------------------------------------------
-
-    /*!
-     * \brief Whether setup has performed or not.
-     *
-     * Setup occurs on the very first frame of the engine to setup all systems
-     * that require the engine to be in a valid state or a GL context.
-     */
-    bool m_setup;
 
     //--------------------------------------------------------------------------
     //                            PRIVATE CONSTRUCTOR
     //--------------------------------------------------------------------------
 
-    /*!
-     * \brief Creates a new instance of the engine.
-     */
     Engine();
+
+    //--------------------------------------------------------------------------
+    //                             PRIVATE DESTRUCTOR
+    //--------------------------------------------------------------------------
+
+    ~Engine();
+
+    //--------------------------------------------------------------------------
+    //                            COMPILATION FIREWALL
+    //--------------------------------------------------------------------------
+
+    class EngineImpl;
+    EngineImpl* m_impl;
+
+    friend class EngineImpl;
 };
 
 } // namespace runtime

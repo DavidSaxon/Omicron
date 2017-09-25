@@ -57,8 +57,9 @@ private:
 
     // stats
     omi::Int32Attribute m_stat_loads;
+    omi::Int32Attribute m_stat_leaks;
     omi::Int32Attribute m_stat_raw_loads;
-    omi::Int32Attribute m_stat_redunant_loads;
+    omi::Int32Attribute m_stat_redundant_loads;
     #ifndef OMI_API_MODE_PRODUCTION
         omi::Int32Attribute m_stat_reoccurring_loads;
     #endif
@@ -69,9 +70,10 @@ public:
     //--------------------------C O N S T R U C T O R---------------------------
 
     ResourceRegistryImpl()
-        : m_stat_loads         (0, false)
-        , m_stat_raw_loads     (0, false)
-        , m_stat_redunant_loads(0, false)
+        : m_stat_loads          (0, false)
+        , m_stat_leaks          (0, false)
+        , m_stat_raw_loads      (0, false)
+        , m_stat_redundant_loads(0, false)
         #ifndef OMI_API_MODE_PRODUCTION
             , m_stat_reoccurring_loads(0, false)
         #endif
@@ -171,24 +173,38 @@ public:
             m_entries.insert(std::make_pair(id, resource));
         }
 
-        // TODO: should move stats out of the sub directory
         // set up the stats
         omi::report::StatsDatabase::instance()->define_entry(
-            "ResourceRegistry.loads",
-            m_stat_loads
+            "Resources.Loads",
+            m_stat_loads,
+            "The total number of resource loads performed by Omicron during "
+            "the engine's lifetime."
         );
         omi::report::StatsDatabase::instance()->define_entry(
-            "ResourceRegistry.raw_loads",
-            m_stat_raw_loads
+            "Resources.Leaks",
+            m_stat_leaks,
+            "The number of resources that were not released when Omicron was "
+            "was shutdown."
         );
         omi::report::StatsDatabase::instance()->define_entry(
-            "ResourceRegistry.redunant_loads",
-            m_stat_redunant_loads
+            "Resources.Raw Loads",
+            m_stat_raw_loads,
+            "The number of resource loads performed by the built-in raw loader "
+            "- this means no appropriate loader could be found for the "
+            "resource."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
+            "Resources.Redundant Loads",
+            m_stat_redundant_loads,
+            "The number of resource loads that were requested while the "
+            "resource was currently loaded"
         );
         #ifndef OMI_API_MODE_PRODUCTION
             omi::report::StatsDatabase::instance()->define_entry(
-                "ResourceRegistry.reoccurring_loads",
-                m_stat_reoccurring_loads
+                "Resources.Reoccurring Loads",
+                m_stat_reoccurring_loads,
+                "The total number of time resources where requested again "
+                "after being released by the ResourceRegistry"
             );
         #endif
 
@@ -200,7 +216,29 @@ public:
     {
         global::logger->debug << "ResourceRegistry shutdown." << std::endl;
 
+        // stat leaks
+        m_stat_leaks.set_at(0, m_resources.size());
+
+        // List leaked resources
+        if(!m_resources.empty())
+        {
+            arc::str::UTF8String header = "=";
+            header *= 80;
+            arc::str::UTF8String leak_list;
+            for(auto r : m_resources)
+            {
+                leak_list
+                    << r.first << " :: " << m_entries[r.first].to_unix()
+                    << "\n";
+            }
+            global::logger->warning
+                << "Leaked resources:\n\t" << header << "\n\t" << leak_list
+                << "\t" << header << std::endl;
+        }
+
+        m_resources.clear();
         m_entries.clear();
+        m_loaders.clear();
         m_accessor.reset();
         m_config_data.reset();
 
@@ -234,7 +272,7 @@ public:
         if(f_resource != m_resources.end())
         {
             // record in stats
-            m_stat_redunant_loads.set_at(0, m_stat_redunant_loads.at(0) + 1);
+            m_stat_redundant_loads.set_at(0, m_stat_redundant_loads.at(0) + 1);
             return;
         }
 

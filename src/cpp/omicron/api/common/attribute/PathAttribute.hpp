@@ -53,7 +53,7 @@ public:
     //                                  STORAGE
     //--------------------------------------------------------------------------
 
-    class PathStorage : public TypedDataStorage<PathAttribute, DataType>
+    class PathStorage : public TypedDataStorage<DataType>
     {
     public:
 
@@ -77,7 +77,7 @@ public:
                 const T_InputIterator& first,
                 const T_InputIterator& last,
                 std::size_t tuple_size)
-            : TypedDataStorage<PathAttribute, DataType>(
+            : TypedDataStorage<DataType>(
                 first,
                 last,
                 tuple_size

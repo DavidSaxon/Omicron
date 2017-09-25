@@ -50,10 +50,7 @@ public:
     /*!
      * \brief The storage type used by FloatAttributes.
      */
-    typedef DataAttribute::TypedDataStorage<
-            FloatAttribute,
-            DataType
-    > FloatStorage;
+    typedef DataAttribute::TypedDataStorage<DataType> FloatStorage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

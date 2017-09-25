@@ -50,10 +50,7 @@ public:
     /*!
      * \brief The storage type used by DoubleAttributes.
      */
-    typedef DataAttribute::TypedDataStorage<
-            DoubleAttribute,
-            DataType
-    > DoubleStorage;
+    typedef DataAttribute::TypedDataStorage<DataType> DoubleStorage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

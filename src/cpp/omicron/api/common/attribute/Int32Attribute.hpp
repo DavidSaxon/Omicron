@@ -50,10 +50,7 @@ public:
     /*!
      * \brief The storage type used by Int32Attributes.
      */
-    typedef DataAttribute::TypedDataStorage<
-            Int32Attribute,
-            DataType
-    > Int32Storage;
+    typedef DataAttribute::TypedDataStorage<DataType> Int32Storage;
 
     //--------------------------------------------------------------------------
     //                                CONSTRUCTORS

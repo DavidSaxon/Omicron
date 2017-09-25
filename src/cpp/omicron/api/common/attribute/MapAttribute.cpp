@@ -237,20 +237,29 @@ OMI_API_GLOBAL void MapAttribute::MapStorage::string_repr(
     // indentation?
     arc::str::UTF8String indent_str = " ";
     indent_str *= indentation;
-    s << indent_str << "MapAttribute";
     // empty map?
     if(m_data.empty())
     {
-        s << ": {}";
+        s << indent_str << "{}";
     }
     else
     {
+        // TODO: fix
         // next level of indentation
         std::size_t next_indentation = indentation + 4;
         // build the indentation string once
+        bool first = true;
         for(auto entry : m_data)
         {
-            s << "\n" << indent_str << "- " << entry.first << ":\n";
+            if(!first)
+            {
+                s << "\n";
+            }
+            else
+            {
+                first = true;
+            }
+            s << indent_str << "- " << entry.first << ":\n";
             entry.second.string_repr(s, next_indentation);
         }
     }

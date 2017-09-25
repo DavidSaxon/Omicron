@@ -37,7 +37,7 @@ OMI_API_GLOBAL Attribute::Type BoolAttribute::kTypeBool =
 
 OMI_API_GLOBAL BoolAttribute::BoolStorage::BoolStorage(
         std::size_t tuple_size)
-    : TypedDataStorage<BoolAttribute, DataType>(tuple_size)
+    : TypedDataStorage<DataType>(tuple_size)
 {
 }
 
