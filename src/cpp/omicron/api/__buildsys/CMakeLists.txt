@@ -22,6 +22,7 @@ set(API_SRC
     ../report/Logging.cpp
     ../report/ReportBoot.cpp
     ../report/ReportGlobals.cpp
+    ../report/SystemMonitor.cpp
     ../report/stats/StatsDatabase.cpp
     ../report/stats/StatsOperations.cpp
     ../report/stats/StatsQuery.cpp

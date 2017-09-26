@@ -10,10 +10,10 @@
 #include <omicron/api/common/Attributes.hpp>
 #include <omicron/api/config/ConfigInline.hpp>
 #include <omicron/api/report/ReportBoot.hpp>
+#include <omicron/api/report/SystemMonitor.hpp>
 #include <omicron/api/report/stats/StatsDatabase.hpp>
 #include <omicron/api/report/stats/StatsOperations.hpp>
 #include <omicron/api/report/stats/StatsQuery.hpp>
-
 #include <omicron/api/res/ResourceRegistry.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
@@ -43,6 +43,8 @@ static bool g_first_frame_complete = false;
 
 // The config document for engine startup
 arc::config::DocumentPtr g_startup_config;
+// The config document for engine shutdown
+arc::config::DocumentPtr g_shutdown_config;
 
 // the time in milliseconds since epoch that Omicron started
 static arc::uint64 g_start_time;
@@ -119,6 +121,10 @@ static void define_statistics()
     );
 }
 
+//------------------------------------------------------------------------------
+//                                 S T A R T U P
+//------------------------------------------------------------------------------
+
 bool startup_routine()
 {
     // warn and do nothing if Omicron has already been initialised
@@ -144,12 +150,10 @@ bool startup_routine()
     // build the path to the configuration data for startup
     arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
     config_path << "boot" << "startup.json";
-
     // built-in memory data
     static const arc::str::UTF8String config_compiled(
         OMICRON_CONFIG_INLINE_RUNTIME_BOOT_STARTUP
     );
-
     // construct the document
     g_startup_config.reset(
         new arc::config::Document(config_path, &config_compiled)
@@ -157,7 +161,13 @@ bool startup_routine()
 
     try
     {
-        omi::report::startup_routine();
+        if(!omi::report::startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routines of report module"
+                << std::endl;
+            return false;
+        }
         omi::runtime::boot::startup_logging_subroutine();
         os_startup_routine();
         if(!omi::res::ResourceRegistry::instance()->startup_routine())
@@ -167,7 +177,13 @@ bool startup_routine()
                 << std::endl;
             return false;
         }
-        omi::asset::AssetLibrary::instance()->startup_routine();
+        if(!omi::asset::AssetLibrary::instance()->startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routines of the AssetLibrary"
+                << std::endl;
+            return false;
+        }
         omi::runtime::ss::SubsystemManager::instance()->startup();
     }
     catch(const std::exception& exc)
@@ -246,6 +262,8 @@ bool first_frame_routine()
         return false;
     }
 
+    // force update the system monitor so we can get up-to-date stats
+    omi::report::SystemMonitor::instance()->update(true);
 
     // stat the time to first frame
     g_stat_time_to_first_frame.set_at(
@@ -302,16 +320,39 @@ static void startup_reports()
     }
 }
 
+//------------------------------------------------------------------------------
+//                                S H U T D O W N
+//------------------------------------------------------------------------------
+
 bool shutdown_routine()
 {
     // time shutdown starts
     arc::uint64 shutdown_start_time = arc::clock::get_current_time();
 
+    // build the path to the configuration data for startup
+    arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
+    config_path << "boot" << "shutdown.json";
+    // built-in memory data
+    static const arc::str::UTF8String config_compiled(
+        OMICRON_CONFIG_INLINE_RUNTIME_BOOT_SHUTDOWN
+    );
+    // construct the document
+    g_shutdown_config.reset(
+        new arc::config::Document(config_path, &config_compiled)
+    );
+
     try
     {
         bool failure = false;
+        // global::logger->warning << "Subsystem shutdown disabled" << std::endl;
         omi::runtime::ss::SubsystemManager::instance()->shutdown();
-        omi::asset::AssetLibrary::instance()->shutdown_routine();
+        if(!omi::asset::AssetLibrary::instance()->shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routines of the AssetLibrary"
+                << std::endl;
+            failure = true;
+        }
         if(!omi::res::ResourceRegistry::instance()->shutdown_routine())
         {
             global::logger->critical
@@ -320,9 +361,11 @@ bool shutdown_routine()
             failure = true;
         }
 
+        // force update the system monitor so we can get up-to-date stats
+        omi::report::SystemMonitor::instance()->update(true);
+
         // get the time of shutdown
         arc::uint64 end_time = arc::clock::get_current_time();
-
         // stat
         g_stat_end_at.set_at(
             0,
@@ -345,7 +388,14 @@ bool shutdown_routine()
         }
 
         omi::runtime::boot::startup_logging_subroutine();
-        omi::report::shutdown_routine();
+
+        if(!omi::report::shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routines of the report module"
+                << std::endl;
+            failure = true;
+        }
 
         // shutdown failed at some point
         if(failure)
@@ -366,6 +416,22 @@ bool shutdown_routine()
     return true;
 }
 
+static void shutdown_reports()
+{
+    // print stats?
+    if(*g_shutdown_config->get("print_stats.enable", AC_BOOLV))
+    {
+        // get the path to the query
+        arc::io::sys::Path query_path =
+            *g_shutdown_config->get("print_stats.query_path", AC_PATHV);
+        print_stats(query_path, "Shutdown Statistics");
+    }
+}
+
+//------------------------------------------------------------------------------
+//                                 U T I L I T Y
+//------------------------------------------------------------------------------
+
 std::ostream& get_critical_stream()
 {
     // return the from proper logging if input is not null
@@ -376,30 +442,6 @@ std::ostream& get_critical_stream()
     // return std::cerr
     std::cerr << "{OMICRON-RUNTIME} - [CRITICAL]: ";
     return std::cerr;
-}
-
-static void shutdown_reports()
-{
-    // build the path to the configuration data for shutdown reporting
-    arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
-    config_path << "boot" << "shutdown.json";
-
-    // built-in memory data
-    static const arc::str::UTF8String config_compiled(
-        OMICRON_CONFIG_INLINE_RUNTIME_BOOT_SHUTDOWN
-    );
-
-    // construct the document
-    arc::config::Document config_data(config_path, &config_compiled);
-
-    // print stats?
-    if(*config_data.get("print_stats.enable", AC_BOOLV))
-    {
-        // get the path to the query
-        arc::io::sys::Path query_path =
-            *config_data.get("print_stats.query_path", AC_PATHV);
-        print_stats(query_path, "Shutdown Statistics");
-    }
 }
 
 static void print_stats(

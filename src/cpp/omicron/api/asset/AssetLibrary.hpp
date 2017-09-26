@@ -52,26 +52,16 @@ public:
     /*!
      * \brief Initialises Omicron's AssetLibrary.
      */
-    OMI_API_GLOBAL void startup_routine();
+    OMI_API_GLOBAL bool startup_routine();
 
     /*!
      * \brief Shutdowns Omicron's AssetLibrary.
      */
-    OMI_API_GLOBAL void shutdown_routine();
+    OMI_API_GLOBAL bool shutdown_routine();
 
     #endif
     // IN_DOXYGEN
     //--------------------------------------------------------------------------
-
-    // TODO: DOC
-    OMI_API_GLOBAL void load_blocking(const arc::str::UTF8String& id);
-
-    // TODO:
-    // void load_ansyc()
-
-    // TODO: release blocking
-
-    // TODO: release async
 
     // TODO: DOC
     // omi::asset::AbstractAsset* get();
@@ -79,8 +69,6 @@ public:
     // TODO:
     OMI_API_GLOBAL omi::asset::Geometry* get_geometry(
             const arc::str::UTF8String& id);
-
-    // TODO: load request packets
 
     // TODO: how to run multi-threaded to get data onto GPU
 

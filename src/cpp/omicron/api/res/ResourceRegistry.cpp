@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <arcanecore/base/clock/ClockOperations.hpp>
 #include <arcanecore/col/Accessor.hpp>
 #include <arcanecore/col/Reader.hpp>
 #include <arcanecore/config/Document.hpp>
@@ -58,24 +59,31 @@ private:
     // stats
     omi::Int32Attribute m_stat_loads;
     omi::Int32Attribute m_stat_leaks;
-    omi::Int32Attribute m_stat_raw_loads;
-    omi::Int32Attribute m_stat_redundant_loads;
+    omi::Int32Attribute m_stat_unexpected;
     #ifndef OMI_API_MODE_PRODUCTION
+        omi::Int32Attribute m_stat_raw_loads;
+        omi::Int32Attribute m_stat_redundant_loads;
         omi::Int32Attribute m_stat_reoccurring_loads;
+        omi::Int64Attribute m_stat_total_load_time;
+        omi::Int64Attribute m_stat_peak_load_time;
+        omi::StringAttribute m_stat_peak_load_resource;
     #endif
-
 
 public:
 
     //--------------------------C O N S T R U C T O R---------------------------
 
     ResourceRegistryImpl()
-        : m_stat_loads          (0, false)
-        , m_stat_leaks          (0, false)
-        , m_stat_raw_loads      (0, false)
-        , m_stat_redundant_loads(0, false)
+        : m_stat_loads             (0, false)
+        , m_stat_leaks             (0, false)
+        , m_stat_unexpected        (0, false)
         #ifndef OMI_API_MODE_PRODUCTION
-            , m_stat_reoccurring_loads(0, false)
+        , m_stat_raw_loads         (0, false)
+        , m_stat_redundant_loads   (0, false)
+        , m_stat_reoccurring_loads (0, false)
+        , m_stat_total_load_time   (0, false)
+        , m_stat_peak_load_time    (0, false)
+        , m_stat_peak_load_resource("", false)
         #endif
     {
     }
@@ -187,27 +195,50 @@ public:
             "was shutdown."
         );
         omi::report::StatsDatabase::instance()->define_entry(
-            "Resources.Raw Loads",
-            m_stat_raw_loads,
-            "The number of resource loads performed by the built-in raw loader "
-            "- this means no appropriate loader could be found for the "
-            "resource."
-        );
-        omi::report::StatsDatabase::instance()->define_entry(
-            "Resources.Redundant Loads",
-            m_stat_redundant_loads,
-            "The number of resource loads that were requested while the "
-            "resource was currently loaded"
+            "Resources.Unexpected Loads",
+            m_stat_unexpected,
+            "The number of resources that were requested but had not been "
+            "preemptively loaded."
         );
         #ifndef OMI_API_MODE_PRODUCTION
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Resources.Raw Loads",
+                m_stat_raw_loads,
+                "The number of resource loads performed by the built-in raw "
+                "loader - this means no appropriate loader could be found for "
+                "the resource."
+            );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Resources.Redundant Loads",
+                m_stat_redundant_loads,
+                "The number of resource loads that were requested while the "
+                "resource was currently loaded"
+            );
             omi::report::StatsDatabase::instance()->define_entry(
                 "Resources.Reoccurring Loads",
                 m_stat_reoccurring_loads,
                 "The total number of time resources where requested again "
                 "after being released by the ResourceRegistry"
             );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Resources.Total Load Time (ms)",
+                m_stat_total_load_time,
+                "The total time spent by the engine loading resources"
+            );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Resources.Peak Load Time (ms)",
+                m_stat_peak_load_time,
+                "The maximum amount of time spent by the engine loading a "
+                "single resource."
+            );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Resources.Peak Resource",
+                m_stat_peak_load_resource,
+                "Records the resource which took the longest time to load (i.e. "
+                "its load time is represented by the Resource.Max Load Time "
+                "stat."
+            );
         #endif
-
 
         return true;
     }
@@ -265,14 +296,52 @@ public:
         m_loaders.insert(std::make_pair(extension, function));
     }
 
+    bool is_loaded(ResourceId id) const
+    {
+        return m_resources.find(id) != m_resources.end();
+    }
+
+    omi::Attribute get(ResourceId id)
+    {
+        // TODO: need to check if the id is in the async queue, or this could
+        //       take an optional argument whether it waits for async or forces
+        //       a blocking load...
+
+        // has the resource been loaded?
+        auto f_resource = m_resources.find(id);
+
+        if(f_resource == m_resources.end())
+        {
+            // have do perform an unexpected load
+            global::logger->warning
+                << "Performing an unexpected load on resource \""
+                << m_entries[id].to_unix() << "\"" << std::endl;
+
+            // stat
+            m_stat_unexpected.set_at(0, m_stat_unexpected.at(0) + 1);
+
+            // perform the load and return
+            load_blocking(id);
+            return m_resources[id];
+        }
+
+        return f_resource->second;
+    }
+
     void load_blocking(ResourceId id)
     {
         // early exit if the resource is already loaded
         auto f_resource = m_resources.find(id);
         if(f_resource != m_resources.end())
         {
-            // record in stats
-            m_stat_redundant_loads.set_at(0, m_stat_redundant_loads.at(0) + 1);
+            #ifndef OMI_API_MODE_PRODUCTION
+                // stat
+                m_stat_redundant_loads.set_at(
+                    0,
+                    m_stat_redundant_loads.at(0) + 1
+                );
+            #endif
+
             return;
         }
 
@@ -312,6 +381,11 @@ public:
             }
         #endif
 
+        #ifndef OMI_API_MODE_PRODUCTION
+            // time this load
+            arc::uint64 load_start = arc::clock::get_current_time();
+        #endif
+
         // find the loader for this extension
         auto f_loader = m_loaders.find(ext);
         if(f_loader != m_loaders.end())
@@ -323,10 +397,29 @@ public:
         // fallback to the raw loader
         else
         {
-            // record in stats
-            m_stat_raw_loads.set_at(0, m_stat_raw_loads.at(0) + 1);
+            #ifndef OMI_API_MODE_PRODUCTION
+                // record in stats
+                m_stat_raw_loads.set_at(0, m_stat_raw_loads.at(0) + 1);
+            #endif
+
             m_resources.insert(std::make_pair(id, omi::res::load_raw(reader)));
         }
+
+        #ifndef OMI_API_MODE_PRODUCTION
+            // get the time taken
+            arc::uint64 load_time = arc::clock::get_current_time() - load_start;
+            //stat
+            m_stat_total_load_time.set_at(
+                0,
+                m_stat_total_load_time.at(0) + load_time
+            );
+            // max load
+            if(static_cast<arc::int64>(load_time) > m_stat_peak_load_time.at(0))
+            {
+                m_stat_peak_load_time.set_at(0, load_time);
+                m_stat_peak_load_resource.set_at(0, f_entry->second.to_unix());
+            }
+        #endif
     }
 };
 
@@ -359,6 +452,16 @@ OMI_API_GLOBAL void ResourceRegistry::define_loader(
         const arc::str::UTF8String& extension)
 {
     m_impl->define_loader(function, extension);
+}
+
+OMI_API_GLOBAL bool ResourceRegistry::is_loaded(ResourceId id) const
+{
+    return m_impl->is_loaded(id);
+}
+
+OMI_API_GLOBAL omi::Attribute ResourceRegistry::get(ResourceId id)
+{
+    return m_impl->get(id);
 }
 
 OMI_API_GLOBAL void ResourceRegistry::load_blocking(ResourceId id)

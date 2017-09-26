@@ -55,6 +55,7 @@
     <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\report\SystemMonitor.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\stats\StatsDatabase.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\stats\StatsOperations.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\stats\StatsQuery.cpp" />

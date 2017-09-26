@@ -100,6 +100,17 @@ public:
     // IN_DOXYGEN
     //--------------------------------------------------------------------------
 
+    /*!
+     * \brief Returns whether the resource is currently loaded or not.
+     */
+    OMI_API_GLOBAL bool is_loaded(ResourceId id) const;
+
+    // TOOD: in async queue?
+
+    // TODO: DOC once async loading is thing
+    // TODO: this resource could be an mutable copy or the true mutable version
+    OMI_API_GLOBAL omi::Attribute get(ResourceId id);
+
     // TODO: DOC
     OMI_API_GLOBAL void load_blocking(ResourceId id);
 
