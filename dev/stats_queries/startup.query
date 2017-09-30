@@ -2,4 +2,5 @@
 Lifecycle.Start At
 Lifecycle.Active Time (ms)
 Lifecycle.Startup.*
+System.*
 Resources.Loads

@@ -63,28 +63,37 @@ public:
     OMI_API_GLOBAL void update(bool force = false);
 
     /*!
-     * \brief Returns an immutable reference to the statistics attribute which
-     *        stores current resident set size.
+     * \brief Returns the model of this machine's CPU.
      */
-    OMI_API_GLOBAL omi::Int64Attribute get_current_rss() const;
+    OMI_API_GLOBAL const arc::str::UTF8String& get_cpu_model() const;
 
     /*!
-     * \brief Returns the StatsDatabase key for current resident set size.
+     * \brief Returns the number of physical cores this machine's CPU has.
      */
-    OMI_API_GLOBAL const arc::str::UTF8String& get_current_rss_key() const;
+    OMI_API_GLOBAL std::size_t get_cpu_physial_cores() const;
 
     /*!
-     * \brief Return an immutable reference to the statistics attribute which
-     *        stores peak resident set size.
+     * \brief Returns the number of logical processing units this machine's CPU
+     *        has.
      */
-    OMI_API_GLOBAL omi::Int64Attribute get_peak_rss() const;
+    OMI_API_GLOBAL std::size_t get_cpu_logical_processors() const;
 
     /*!
-     * \brief Returns the StatsDatabase key for peak resident set size.
+     * \brief Returns the clock rate (in MHz) of this machine's CPU.
      */
-    OMI_API_GLOBAL const arc::str::UTF8String& get_peak_rss_key() const;
+    OMI_API_GLOBAL float get_cpu_clock_rate() const;
 
-    // TODO: more stats
+    /*!
+     * \brief Returns the last sampled size of the engine's Resident Set Size
+     *        (in megabytes).
+     */
+    OMI_API_GLOBAL double get_current_rss() const;
+
+    /*!
+     * \brief Returns the peak sampled value that engine's Residents Set Size
+     *        reached (in megabytes).
+     */
+    OMI_API_GLOBAL double get_peak_rss() const;
 
 private:
 
