@@ -4,7 +4,8 @@
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/boot/BootRoutines.hpp"
-#include "omicron/runtime/subsystem/SubsystemManager.hpp"
+// TODO:
+// #include "omicron/runtime/subsystem/SubsystemManager.hpp"
 
 
 namespace omi
@@ -46,17 +47,18 @@ public:
             return -1;
         }
 
-        // TODO: need to do first time window setup somewhere...
-        omi::window::MainWindow* main_window =
-            omi::window::MainWindow::instance();
-        main_window->set_mode(omi::window::kModeFullscreen);
+        // TODO: FIX
+        // // TODO: need to do first time window setup somewhere...
+        // omi::window::MainWindow* main_window =
+        //     omi::window::MainWindow::instance();
+        // main_window->set_mode(omi::window::kModeFullscreen);
 
-        // get the subsystem manager
-        ss::SubsystemManager* ss_manager = ss::SubsystemManager::instance();
+        // // get the subsystem manager
+        // ss::SubsystemManager* ss_manager = ss::SubsystemManager::instance();
 
-        global::logger->info << "Starting main loop" << std::endl;
-        // start the main loop
-        ss_manager->start_main_loop(&cycle_static);
+        // global::logger->info << "Starting main loop" << std::endl;
+        // // start the main loop
+        // ss_manager->start_main_loop(&cycle_static);
 
         if(!omi::runtime::boot::shutdown_routine())
         {

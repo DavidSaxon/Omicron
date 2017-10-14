@@ -9,6 +9,7 @@
 #include <omicron/api/asset/AssetLibrary.hpp>
 #include <omicron/api/common/Attributes.hpp>
 #include <omicron/api/config/ConfigInline.hpp>
+#include <omicron/api/context/ContextSubsystem.hpp>
 #include <omicron/api/report/ReportBoot.hpp>
 #include <omicron/api/report/SystemMonitor.hpp>
 #include <omicron/api/report/stats/StatsDatabase.hpp>
@@ -53,7 +54,7 @@ static arc::uint64 g_start_time;
 static omi::StringAttribute g_stat_start_at           ("", false);
 static omi::StringAttribute g_stat_end_at             ("", false);
 static omi::Int64Attribute  g_stat_active_time        (0, false);
-static omi::Int64Attribute  g_stat_core_startup_time  (0, false);
+static omi::Int64Attribute  g_stat_base_startup_time  (0, false);
 static omi::Int64Attribute  g_stat_time_to_first_frame(0, false);
 static omi::Int64Attribute  g_stat_shutdown_time(0, false);
 
@@ -102,9 +103,9 @@ static void define_statistics()
         "The amount of time Omicron has been active for."
     );
     omi::report::StatsDatabase::instance()->define_entry(
-        "Lifecycle.Startup.Core Time (ms)",
-        g_stat_core_startup_time,
-        "The time taken by startup of the core engine (including "
+        "Lifecycle.Startup.Base Time (ms)",
+        g_stat_base_startup_time,
+        "The time taken by startup of the base engine (including "
         "subsystem loading and startup)."
     );
     omi::report::StatsDatabase::instance()->define_entry(
@@ -184,7 +185,21 @@ bool startup_routine()
                 << std::endl;
             return false;
         }
-        omi::runtime::ss::SubsystemManager::instance()->startup();
+        if(!omi::runtime::ss::SubsystemManager::instance()->startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routines of the SubsystemManager"
+                << std::endl;
+            return false;
+        }
+        if(!omi::context::ContextSubsystem::instance()->startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routines of the ContextSubsystem"
+                << std::endl;
+            return false;
+        }
+
     }
     catch(const std::exception& exc)
     {
@@ -195,7 +210,7 @@ bool startup_routine()
     }
 
     // stat the time of core startup
-    g_stat_core_startup_time.set_at(
+    g_stat_base_startup_time.set_at(
         0,
         arc::clock::get_current_time() - g_start_time
     );
@@ -344,8 +359,20 @@ bool shutdown_routine()
     try
     {
         bool failure = false;
-        // global::logger->warning << "Subsystem shutdown disabled" << std::endl;
-        omi::runtime::ss::SubsystemManager::instance()->shutdown();
+        if(!omi::context::ContextSubsystem::instance()->shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routines of the ContextSubsystem"
+                << std::endl;
+            failure = true;
+        }
+        if(!omi::runtime::ss::SubsystemManager::instance()->shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routines of the SubsystemManager"
+                << std::endl;
+            failure = true;
+        }
         if(!omi::asset::AssetLibrary::instance()->shutdown_routine())
         {
             global::logger->critical

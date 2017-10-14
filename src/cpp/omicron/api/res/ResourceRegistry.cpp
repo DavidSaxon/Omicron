@@ -10,7 +10,7 @@
 #include <arcanecore/config/Document.hpp>
 #include <arcanecore/config/visitors/Shorthand.hpp>
 
-#include "omicron/api/common/attribute/Attribute.hpp"
+#include "omicron/api/common/Attributes.hpp"
 #include "omicron/api/config/ConfigInline.hpp"
 #include "omicron/api/report/Logging.hpp"
 #include "omicron/api/report/stats/StatsDatabase.hpp"
@@ -59,7 +59,7 @@ private:
     // stats
     omi::Int32Attribute m_stat_loads;
     omi::Int32Attribute m_stat_leaks;
-    omi::Int32Attribute m_stat_unexpected;
+    omi::Int32Attribute m_stat_unanticipated;
     #ifndef OMI_API_MODE_PRODUCTION
         omi::Int32Attribute m_stat_raw_loads;
         omi::Int32Attribute m_stat_redundant_loads;
@@ -76,7 +76,7 @@ public:
     ResourceRegistryImpl()
         : m_stat_loads             (0, false)
         , m_stat_leaks             (0, false)
-        , m_stat_unexpected        (0, false)
+        , m_stat_unanticipated     (0, false)
         #ifndef OMI_API_MODE_PRODUCTION
         , m_stat_raw_loads         (0, false)
         , m_stat_redundant_loads   (0, false)
@@ -195,8 +195,8 @@ public:
             "was shutdown."
         );
         omi::report::StatsDatabase::instance()->define_entry(
-            "Resources.Unexpected Loads",
-            m_stat_unexpected,
+            "Resources.Unanticipated Loads",
+            m_stat_unanticipated,
             "The number of resources that were requested but had not been "
             "preemptively loaded."
         );
@@ -318,7 +318,7 @@ public:
                 << m_entries[id].to_unix() << "\"" << std::endl;
 
             // stat
-            m_stat_unexpected.set_at(0, m_stat_unexpected.at(0) + 1);
+            m_stat_unanticipated.set_at(0, m_stat_unanticipated.at(0) + 1);
 
             // perform the load and return
             load_blocking(id);

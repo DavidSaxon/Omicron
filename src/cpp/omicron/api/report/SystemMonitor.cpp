@@ -29,10 +29,18 @@ private:
     // The config document for the system monitor.
     arc::config::DocumentPtr m_config_data;
 
+    // stats
+    omi::StringAttribute m_os_name;
+    omi::StringAttribute m_os_distro;
     omi::StringAttribute m_cpu_model;
     omi::Int64Attribute m_cpu_physical_cores;
     omi::Int64Attribute m_cpu_logical_processors;
     omi::FloatAttribute m_cpu_clock_rate;
+    omi::Int64Attribute m_primary_processor;
+    omi::DoubleAttribute m_total_ram;
+    omi::DoubleAttribute m_free_ram;
+    omi::DoubleAttribute m_total_virtual_memory;
+    omi::DoubleAttribute m_free_virtual_memory;
     omi::DoubleAttribute m_current_rss;
     omi::DoubleAttribute m_peak_rss;
 
@@ -41,6 +49,16 @@ private:
     // defines the statistics in the StatsDatabase
     void define_stats()
     {
+        omi::report::StatsDatabase::instance()->define_entry(
+            "System.OS.Name",
+            m_os_name,
+            "The model name of this machine's operating system."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
+            "System.OS.Distro",
+            m_os_distro,
+            "The distribution name/version of this machine's operating system."
+        );
         omi::report::StatsDatabase::instance()->define_entry(
             "System.CPU.Model",
             m_cpu_model,
@@ -62,6 +80,32 @@ private:
             "The estimated clock rate of this machine's CPU."
         );
         omi::report::StatsDatabase::instance()->define_entry(
+            "System.CPU.Primary Processor",
+            m_primary_processor,
+            "The id of the logical processor the primary thread of the engine "
+            "is running on."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
+            "System.Memory.Total RAM (mb)",
+            m_total_ram,
+            "The total amount of RAM on this system."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
+            "System.Memory.Free RAM (mb)",
+            m_free_ram,
+            "The total amount of RAM free on this system."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
+            "System.Memory.Total Virtual Memory (mb)",
+            m_total_virtual_memory,
+            "The total amount of virtual memory on this system."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
+            "System.Memory.Free Virtual Memory (mb)",
+            m_free_virtual_memory,
+            "The total amount of virtual memory free on this system."
+        );
+        omi::report::StatsDatabase::instance()->define_entry(
             "System.Memory.RSS (mb)",
             m_current_rss,
             "The last sampled size of the engine's Resident Set Size (RSS) "
@@ -80,10 +124,17 @@ public:
     //--------------------------C O N S T R U C T O R---------------------------
 
     SystemMonitorImpl()
-        : m_cpu_model             ("", false)
+        : m_os_name               ("", false)
+        , m_os_distro             ("", false)
+        , m_cpu_model             ("", false)
         , m_cpu_physical_cores    (0, false)
         , m_cpu_logical_processors(0, false)
         , m_cpu_clock_rate        (0.0F, false)
+        , m_primary_processor     (0, false)
+        , m_total_ram             (0.0, false)
+        , m_free_ram              (0.0, false)
+        , m_total_virtual_memory  (0.0, false)
+        , m_free_virtual_memory   (0.0, false)
         , m_current_rss           (0, false)
         , m_peak_rss              (0, false)
     {
@@ -103,9 +154,9 @@ public:
 
         // TODO: load config
 
-        std::cout << "startup_routine called!" << std::endl;
-
-        // get the one system stats CPU stats
+        // get the one time system stats
+        m_os_name.set_at(0, arc::io::os::get_os_name());
+        m_os_distro.set_at(0, arc::io::os::get_distro_name());
         m_cpu_model.set_at(0, arc::io::os::get_cpu_model());
         m_cpu_physical_cores.set_at(0, arc::io::os::get_cpu_physical_cores());
         m_cpu_logical_processors.set_at(
@@ -113,6 +164,18 @@ public:
             arc::io::os::get_cpu_logical_processors()
         );
         m_cpu_clock_rate.set_at(0, arc::io::os::get_cpu_clock_rate());
+        m_primary_processor.set_at(0, arc::io::os::get_thread_processor());
+        m_total_ram.set_at(
+            0,
+            static_cast<double>(arc::io::os::get_total_ram()) /
+            static_cast<double>(arc::data::BYTE_TO_MEGABYTE)
+        );
+        m_total_virtual_memory.set_at(
+            0,
+            static_cast<double>(arc::io::os::get_total_virtual_memory()) /
+            static_cast<double>(arc::data::BYTE_TO_MEGABYTE)
+        );
+
 
         return true;
     }
@@ -125,6 +188,16 @@ public:
     void update(bool force)
     {
         // TODO: stochastic sampling
+        m_free_ram.set_at(
+            0,
+            static_cast<double>(arc::io::os::get_free_ram()) /
+            static_cast<double>(arc::data::BYTE_TO_MEGABYTE)
+        );
+        m_free_virtual_memory.set_at(
+            0,
+            static_cast<double>(arc::io::os::get_free_virtual_memory()) /
+            static_cast<double>(arc::data::BYTE_TO_MEGABYTE)
+        );
         m_current_rss.set_at(
             0,
             static_cast<double>(arc::io::os::get_rss()) /
@@ -135,6 +208,16 @@ public:
             static_cast<double>(arc::io::os::get_peak_rss()) /
             static_cast<double>(arc::data::BYTE_TO_MEGABYTE)
         );
+    }
+
+    const arc::str::UTF8String& get_os_name() const
+    {
+        return m_os_name.at(0);
+    }
+
+    const arc::str::UTF8String& get_os_distro() const
+    {
+        return m_os_distro.at(0);
     }
 
     const arc::str::UTF8String& get_cpu_model() const
@@ -155,6 +238,31 @@ public:
     float get_cpu_clock_rate() const
     {
         return m_cpu_clock_rate.at(0);
+    }
+
+    std::size_t get_primary_processor() const
+    {
+        return m_primary_processor.at(0);
+    }
+
+    double get_total_ram() const
+    {
+        return m_total_ram.at(0);
+    }
+
+    double get_free_ram() const
+    {
+        return m_free_ram.at(0);
+    }
+
+    double get_total_virtual_memory() const
+    {
+        return m_total_virtual_memory.at(0);
+    }
+
+    double get_free_virtual_memory() const
+    {
+        return m_free_virtual_memory.at(0);
     }
 
     double get_current_rss() const
@@ -197,6 +305,16 @@ OMI_API_GLOBAL void SystemMonitor::update(bool force)
     m_impl->update(force);
 }
 
+OMI_API_GLOBAL const arc::str::UTF8String& SystemMonitor::get_os_name() const
+{
+    return m_impl->get_os_name();
+}
+
+OMI_API_GLOBAL const arc::str::UTF8String& SystemMonitor::get_os_distro() const
+{
+    return m_impl->get_os_distro();
+}
+
 OMI_API_GLOBAL const arc::str::UTF8String& SystemMonitor::get_cpu_model() const
 {
     return m_impl->get_cpu_model();
@@ -215,6 +333,31 @@ OMI_API_GLOBAL std::size_t SystemMonitor::get_cpu_logical_processors() const
 OMI_API_GLOBAL float SystemMonitor::get_cpu_clock_rate() const
 {
     return m_impl->get_cpu_clock_rate();
+}
+
+OMI_API_GLOBAL std::size_t SystemMonitor::get_primary_processor() const
+{
+    return m_impl->get_primary_processor();
+}
+
+OMI_API_GLOBAL double SystemMonitor::get_total_ram() const
+{
+    return m_impl->get_total_ram();
+}
+
+OMI_API_GLOBAL double SystemMonitor::get_free_ram() const
+{
+    return m_impl->get_free_ram();
+}
+
+OMI_API_GLOBAL double SystemMonitor::get_total_virtual_memory() const
+{
+    return m_impl->get_total_virtual_memory();
+}
+
+OMI_API_GLOBAL double SystemMonitor::get_free_virtual_memory() const
+{
+    return m_impl->get_free_virtual_memory();
 }
 
 OMI_API_GLOBAL double SystemMonitor::get_current_rss() const

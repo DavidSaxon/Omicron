@@ -15,6 +15,9 @@ set(API_SRC
 
     ../config/ConfigGlobals.cpp
 
+    ../context/ContextSubsystem.cpp
+    ../context/Surface.cpp
+
     ../asset/AssetGlobals.cpp
     ../asset/AssetLibrary.cpp
     ../asset/types/Geometry.cpp

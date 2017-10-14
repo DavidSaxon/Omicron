@@ -1,16 +1,18 @@
 #include "omicron/runtime/subsystem/SubsystemManager.hpp"
 
-#include <cassert>
+#include <unordered_map>
 #include <unordered_set>
 
-#include <arcanecore/base/Preproc.hpp>
 #include <arcanecore/io/sys/FileSystemOperations.hpp>
-
+#include <arcanecore/config/Variant.hpp>
 #include <arcanecore/config/visitors/Shorthand.hpp>
 
+#include "omicron/api/common/Attributes.hpp"
 #include <omicron/api/config/ConfigInline.hpp>
+#include "omicron/api/report/stats/StatsDatabase.hpp"
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
+#include "omicron/runtime/subsystem/ContextSSDL.hpp"
 
 
 namespace omi
@@ -20,31 +22,250 @@ namespace runtime
 namespace ss
 {
 
-namespace
+//------------------------------------------------------------------------------
+//                                 IMPLEMENTATION
+//------------------------------------------------------------------------------
+
+class SubsystemManager::SubsystemManagerImpl
+    : private arc::lang::Noncopyable
+    , private arc::lang::Nonmovable
+    , private arc::lang::Noncomparable
 {
-//------------------------------------------------------------------------------
-//                                TYPE DEFINITIONS
-//------------------------------------------------------------------------------
+private:
 
-typedef void* (LibRegisterFunc)();
+    //-------------------P R I V A T E    A T T R I B U T E S-------------------
 
-} // namespace anonymous
+    // whether the subsystem manager has been initialised yet or not
+    bool m_initialised;
 
-//------------------------------------------------------------------------------
-//                              PRIVATE CONSTRUCTOR
-//------------------------------------------------------------------------------
+    // the ArcaneCore config Variant for general subsystem configuration.
+    arc::config::VariantPtr m_config;
 
-SubsystemManager::SubsystemManager()
-{
-}
+    // the extension that subsystems should have
+    arc::str::UTF8String m_extension;
 
-//------------------------------------------------------------------------------
-//                                   DESTRUCTOR
-//------------------------------------------------------------------------------
+    // the names of the subsystems to use
+    arc::str::UTF8String m_context_name;
+    // TODO: MORE SUBSYSTEMS
 
-SubsystemManager::~SubsystemManager()
-{
-}
+    // mapping from subsystem names to the paths they should be loaded from
+    std::unordered_map<arc::str::UTF8String, arc::io::sys::Path> m_paths;
+
+    // the context subsystem DL manager
+    ContextSSDL m_context_dl;
+
+public:
+
+    //--------------------------C O N S T R U C T O R---------------------------
+
+    SubsystemManagerImpl()
+        : m_initialised(false)
+    {
+    }
+
+    //---------------------------D E S T R U C T O R----------------------------
+
+    ~SubsystemManagerImpl()
+    {
+    }
+
+    //-------------P U B L I C    M E M B E R    F U N C T I O N S--------------
+
+    bool startup_routine()
+    {
+        // bail out if we're already initialised
+        if(m_initialised)
+        {
+            return true;
+        }
+
+        global::logger->debug << "SubsystemManager startup." << std::endl;
+
+        // build the path to the base subsystem document
+        arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
+        config_path << "subsystems" << "subsystems.json";
+
+        // build in-memory data
+        static const arc::str::UTF8String config_compiled(
+            OMICRON_CONFIG_INLINE_RUNTIME_SUBSYSTEMS
+        );
+
+        // construct the variant
+        m_config.reset(new arc::config::Variant(
+            config_path,
+            &config_compiled
+        ));
+        // use unix variant?
+        #ifdef ARC_OS_UNIX
+            m_config->set_variant("linux");
+        #endif
+
+        // get the subsystem searchpaths
+        std::vector<arc::io::sys::Path> search_path = *m_config->get(
+            "search_paths",
+            AC_PATHVECV
+        );
+        if(search_path.empty())
+        {
+            global::logger->error
+                << "No subsystem search paths provided." << std::endl;
+        }
+
+        // get the subsystem extension
+        m_extension =  "." + *m_config->get(
+            "extension",
+            AC_U8STRV
+        );
+
+        // get the names of the subsystems to use
+        m_context_name = *m_config->get(
+            "roles.context",
+            AC_U8STRV
+        );
+        // TODO: more subsystems
+
+        collect_paths(search_path);
+
+        bool success = true;
+        // bind the subsystems
+        if(!bind_context())
+        {
+            success = false;
+        }
+        // TODO: more subsystems
+
+        m_initialised = true;
+        return success;
+    }
+
+    bool shutdown_routine()
+    {
+        global::logger->debug << "SubsystemManager shutdown." << std::endl;
+
+        m_context_dl.release();
+
+        m_initialised = false;
+        return true;
+    }
+
+private:
+
+    //------------P R I V A T E    M E M B E R    F U N C T I O N S-------------
+
+    // collects the path to be used for each subsystem
+    void collect_paths(const std::vector<arc::io::sys::Path>& search_path)
+    {
+        // TODO: more subsystems
+        std::unordered_set<arc::str::UTF8String> names{m_context_name};
+
+        // iterate over each path
+        for(const arc::io::sys::Path& path : search_path)
+        {
+            global::logger->info
+                << "Searching path for potential subsystem libraries: \""
+                << path << "\"" << std::endl;
+
+            // handle if the search path is a file
+            if(arc::io::sys::is_file(path))
+            {
+                add_if_potential_path(names, path);
+            }
+            // handle if the search path is a directory
+            else if(arc::io::sys::is_directory(path))
+            {
+                // evaluate the files in the directory
+                for(const arc::io::sys::Path& sub_path :
+                    arc::io::sys::list(path))
+                {
+                    if(arc::io::sys::is_file(sub_path))
+                    {
+                        add_if_potential_path(names, sub_path);
+                    }
+                }
+            }
+            else
+            {
+                global::logger->warning
+                    << "Invalid path used in search path: \"" << path << "\""
+                    << std::endl;
+            }
+        }
+    }
+
+    // Checks if the given path is potential path that can be used to load a
+    // subsystem from and if so, stores it in the path mapping
+    void add_if_potential_path(
+            const std::unordered_set<arc::str::UTF8String>& names,
+            const arc::io::sys::Path& path)
+    {
+        // has at least one part and ends with the extension
+        if(path.is_empty() || !path.get_back().ends_with(m_extension))
+        {
+            return;
+        }
+
+        // get the name of the potential subsystem library
+        arc::str::UTF8String lib_name = path.get_back().substring(
+            0,
+            path.get_back().get_length() - m_extension.get_length()
+        );
+
+        // does the name match any of the expected names
+        auto f_name = names.find(lib_name);
+        if(f_name != names.end() && m_paths.find(lib_name) == m_paths.end())
+        {
+            auto f_lib = m_paths.find(lib_name);
+            if(m_paths.find(lib_name) != m_paths.end())
+            {
+                global::logger->warning
+                    << "Potential subsystem library at: \"" << path << "\" "
+                    << "masked by a file with the same name defined earlier in "
+                    << "the search path: \"" << f_lib->second << "\""
+                    << std::endl;
+                return;
+            }
+
+            global::logger->debug
+                << "Identified potential subsystem library at \"" << path
+                << "\"" << std::endl;
+            // store
+            m_paths.insert(std::make_pair(lib_name, path));
+        }
+    }
+
+    // loads and bind the context subsystem
+    bool bind_context()
+    {
+        // check the required subsystem path has been found
+        auto f_path = m_paths.find(m_context_name);
+        if(f_path == m_paths.end())
+        {
+            global::logger->error
+                << "Failed to load and bind context subsystem as no library "
+                << "with the name \"" << m_context_name << "\" was found "
+                << "in the search paths." << std::endl;
+            return false;
+        }
+
+        // record stats
+        #ifndef OMI_API_MODE_PRODUCTION
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Subsystem.Context.Name",
+                omi::StringAttribute(m_context_name, false),
+                "The name of the implementation being used for the context "
+                "subsystem."
+            );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Subsystem.Context.Path",
+                omi::PathAttribute(f_path->second, false),
+                "The path to the implementation being used for the context "
+                "subsystem."
+            );
+        #endif
+
+        return m_context_dl.bind(f_path->second);
+    }
+};
 
 //------------------------------------------------------------------------------
 //                            PUBLIC STATIC FUNCTIONS
@@ -60,422 +281,32 @@ SubsystemManager* SubsystemManager::instance()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-void SubsystemManager::startup()
+bool SubsystemManager::startup_routine()
 {
-    // bail out if we're already initialised
-    if(m_initialised)
-    {
-        return;
-    }
-
-    global::logger->debug << "SubsystemManager startup." << std::endl;
-
-    // build the path to the base subsystem document
-    arc::io::sys::Path config_path(omi::runtime::global::config_root_dir);
-    config_path << "subsystems" << "subsystems.json";
-
-    // build in-memory data
-    static const arc::str::UTF8String config_compiled(
-        OMICRON_CONFIG_INLINE_RUNTIME_SUBSYSTEMS);
-
-    // construct the variant
-    m_config_data.reset(new arc::config::Variant(
-        config_path,
-        &config_compiled
-    ));
-    // use unix variant?
-    #ifdef ARC_OS_UNIX
-        m_config_data->set_variant("linux");
-    #endif
-
-    // get the subsystem searchpaths
-    std::vector<arc::io::sys::Path> m_search_path = *m_config_data->get(
-        "search_paths", AC_PATHVECV
-    );
-    if(m_search_path.empty())
-    {
-        global::logger->error
-            << "No subsystem search paths provided." << std::endl;
-    }
-
-    // get the subsystem extension
-    m_extension =  "." + *m_config_data->get(
-        "extension", AC_U8STRV
-    );
-
-    // fill out the potential paths of subsystems based on the existing files
-    // within the search path
-    for(const arc::io::sys::Path& path : m_search_path)
-    {
-        global::logger->info
-            << "Searching path for potential subsytem libraries: \"" << path
-            << "\"" << std::endl;
-
-        // handle if the search path is a file
-        if(arc::io::sys::is_file(path))
-        {
-            add_if_ptoential_path(path);
-        }
-        // handle if the search path is a directory
-        else if(arc::io::sys::is_directory(path))
-        {
-            // evaluate the files in the directory
-            for(const arc::io::sys::Path& sub_path : arc::io::sys::list(path))
-            {
-                if(arc::io::sys::is_file(sub_path))
-                {
-                    add_if_ptoential_path(sub_path);
-                }
-            }
-        }
-        else
-        {
-            global::logger->debug
-                << "Invalid path used in search path: \"" << path << "\""
-                << std::endl;
-        }
-    }
-
-    // bind the subsystems
-    m_window.bind(get_or_load_library("window"));
-
-    // start the subsystems
-    m_window.startup();
-
-    // we're done
-    m_initialised = true;
+    return m_impl->startup_routine();
 }
 
-void SubsystemManager::shutdown()
+bool SubsystemManager::shutdown_routine()
 {
-    global::logger->debug << "SubsystemManager shutdown." << std::endl;
-
-    // release the subsystems
-    m_window.release();
-
-    // close the open dynamic libraries
-    for(auto library : m_dl_handles)
-    {
-        global::logger->debug
-            << "Closing subsystem library: " << library.first << std::endl;
-        arc::io::dl::close_library(library.second);
-    }
-    m_dl_handles.clear();
-
-    // we're done
-    m_initialised = false;
-}
-
-void SubsystemManager::start_main_loop(
-        omi::window::ss::EngineCycleFunc* engine_cycle_func)
-{
-    // ensure subsystems are initialised
-    if(!m_initialised)
-    {
-        throw arc::ex::ContextError(
-            "Cannot start Omicron main-loop until subsystems have been "
-            "initialised"
-        );
-    }
-
-    m_window.start_main_loop(engine_cycle_func);
+    return m_impl->shutdown_routine();
 }
 
 //------------------------------------------------------------------------------
-//                            PRIVATE MEMBER FUNCTIONS
+//                              PRIVATE CONSTRUCTOR
 //------------------------------------------------------------------------------
 
-void SubsystemManager::add_if_ptoential_path(const arc::io::sys::Path& path)
+SubsystemManager::SubsystemManager()
+    : m_impl(new SubsystemManagerImpl())
 {
-    // has at least one part and ends with the extension
-    if(path.is_empty() || !path.get_back().ends_with(m_extension))
-    {
-        return;
-    }
-
-    // get the name of the potential subsystem library
-    arc::str::UTF8String lib_name = path.get_back().substring(
-        0,
-        path.get_back().get_length()  - m_extension.get_length()
-    );
-
-    // has the library been identified already?
-    auto f_lib = m_potential.find(lib_name);
-    if(f_lib != m_potential.end())
-    {
-        global::logger->warning
-            << "Potential subsystem library at: \"" << path << "\" masked by "
-            << "a file with the same name defined earlier in the search path: "
-            << "\"" << f_lib->second << "\"" << std::endl;
-        return;
-    }
-
-    global::logger->debug
-        << "Identified potential subsystem library at: " << path << std::endl;
-
-    // add to the global mapping
-    m_potential[lib_name] = path;
 }
 
-arc::io::dl::Handle SubsystemManager::get_or_load_library(
-        const arc::str::UTF8String& role)
+//------------------------------------------------------------------------------
+//                               PRIVATE DESTRUCTOR
+//------------------------------------------------------------------------------
+
+SubsystemManager::~SubsystemManager()
 {
-    // get the name of the subsystem to use
-    arc::str::UTF8String ss_name =
-        *m_config_data->get("roles." + role, AC_U8STRV);
-
-    if(ss_name.is_empty())
-    {
-        throw arc::ex::ValidationError(
-            "Invalid name supplied for " + role + " subsystem \"" + ss_name +
-            "\""
-        );
-    }
-
-    // get the path for the subsystem
-    auto f_path = m_potential.find(ss_name);
-    if(f_path == m_potential.end())
-    {
-        throw arc::ex::ValidationError(
-            "No potential " + role + " subsystem found for the name \"" +
-            ss_name + "\""
-        );
-    }
-
-    arc::io::sys::Path ss_path = f_path->second;
-    arc::io::dl::Handle ss_handle = nullptr;
-
-    // check if there is an already open dl handle for the subsystem
-    auto f_dl_handle = m_dl_handles.find(ss_path);
-    if(f_dl_handle == m_dl_handles.end())
-    {
-        // attempt to open the library
-        try
-        {
-            ss_handle = arc::io::dl::open_library(ss_path);
-        }
-        catch(const std::exception& exc)
-        {
-            arc::str::UTF8String error_message;
-            error_message
-                << "Failed to load " + role + " subsystem library from file \""
-                << ss_path << "\", with message: \"" << exc.what() << "\"";
-            throw arc::ex::ValidationError(error_message);
-        }
-        // write the handle to the loaded map
-        m_dl_handles.insert(std::make_pair(ss_path, ss_handle));
-    }
-    else
-    {
-        // just use already opened handle
-        ss_handle = f_dl_handle->second;
-    }
-
-    return ss_handle;
-}
-
-void SubsystemManager::bind_role(omi::ss::Subsystem::Role role)
-{
-    // get the name of the role
-    arc::str::UTF8String role_name = omi::ss::Subsystem::role_to_string(role);
-
-    // load the config data for the subsystems to use for this role
-    std::vector<arc::str::UTF8String> subsystem_names = *m_config_data->get(
-        "roles." + role_name, AC_U8STRVECV
-    );
-
-    // ensure some names have been supplied
-    if(subsystem_names.empty())
-    {
-        throw arc::ex::ValidationError(
-            "No subsystems have been defined for the role: " + role_name
-        );
-    }
-
-    // iterate through each subsystem and load it or retrieve it from the cache
-    bool primary = true;
-    for(const arc::str::UTF8String& subsystem_name : subsystem_names)
-    {
-        // check storage first
-        if(m_bind_storage.find(subsystem_name) != m_bind_storage.end())
-        {
-            assign_from_storage(role, subsystem_name);
-            primary = false;
-            continue;
-        }
-
-        // get the path to the subsystem from the potentials
-        auto f_potential = m_potential.find(subsystem_name);
-        if(f_potential == m_potential.end())
-        {
-            // the potential path doesn't exist
-            if(primary)
-            {
-                arc::str::UTF8String error_message;
-                error_message
-                    << "No subsystem library named \"" <<  subsystem_name
-                    << "\" was found, which was requested as the primary "
-                    << "subsystem for the role: " << role_name;
-                throw arc::ex::ValidationError(error_message);
-            }
-            else
-            {
-                global::logger->error
-                    << "No subsystem library named \"" <<  subsystem_name
-                    << "\" was found, which was requested as a secondary "
-                    << "subsystem for the role: " << role_name << std::endl;
-                continue;
-            }
-        }
-
-        // try to open a handle to the library
-        arc::io::dl::Handle handle = nullptr;
-        try
-        {
-            handle = arc::io::dl::open_library(f_potential->second);
-        }
-        catch(const std::exception& exc)
-        {
-            if(primary)
-            {
-                arc::str::UTF8String error_message;
-                error_message
-                    << "Failed to bind subsystem library from file \""
-                    << f_potential->second << "\", which was requested as the "
-                    << "primary subsystem for the role: \"" << role_name
-                    << "\", with message: \"" << exc.what() << "\"";
-                throw arc::ex::ValidationError(error_message);
-            }
-            global::logger->error
-                << "Failed to bind subsystem library from file \""
-                << f_potential->second << "\", which was requested as a "
-                << "secondary subsystem for the role: \"" << role_name
-                << "\", with message: \"" << exc.what() << "\"" << std::endl;
-            continue;
-        }
-        assert(handle != nullptr);
-
-        // attempt to find the register function symbol in the library
-        LibRegisterFunc* register_func = nullptr;
-        try
-        {
-            register_func = arc::io::dl::bind_symbol<LibRegisterFunc>(
-                handle,
-                m_register_symbol
-            );
-        }
-        catch(const std::exception& exc)
-        {
-            arc::io::dl::close_library(handle);
-            if(primary)
-            {
-                arc::str::UTF8String error_message;
-                error_message
-                    << "Failed to bind register function in subsystem library "
-                    << "from file \"" << f_potential->second << "\", which was "
-                    << "requested as the primary subsystem for the role: \""
-                    << role_name << "\", with message: \"" << exc.what()
-                    << "\"";
-                throw arc::ex::ValidationError(error_message);
-            }
-            global::logger->error
-                << "Failed to bind register function in subsystem library from "
-                << "file \"" << f_potential->second << "\", which was "
-                << "requested as a secondary subsystem for the role: \""
-                << role_name << "\", with message: \"" << exc.what() << "\""
-                << std::endl;
-            continue;
-        }
-        assert(register_func != nullptr);
-
-        omi::ss::Subsystem* subsystem = nullptr;
-        try
-        {
-            subsystem = static_cast<omi::ss::Subsystem*>((*register_func)());
-        }
-        catch(const std::exception& exc)
-        {
-            arc::io::dl::close_library(handle);
-            if(primary)
-            {
-                arc::str::UTF8String error_message;
-                error_message
-                    << "Encountered error while attempting to register "
-                    << "subsystem from library: \"" << f_potential->second
-                    << "\", which was requested as the primary subsystem for "
-                    << "the role: \"" << role_name << "\", with message: \""
-                    << exc.what() << "\"";
-                throw arc::ex::ValidationError(error_message);
-            }
-            global::logger->error
-                << "Encountered error while attempting to register subsystem "
-                << "from library: \"" << f_potential->second << "\", which was "
-                << "requested as a secondary subsystem for the role: \""
-                << role_name << "\", with message: \"" << exc.what() << "\""
-                << std::endl;
-            continue;
-        }
-
-        global::logger->info
-            << "Registered subsystem \"" << subsystem_name << "\" which "
-            << "fulfills the roles: "
-            << omi::ss::Subsystem::role_to_string(subsystem->get_roles())
-            << std::endl;
-
-        // store
-        m_dl_handles[f_potential->second] = handle;
-        m_bind_storage[subsystem_name] = subsystem;
-
-        // assign
-        assign_from_storage(role, subsystem_name);
-
-        primary = false;
-    }
-}
-
-void SubsystemManager::assign_from_storage(
-        omi::ss::Subsystem::Role role,
-        const arc::str::UTF8String& subsystem_name)
-{
-    // get the subsystem with the name from storage
-    auto f_subsystem = m_bind_storage.find(subsystem_name);
-    assert(f_subsystem != m_bind_storage.end());
-    omi::ss::Subsystem* subsystem = f_subsystem->second;
-
-    // identify whether this is the primary subsystem for the role
-    bool primary = m_assigned.find(role) == m_assigned.end();
-
-    // ensure the subsystem fulfills the given role
-    if((subsystem->get_roles() & role) == 0)
-    {
-        if(primary)
-        {
-            arc::str::UTF8String error_message;
-            error_message
-                << "Cannot assign subsystem \"" << subsystem_name << "\", "
-                << "which was requested as the primary subsystem, for the "
-                << "role \"" << omi::ss::Subsystem::role_to_string(role)
-                << "\" since the subsystem only fulfills these roles: \""
-                << omi::ss::Subsystem::role_to_string(subsystem->get_roles())
-                << "\"";
-            throw arc::ex::ValidationError(error_message);
-        }
-        global::logger->error
-            << "Cannot assign subsystem \"" << subsystem_name << "\", which "
-            << "was requested as a secondary subsystem, for the role \""
-            << omi::ss::Subsystem::role_to_string(role) << "\" since the "
-            << "subsystem only fulfills these roles: \""
-            << omi::ss::Subsystem::role_to_string(subsystem->get_roles())
-            << "\"" << std::endl;
-        return;
-    }
-
-    // assign
-    if(primary)
-    {
-        m_assigned[role] = SubsystemArray();
-    }
-    m_assigned[role].push_back(subsystem);
+    delete m_impl;
 }
 
 } // namespace ss

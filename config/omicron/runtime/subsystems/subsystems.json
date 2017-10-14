@@ -3,11 +3,9 @@
     "extension": "dll",
     "roles":
     {
-        "window": "omi_qt"
-        // "input": ["omi_qt"],
-        // "ui": ["omi_qt"],
-        // "renderer": ["pxtrace", "omi_gl"],
-        // "physics": ["omi_bullet"],
-        // "audio": ["omi_al"]
+        "context": "omi_glfw",
+        "renderer": "omi_deathray",
+        "physics": "omi_bullet",
+        "audio": "omi_al"
     }
 }

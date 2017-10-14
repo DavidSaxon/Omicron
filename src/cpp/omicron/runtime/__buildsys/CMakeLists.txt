@@ -5,8 +5,8 @@ set(OMICRON_RUNTIME_SRC
     ../RuntimeGlobals.cpp
     ../boot/BootLogging.cpp
     ../boot/BootRoutines.cpp
+    ../subsystem/ContextSSDL.cpp
     ../subsystem/SubsystemManager.cpp
-    ../subsystem/WindowSubsystem.cpp
 )
 
 # build the omicron runtime executable

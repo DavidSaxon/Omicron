@@ -63,6 +63,17 @@ public:
     OMI_API_GLOBAL void update(bool force = false);
 
     /*!
+     * \brief Returns the name of this machine's operating system.
+     */
+    OMI_API_GLOBAL const arc::str::UTF8String& get_os_name() const;
+
+    /*!
+     * \brief Returns the distribution name/version of this machine's operating
+     *        system.
+     */
+    OMI_API_GLOBAL const arc::str::UTF8String& get_os_distro() const;
+
+    /*!
      * \brief Returns the model of this machine's CPU.
      */
     OMI_API_GLOBAL const arc::str::UTF8String& get_cpu_model() const;
@@ -82,6 +93,34 @@ public:
      * \brief Returns the clock rate (in MHz) of this machine's CPU.
      */
     OMI_API_GLOBAL float get_cpu_clock_rate() const;
+
+    /*!
+     * \brief Returns the id of the logical processor the primary thread of the
+     *        engine is running on.
+     */
+    OMI_API_GLOBAL std::size_t get_primary_processor() const;
+
+    /*!
+     * \brief Returns the total amount of RAM on this system (in megabytes).
+     */
+    OMI_API_GLOBAL double get_total_ram() const;
+
+    /*!
+     * \brief Returns the amount of free RAM on this system (in megabytes).
+     */
+    OMI_API_GLOBAL double get_free_ram() const;
+
+    /*!
+     * \brief Returns the total amount of virtual memory on this system
+     *        (in megabytes).
+     */
+    OMI_API_GLOBAL double get_total_virtual_memory() const;
+
+    /*!
+     * \brief Returns the amount of free virtual memory on this system (in
+     *        megabytes).
+     */
+    OMI_API_GLOBAL double get_free_virtual_memory() const;
 
     /*!
      * \brief Returns the last sampled size of the engine's Resident Set Size

@@ -9,9 +9,9 @@ echo ----------------
 msbuild ..\Omicron.sln /v:n /p:Configuration=omicron_runtime
 
 echo ----------------
-echo omi_qt
+echo omi_glfw
 echo ----------------
-msbuild ..\Omicron.sln /v:n /p:Configuration=omi_qt
+msbuild ..\Omicron.sln /v:n /p:Configuration=omi_glfw
 
 echo ----------------
 echo omi_gl
