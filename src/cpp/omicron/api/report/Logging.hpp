@@ -23,7 +23,7 @@ namespace report
 /*!
  * \brief The global log handler for all Omicron logging
  */
-OMI_API_GLOBAL extern arc::log::LogHandler log_handler;
+OMI_API_EXPORT extern arc::log::LogHandler log_handler;
 
 //------------------------------------------------------------------------------
 //                                   FUNCTIONS

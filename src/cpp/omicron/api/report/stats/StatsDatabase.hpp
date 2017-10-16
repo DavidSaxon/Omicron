@@ -41,7 +41,7 @@ public:
     /*!
      * \brief Returns the singleton instance of the StatsDatabase.
      */
-    OMI_API_GLOBAL static StatsDatabase* instance();
+    OMI_API_EXPORT static StatsDatabase* instance();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -65,7 +65,7 @@ public:
      * \throw arc::ex::ValueError If the attribute is not a valid mutable
      *                            attribute.
      */
-    OMI_API_GLOBAL void define_entry(
+    OMI_API_EXPORT void define_entry(
             const arc::str::UTF8String& name,
             omi::DataAttribute attr,
             const arc::str::UTF8String& description = "");
@@ -78,7 +78,7 @@ public:
      *
      * \throw arc::ex::KeyError If there is no entry for the given name.
      */
-    OMI_API_GLOBAL const omi::DataAttribute& get_entry(
+    OMI_API_EXPORT const omi::DataAttribute& get_entry(
             const arc::str::UTF8String& name) const;
 
     /*!
@@ -87,19 +87,19 @@ public:
      * If there is no description for the name, an empty string will be
      * returned.
      */
-    OMI_API_GLOBAL const arc::str::UTF8String& get_description(
+    OMI_API_EXPORT const arc::str::UTF8String& get_description(
             const arc::str::UTF8String& name) const;
 
     /*!
      * \brief Returns an array of all the names of the entries in the
      *        StatsDatabase.
      */
-    OMI_API_GLOBAL std::vector<arc::str::UTF8String> get_names() const;
+    OMI_API_EXPORT std::vector<arc::str::UTF8String> get_names() const;
 
     /*!
      * \brief Executes the given query on the StatsDatabase.
      */
-    OMI_API_GLOBAL void execute_query(StatsQuery& query) const;
+    OMI_API_EXPORT void execute_query(StatsQuery& query) const;
 
 private:
 

@@ -24,7 +24,7 @@ static ByteAttribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type ByteAttribute::kTypeByte =
+OMI_API_EXPORT Attribute::Type ByteAttribute::kTypeByte =
     DataAttribute::kTypeDataBits |
     (typeid(ByteAttribute::DataType).hash_code() >> 8);
 
@@ -32,12 +32,12 @@ OMI_API_GLOBAL Attribute::Type ByteAttribute::kTypeByte =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL ByteAttribute::ByteAttribute()
+OMI_API_EXPORT ByteAttribute::ByteAttribute()
     : DataAttribute(kTypeByte, true, new ByteStorage(0))
 {
 }
 
-OMI_API_GLOBAL ByteAttribute::ByteAttribute(DataType value, bool immutable)
+OMI_API_EXPORT ByteAttribute::ByteAttribute(DataType value, bool immutable)
     : DataAttribute(
         kTypeByte,
         immutable,
@@ -46,7 +46,7 @@ OMI_API_GLOBAL ByteAttribute::ByteAttribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL ByteAttribute::ByteAttribute(
+OMI_API_EXPORT ByteAttribute::ByteAttribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -58,13 +58,13 @@ OMI_API_GLOBAL ByteAttribute::ByteAttribute(
 {
 }
 
-OMI_API_GLOBAL ByteAttribute::ByteAttribute(const Attribute& other)
+OMI_API_EXPORT ByteAttribute::ByteAttribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL ByteAttribute::ByteAttribute(const ByteAttribute& other)
+OMI_API_EXPORT ByteAttribute::ByteAttribute(const ByteAttribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -74,7 +74,7 @@ OMI_API_GLOBAL ByteAttribute::ByteAttribute(const ByteAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL ByteAttribute::~ByteAttribute()
+OMI_API_EXPORT ByteAttribute::~ByteAttribute()
 {
 }
 
@@ -82,7 +82,7 @@ OMI_API_GLOBAL ByteAttribute::~ByteAttribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String ByteAttribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String ByteAttribute::get_type_string()
 {
     return "ByteAttribute";
 }
@@ -91,7 +91,7 @@ OMI_API_GLOBAL arc::str::UTF8String ByteAttribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL ByteAttribute::DataType ByteAttribute::get_value() const
+OMI_API_EXPORT ByteAttribute::DataType ByteAttribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -111,7 +111,7 @@ OMI_API_GLOBAL ByteAttribute::DataType ByteAttribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const ByteAttribute::ArrayType& ByteAttribute::get_values() const
 {
     // valid?
@@ -121,7 +121,7 @@ const ByteAttribute::ArrayType& ByteAttribute::get_values() const
     return get_storage<ByteStorage>()->m_data;
 }
 
-OMI_API_GLOBAL const ByteAttribute::DataType& ByteAttribute::at(
+OMI_API_EXPORT const ByteAttribute::DataType& ByteAttribute::at(
         std::size_t index) const
 {
     // valid?
@@ -143,7 +143,7 @@ OMI_API_GLOBAL const ByteAttribute::DataType& ByteAttribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void ByteAttribute::set_value(DataType value)
+OMI_API_EXPORT void ByteAttribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -153,7 +153,7 @@ OMI_API_GLOBAL void ByteAttribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void ByteAttribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void ByteAttribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -162,7 +162,7 @@ OMI_API_GLOBAL void ByteAttribute::set_values(const ArrayType& values)
     get_storage<ByteStorage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void ByteAttribute::set_at(
+OMI_API_EXPORT void ByteAttribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -192,7 +192,7 @@ OMI_API_GLOBAL void ByteAttribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool ByteAttribute::check_type(Type type) const
+OMI_API_EXPORT bool ByteAttribute::check_type(Type type) const
 {
     return type == kTypeByte;
 }

@@ -242,7 +242,7 @@ public:
 
     std::size_t get_primary_processor() const
     {
-        return m_primary_processor.at(0);
+        return static_cast<std::size_t>(m_primary_processor.at(0));
     }
 
     double get_total_ram() const
@@ -280,7 +280,7 @@ public:
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL SystemMonitor* SystemMonitor::instance()
+OMI_API_EXPORT SystemMonitor* SystemMonitor::instance()
 {
     static SystemMonitor inst;
     return &inst;
@@ -290,82 +290,82 @@ OMI_API_GLOBAL SystemMonitor* SystemMonitor::instance()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool SystemMonitor::startup_routine()
+OMI_API_EXPORT bool SystemMonitor::startup_routine()
 {
     return m_impl->startup_routine();
 }
 
-OMI_API_GLOBAL bool SystemMonitor::shutdown_routine()
+OMI_API_EXPORT bool SystemMonitor::shutdown_routine()
 {
     return m_impl->shutdown_routine();
 }
 
-OMI_API_GLOBAL void SystemMonitor::update(bool force)
+OMI_API_EXPORT void SystemMonitor::update(bool force)
 {
     m_impl->update(force);
 }
 
-OMI_API_GLOBAL const arc::str::UTF8String& SystemMonitor::get_os_name() const
+OMI_API_EXPORT const arc::str::UTF8String& SystemMonitor::get_os_name() const
 {
     return m_impl->get_os_name();
 }
 
-OMI_API_GLOBAL const arc::str::UTF8String& SystemMonitor::get_os_distro() const
+OMI_API_EXPORT const arc::str::UTF8String& SystemMonitor::get_os_distro() const
 {
     return m_impl->get_os_distro();
 }
 
-OMI_API_GLOBAL const arc::str::UTF8String& SystemMonitor::get_cpu_model() const
+OMI_API_EXPORT const arc::str::UTF8String& SystemMonitor::get_cpu_model() const
 {
     return m_impl->get_cpu_model();
 }
 
-OMI_API_GLOBAL std::size_t SystemMonitor::get_cpu_physial_cores() const
+OMI_API_EXPORT std::size_t SystemMonitor::get_cpu_physial_cores() const
 {
     return m_impl->get_cpu_physial_cores();
 }
 
-OMI_API_GLOBAL std::size_t SystemMonitor::get_cpu_logical_processors() const
+OMI_API_EXPORT std::size_t SystemMonitor::get_cpu_logical_processors() const
 {
     return m_impl->get_cpu_logical_processors();
 }
 
-OMI_API_GLOBAL float SystemMonitor::get_cpu_clock_rate() const
+OMI_API_EXPORT float SystemMonitor::get_cpu_clock_rate() const
 {
     return m_impl->get_cpu_clock_rate();
 }
 
-OMI_API_GLOBAL std::size_t SystemMonitor::get_primary_processor() const
+OMI_API_EXPORT std::size_t SystemMonitor::get_primary_processor() const
 {
     return m_impl->get_primary_processor();
 }
 
-OMI_API_GLOBAL double SystemMonitor::get_total_ram() const
+OMI_API_EXPORT double SystemMonitor::get_total_ram() const
 {
     return m_impl->get_total_ram();
 }
 
-OMI_API_GLOBAL double SystemMonitor::get_free_ram() const
+OMI_API_EXPORT double SystemMonitor::get_free_ram() const
 {
     return m_impl->get_free_ram();
 }
 
-OMI_API_GLOBAL double SystemMonitor::get_total_virtual_memory() const
+OMI_API_EXPORT double SystemMonitor::get_total_virtual_memory() const
 {
     return m_impl->get_total_virtual_memory();
 }
 
-OMI_API_GLOBAL double SystemMonitor::get_free_virtual_memory() const
+OMI_API_EXPORT double SystemMonitor::get_free_virtual_memory() const
 {
     return m_impl->get_free_virtual_memory();
 }
 
-OMI_API_GLOBAL double SystemMonitor::get_current_rss() const
+OMI_API_EXPORT double SystemMonitor::get_current_rss() const
 {
     return m_impl->get_current_rss();
 }
 
-OMI_API_GLOBAL double SystemMonitor::get_peak_rss() const
+OMI_API_EXPORT double SystemMonitor::get_peak_rss() const
 {
     return m_impl->get_peak_rss();
 }

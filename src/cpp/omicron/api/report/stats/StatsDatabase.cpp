@@ -155,7 +155,7 @@ public:
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StatsDatabase* StatsDatabase::instance()
+OMI_API_EXPORT StatsDatabase* StatsDatabase::instance()
 {
     static StatsDatabase inst;
     return &inst;
@@ -165,7 +165,7 @@ OMI_API_GLOBAL StatsDatabase* StatsDatabase::instance()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL void StatsDatabase::define_entry(
+OMI_API_EXPORT void StatsDatabase::define_entry(
         const arc::str::UTF8String& name,
         omi::DataAttribute attr,
         const arc::str::UTF8String& description)
@@ -173,19 +173,19 @@ OMI_API_GLOBAL void StatsDatabase::define_entry(
     m_impl->define_entry(name, attr, description);
 }
 
-OMI_API_GLOBAL const omi::DataAttribute& StatsDatabase::get_entry(
+OMI_API_EXPORT const omi::DataAttribute& StatsDatabase::get_entry(
         const arc::str::UTF8String& name) const
 {
     return m_impl->get_entry(name);
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 std::vector<arc::str::UTF8String> StatsDatabase::get_names() const
 {
     return m_impl->get_names();
 }
 
-OMI_API_GLOBAL void StatsDatabase::execute_query(StatsQuery& query) const
+OMI_API_EXPORT void StatsDatabase::execute_query(StatsQuery& query) const
 {
     m_impl->execute_query(query, query.m_result);
 }

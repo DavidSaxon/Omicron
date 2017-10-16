@@ -19,11 +19,6 @@ echo ----------------
 msbuild ..\Omicron.sln /v:n /p:Configuration=omi_gl
 
 echo ----------------
-echo pxtrace
-echo ----------------
-msbuild ..\Omicron.sln /v:n /p:Configuration=pxtrace
-
-echo ----------------
 echo omi_bullet
 echo ----------------
 msbuild ..\Omicron.sln /v:n /p:Configuration=omi_bullet
@@ -37,3 +32,8 @@ echo ----------------
 echo tests
 echo ----------------
 msbuild ..\Omicron.sln /v:n /p:Configuration=tests
+
+echo ----------------
+echo hellbound
+echo ----------------
+msbuild ..\Omicron.sln /v:n /p:Configuration=hellbound

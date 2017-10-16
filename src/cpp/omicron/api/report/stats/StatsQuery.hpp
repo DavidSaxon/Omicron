@@ -66,7 +66,7 @@ public:
     /*!
      * \brief Creates a new empty StatsQuery.
      */
-    OMI_API_GLOBAL StatsQuery();
+    OMI_API_EXPORT StatsQuery();
 
     /*!
      * \brief Creates a StatsQuery using the patterns from the data described by
@@ -87,23 +87,23 @@ public:
      *
      * \throw arc::ex::IOError If the file path cannot be opened.
      */
-    OMI_API_GLOBAL StatsQuery(const arc::io::sys::Path& path);
+    OMI_API_EXPORT StatsQuery(const arc::io::sys::Path& path);
 
     /*!
      * \brief Copy constructor.
      */
-    OMI_API_GLOBAL StatsQuery(const StatsQuery& other);
+    OMI_API_EXPORT StatsQuery(const StatsQuery& other);
 
     /*!
      * \brief Move constructor.
      */
-    OMI_API_GLOBAL StatsQuery(StatsQuery&& other);
+    OMI_API_EXPORT StatsQuery(StatsQuery&& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~StatsQuery();
+    OMI_API_EXPORT virtual ~StatsQuery();
 
     //--------------------------------------------------------------------------
     //                                 OPERATORS
@@ -112,12 +112,12 @@ public:
     /*!
      * \brief Copy assignment operator.
      */
-    OMI_API_GLOBAL StatsQuery& operator=(const StatsQuery& other);
+    OMI_API_EXPORT StatsQuery& operator=(const StatsQuery& other);
 
     /*!
      * \brief Move assignment operator.
      */
-    OMI_API_GLOBAL StatsQuery& operator=(StatsQuery&& other);
+    OMI_API_EXPORT StatsQuery& operator=(StatsQuery&& other);
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -126,22 +126,22 @@ public:
     /*!
      * \brief Returns the list of patterns within this query.
      */
-    OMI_API_GLOBAL const PatternArray& get_patterns() const;
+    OMI_API_EXPORT const PatternArray& get_patterns() const;
 
     /*!
      * \brief Adds a new pattern to the list match strings within this query.
      */
-    OMI_API_GLOBAL void add_pattern(const arc::str::UTF8String& s);
+    OMI_API_EXPORT void add_pattern(const arc::str::UTF8String& s);
 
     /*!
      * \brief Returns the result of this query.
      */
-    OMI_API_GLOBAL const Result& get_result() const;
+    OMI_API_EXPORT const Result& get_result() const;
 
     /*!
      * \brief Clears the matches patterns of this query and any current results.
      */
-    OMI_API_GLOBAL void clear();
+    OMI_API_EXPORT void clear();
 
 private:
 

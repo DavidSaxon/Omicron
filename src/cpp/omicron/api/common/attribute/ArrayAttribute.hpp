@@ -38,7 +38,7 @@ public:
     /*!
      * \brief The type identifier for ArrayAttributes.
      */
-    OMI_API_GLOBAL static Type kTypeArray;
+    OMI_API_EXPORT static Type kTypeArray;
 
     //--------------------------------------------------------------------------
     //                                  STORAGE
@@ -74,7 +74,7 @@ public:
         /*!
          * \brief Creates a new empty ArrayStorage.
          */
-        OMI_API_GLOBAL ArrayStorage();
+        OMI_API_EXPORT ArrayStorage();
 
         /*!
          * \brief Creates new ArrayStorage using a copy of that data described
@@ -89,30 +89,30 @@ public:
 
         //-------------------------D E S T R U C T O R--------------------------
 
-        OMI_API_GLOBAL virtual ~ArrayStorage();
+        OMI_API_EXPORT virtual ~ArrayStorage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        OMI_API_GLOBAL virtual bool equals(const Storage* other) const override;
+        OMI_API_EXPORT virtual bool equals(const Storage* other) const override;
 
-        OMI_API_GLOBAL
+        OMI_API_EXPORT
         virtual bool less_than(const Storage* other) const override;
 
-        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const override;
+        OMI_API_EXPORT virtual bool is_data_pure_immutable() const override;
 
-        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const override;
+        OMI_API_EXPORT virtual bool is_data_pure_mutable() const override;
 
-        OMI_API_GLOBAL virtual Storage* as_pure_immutable() override;
+        OMI_API_EXPORT virtual Storage* as_pure_immutable() override;
 
-        OMI_API_GLOBAL virtual Storage* as_pure_mutable() override;
+        OMI_API_EXPORT virtual Storage* as_pure_mutable() override;
 
-        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const override;
+        OMI_API_EXPORT virtual Hash get_hash(arc::uint64 seed) const override;
 
-        OMI_API_GLOBAL virtual void invalidate_hash() override;
+        OMI_API_EXPORT virtual void invalidate_hash() override;
 
-        OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft) override;
+        OMI_API_EXPORT virtual Storage* copy_for_overwrite(bool soft) override;
 
-        OMI_API_GLOBAL virtual void string_repr(
+        OMI_API_EXPORT virtual void string_repr(
                 std::size_t indentation,
                 arc::str::UTF8String& s) const override;
     };
@@ -126,7 +126,7 @@ public:
      *
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL ArrayAttribute(bool immutable = true);
+    OMI_API_EXPORT ArrayAttribute(bool immutable = true);
 
     /*!
      * \brief Constructs a new ArrayAttribute using a copy of the data described
@@ -152,7 +152,7 @@ public:
      * \param data The data to copy the contents of this attribute's data from.
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL ArrayAttribute(const DataType& data, bool immutable = true);
+    OMI_API_EXPORT ArrayAttribute(const DataType& data, bool immutable = true);
 
     /*!
      * \brief Constructs a new reference count of the given Attribute.
@@ -160,7 +160,7 @@ public:
      * If the given attribute is not a valid map attribute this will construct
      * a null attribute and the reference count will not be increased.
      */
-    OMI_API_GLOBAL ArrayAttribute(const Attribute& other);
+    OMI_API_EXPORT ArrayAttribute(const Attribute& other);
 
     /*!
      * \brief Constructs a new reference count of the given Attribute.
@@ -168,13 +168,13 @@ public:
      * If the given attribute is invalid this will construct a null attribute
      * and the reference count will not be increased.
      */
-    OMI_API_GLOBAL ArrayAttribute(const ArrayAttribute& other);
+    OMI_API_EXPORT ArrayAttribute(const ArrayAttribute& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~ArrayAttribute();
+    OMI_API_EXPORT virtual ~ArrayAttribute();
 
     //--------------------------------------------------------------------------
     //                                 OPERATORS
@@ -187,7 +187,7 @@ public:
      * \throws arc::ex::IndexOutOfBoundsError If the given index is outside of
      *                                        the range of this array.
      */
-    OMI_API_GLOBAL const Attribute& operator[](std::size_t index) const;
+    OMI_API_EXPORT const Attribute& operator[](std::size_t index) const;
 
     /*!
      * \brief Returns the attribute in this MapAttribute under the given name.
@@ -196,7 +196,7 @@ public:
      * \throws arc::ex::IndexOutOfBoundsError If the given index is outside of
      *                                        the range of this array.
      */
-    OMI_API_GLOBAL Attribute& operator[](std::size_t index);
+    OMI_API_EXPORT Attribute& operator[](std::size_t index);
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -207,14 +207,14 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL std::size_t get_size() const;
+    OMI_API_EXPORT std::size_t get_size() const;
 
     /*!
      * \brief Returns whether this ArrayAttribute has no elements.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL bool is_empty() const;
+    OMI_API_EXPORT bool is_empty() const;
 
     /*!
      * \brief Returns the internal array structure of this ArrayAttribute.
@@ -224,7 +224,7 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL const DataType& get_values() const;
+    OMI_API_EXPORT const DataType& get_values() const;
 
     /*!
      * \brief Returns the attribute in this MapAttribute under the given name.
@@ -233,7 +233,7 @@ public:
      * \throws arc::ex::IndexOutOfBoundsError If the given index is outside of
      *                                        the range of this array.
      */
-    OMI_API_GLOBAL const Attribute& get(std::size_t index) const;
+    OMI_API_EXPORT const Attribute& get(std::size_t index) const;
 
     /*!
      * \brief Returns the attribute in this MapAttribute under the given name.
@@ -242,7 +242,7 @@ public:
      * \throws arc::ex::IndexOutOfBoundsError If the given index is outside of
      *                                        the range of this array.
      */
-    OMI_API_GLOBAL Attribute& get(std::size_t index);
+    OMI_API_EXPORT Attribute& get(std::size_t index);
 
     /*!
      * \brief Returns the first attribute in this array.
@@ -250,7 +250,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throws arc::ex::IndexOutOfBoundsError If the array is empty.
      */
-    OMI_API_GLOBAL const Attribute& front() const;
+    OMI_API_EXPORT const Attribute& front() const;
 
     /*!
      * \brief Returns the first attribute in this array.
@@ -259,7 +259,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throws arc::ex::IndexOutOfBoundsError If the array is empty.
      */
-    OMI_API_GLOBAL Attribute& front();
+    OMI_API_EXPORT Attribute& front();
 
     /*!
      * \brief Returns the last attribute in this array.
@@ -268,7 +268,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throws arc::ex::IndexOutOfBoundsError If the array is empty.
      */
-    OMI_API_GLOBAL const Attribute& back() const;
+    OMI_API_EXPORT const Attribute& back() const;
 
     /*!
      * \brief Returns the last attribute in this array.
@@ -276,7 +276,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throws arc::ex::IndexOutOfBoundsError If the array is empty.
      */
-    OMI_API_GLOBAL Attribute& back();
+    OMI_API_EXPORT Attribute& back();
 
     /*!
      * \brief Sets the attribute at the given index.
@@ -286,7 +286,7 @@ public:
      *                                        the range of this array.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set(std::size_t index, const Attribute& attribute);
+    OMI_API_EXPORT void set(std::size_t index, const Attribute& attribute);
 
     /*!
      * \brief Extends the length of this array by 1 and inserts the given
@@ -295,7 +295,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-     OMI_API_GLOBAL void push_back(const Attribute& attribute);
+     OMI_API_EXPORT void push_back(const Attribute& attribute);
 
     /*!
      * \brief Inserts the given attribute into the array at the provided index
@@ -306,7 +306,7 @@ public:
      *                                        the range + 1 of this array.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void insert(std::size_t index, const Attribute& attrribute);
+    OMI_API_EXPORT void insert(std::size_t index, const Attribute& attrribute);
 
     /*!
      * \brief Removes the attribute at this given index from this ArrayAttribute.
@@ -316,7 +316,7 @@ public:
      *                                        the range of this array.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void erase(std::size_t index);
+    OMI_API_EXPORT void erase(std::size_t index);
 
     /*!
      * \brief Replaces the current data of this ArrayAttribute with the given
@@ -343,7 +343,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_values(const DataType& data);
+    OMI_API_EXPORT void set_values(const DataType& data);
 
     /*!
      * \brief Clears the contents of this ArrayAttribute - effectively replacing
@@ -352,7 +352,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void clear();
+    OMI_API_EXPORT void clear();
 
 protected:
 
@@ -360,7 +360,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
+    OMI_API_EXPORT virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

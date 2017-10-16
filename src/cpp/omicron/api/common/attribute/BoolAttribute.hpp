@@ -41,7 +41,7 @@ public:
     /*!
      * \brief The type identifier for BoolAttributes.
      */
-    OMI_API_GLOBAL static Type kTypeBool;
+    OMI_API_EXPORT static Type kTypeBool;
 
     //--------------------------------------------------------------------------
     //                                  STORAGE
@@ -56,7 +56,7 @@ public:
         /*!
          * \brief Creates new empty BoolStorage with the given tuple size
          */
-        OMI_API_GLOBAL BoolStorage(std::size_t tuple_size);
+        OMI_API_EXPORT BoolStorage(std::size_t tuple_size);
 
         /*!
          * \brief Creates new BoolStorage using a copy of the data described
@@ -81,11 +81,11 @@ public:
 
         //-------------------------D E S T R U C T O R--------------------------
 
-        OMI_API_GLOBAL virtual ~BoolStorage();
+        OMI_API_EXPORT virtual ~BoolStorage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const override;
+        OMI_API_EXPORT virtual Hash get_hash(arc::uint64 seed) const override;
     };
 
     //--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public:
      * \brief Constructs a new empty immutable BoolAttribute with a tuple size
      *        of 0.
      */
-    OMI_API_GLOBAL BoolAttribute();
+    OMI_API_EXPORT BoolAttribute();
 
     /*!
      * \brief Constructs a new BoolAttribute with a single value and a tuple
@@ -105,7 +105,7 @@ public:
      * \param value The single value of this attribute.
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL BoolAttribute(DataType value, bool immutable = true);
+    OMI_API_EXPORT BoolAttribute(DataType value, bool immutable = true);
 
     /*!
      * \brief Constructs a new BoolAttribute using a copy of the data described
@@ -138,7 +138,7 @@ public:
      * \param tuple_size The tuple size of this attribute.
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL BoolAttribute(
+    OMI_API_EXPORT BoolAttribute(
             const ArrayType& values,
             std::size_t tuple_size = 0,
             bool immutable = true);
@@ -149,7 +149,7 @@ public:
      * If the given attribute is not a valid BoolAttribute this will construct
      * a null attribute and the reference count will not be increased.
      */
-    OMI_API_GLOBAL BoolAttribute(const Attribute& other);
+    OMI_API_EXPORT BoolAttribute(const Attribute& other);
 
     /*!
      * \brief Constructs a new reference count of the given attribute.
@@ -157,13 +157,13 @@ public:
      * If the given attribute is invalid this will construct a null attribute
      * and the reference count will not be increased.
      */
-    OMI_API_GLOBAL BoolAttribute(const BoolAttribute& other);
+    OMI_API_EXPORT BoolAttribute(const BoolAttribute& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~BoolAttribute();
+    OMI_API_EXPORT virtual ~BoolAttribute();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
@@ -172,7 +172,7 @@ public:
     /*!
      * \brief Returns the of this attribute as a string.
      */
-    OMI_API_GLOBAL static arc::str::UTF8String get_type_string();
+    OMI_API_EXPORT static arc::str::UTF8String get_type_string();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -184,14 +184,14 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IndexOutOfBoundsError If this attribute has no values.
      */
-    OMI_API_GLOBAL DataType get_value() const;
+    OMI_API_EXPORT DataType get_value() const;
 
     /*!
      * \brief Returns the array of values of this attribute.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL const ArrayType& get_values() const;
+    OMI_API_EXPORT const ArrayType& get_values() const;
 
     /*!
      * \brief Returns the single value at the given index.
@@ -200,7 +200,7 @@ public:
      * \throw arc::ex::IndexOutOfBoundsError If the index is out of this
      *                                       attribute's bounds.
      */
-    OMI_API_GLOBAL DataType at(std::size_t index) const;
+    OMI_API_EXPORT DataType at(std::size_t index) const;
 
     /*!
      * \brief Sets the value of this attribute to be a size 1 array holding the
@@ -209,7 +209,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_value(DataType value);
+    OMI_API_EXPORT void set_value(DataType value);
 
     /*!
      * \brief Sets the value of this attribute to be a copy of the array
@@ -236,7 +236,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_values(const ArrayType& values);
+    OMI_API_EXPORT void set_values(const ArrayType& values);
 
     /*!
      * \brief Sets the single value at the given index.
@@ -246,7 +246,7 @@ public:
      * \throw arc::ex::IndexOutOfBoundsError If the index is out of this
      *                                       attribute's bounds.
      */
-    OMI_API_GLOBAL void set_at(std::size_t index, DataType value);
+    OMI_API_EXPORT void set_at(std::size_t index, DataType value);
 
 protected:
 
@@ -254,7 +254,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
+    OMI_API_EXPORT virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

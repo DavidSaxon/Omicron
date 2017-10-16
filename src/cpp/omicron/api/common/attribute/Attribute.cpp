@@ -10,7 +10,7 @@ namespace omi
 //                            PUBLIC STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type Attribute::kTypeNull = 0;
+OMI_API_EXPORT Attribute::Type Attribute::kTypeNull = 0;
 
 //------------------------------------------------------------------------------
 //                                    STORAGE
@@ -18,14 +18,14 @@ OMI_API_GLOBAL Attribute::Type Attribute::kTypeNull = 0;
 
 //----------------------------C O N S T R U C T O R-----------------------------
 
-OMI_API_GLOBAL Attribute::Storage::Storage()
+OMI_API_EXPORT Attribute::Storage::Storage()
     : m_ref_count(1)
 {
 }
 
 //-----------------------------D E S T R U C T O R------------------------------
 
-OMI_API_GLOBAL Attribute::Storage::~Storage()
+OMI_API_EXPORT Attribute::Storage::~Storage()
 {
 }
 
@@ -80,12 +80,12 @@ public:
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Attribute()
+OMI_API_EXPORT Attribute::Attribute()
     : m_def(new Definition(kTypeNull, true, nullptr))
 {
 }
 
-OMI_API_GLOBAL Attribute::Attribute(const Attribute& other)
+OMI_API_EXPORT Attribute::Attribute(const Attribute& other)
     : m_def(nullptr)
 {
     assign(other);
@@ -95,7 +95,7 @@ OMI_API_GLOBAL Attribute::Attribute(const Attribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::~Attribute()
+OMI_API_EXPORT Attribute::~Attribute()
 {
     decrease_ref();
 }
@@ -104,13 +104,13 @@ OMI_API_GLOBAL Attribute::~Attribute()
 //                                   OPERATORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute& Attribute::operator=(const Attribute& other)
+OMI_API_EXPORT Attribute& Attribute::operator=(const Attribute& other)
 {
     assign(other);
     return *this;
 }
 
-OMI_API_GLOBAL bool Attribute::operator==(const Attribute& other) const
+OMI_API_EXPORT bool Attribute::operator==(const Attribute& other) const
 {
     // fast fail if types aren't the same
     if(get_type() != other.get_type())
@@ -131,12 +131,12 @@ OMI_API_GLOBAL bool Attribute::operator==(const Attribute& other) const
     return m_def->m_storage->equals(other.m_def->m_storage);
 }
 
-OMI_API_GLOBAL bool Attribute::operator!=(const Attribute& other) const
+OMI_API_EXPORT bool Attribute::operator!=(const Attribute& other) const
 {
     return !((*this) == other);
 }
 
-OMI_API_GLOBAL bool Attribute::operator<(const Attribute& other) const
+OMI_API_EXPORT bool Attribute::operator<(const Attribute& other) const
 {
     // check types first
     if(get_type() != other.get_type())
@@ -166,23 +166,23 @@ OMI_API_GLOBAL bool Attribute::operator<(const Attribute& other) const
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type Attribute::get_type() const
+OMI_API_EXPORT Attribute::Type Attribute::get_type() const
 {
     return m_def->m_type;
 }
 
-OMI_API_GLOBAL bool Attribute::is_valid() const
+OMI_API_EXPORT bool Attribute::is_valid() const
 {
     return check_type(m_def->m_type);
 }
 
-OMI_API_GLOBAL bool Attribute::is_immutable() const
+OMI_API_EXPORT bool Attribute::is_immutable() const
 {
     // invalid attributes are always immutable
     return m_def->m_immutable || !is_valid();
 }
 
-OMI_API_GLOBAL bool Attribute::is_pure_immutable() const
+OMI_API_EXPORT bool Attribute::is_pure_immutable() const
 {
     // check mutability first
     if(!is_immutable())
@@ -198,7 +198,7 @@ OMI_API_GLOBAL bool Attribute::is_pure_immutable() const
     return m_def->m_storage->is_data_pure_immutable();
 }
 
-OMI_API_GLOBAL bool Attribute::is_pure_mutable() const
+OMI_API_EXPORT bool Attribute::is_pure_mutable() const
 {
     // check mutability first
     if(is_immutable())
@@ -214,7 +214,7 @@ OMI_API_GLOBAL bool Attribute::is_pure_mutable() const
     return m_def->m_storage->is_data_pure_mutable();
 }
 
-OMI_API_GLOBAL Attribute::Hash Attribute::get_hash() const
+OMI_API_EXPORT Attribute::Hash Attribute::get_hash() const
 {
     // return null hash?
     if(m_def == nullptr || m_def->m_storage == nullptr)
@@ -225,7 +225,7 @@ OMI_API_GLOBAL Attribute::Hash Attribute::get_hash() const
     return m_def->m_storage->get_hash(static_cast<arc::uint64>(m_def->m_type));
 }
 
-OMI_API_GLOBAL void Attribute::assign(const Attribute& other)
+OMI_API_EXPORT void Attribute::assign(const Attribute& other)
 {
     // decrease the reference of the existing definition
     if(m_def != nullptr)
@@ -247,7 +247,7 @@ OMI_API_GLOBAL void Attribute::assign(const Attribute& other)
     }
 }
 
-OMI_API_GLOBAL Attribute Attribute::as_immutable() const
+OMI_API_EXPORT Attribute Attribute::as_immutable() const
 {
     // error on invalid attributes
     check_state("as_immutable() used on an invalid attribute");
@@ -267,7 +267,7 @@ OMI_API_GLOBAL Attribute Attribute::as_immutable() const
     return Attribute(new Definition(m_def->m_type, true, m_def->m_storage));
 }
 
-OMI_API_GLOBAL Attribute Attribute::as_mutable() const
+OMI_API_EXPORT Attribute Attribute::as_mutable() const
 {
     // error on invalid attributes
     check_state("as_mutable() used on an invalid attribute");
@@ -281,7 +281,7 @@ OMI_API_GLOBAL Attribute Attribute::as_mutable() const
     return Attribute(new Definition(m_def->m_type, false, m_def->m_storage));
 }
 
-OMI_API_GLOBAL Attribute Attribute::as_pure_immutable() const
+OMI_API_EXPORT Attribute Attribute::as_pure_immutable() const
 {
     // error on invalid attributes
     check_state("as_pure_immutable() used on an invalid attribute");
@@ -306,7 +306,7 @@ OMI_API_GLOBAL Attribute Attribute::as_pure_immutable() const
     ));
 }
 
-OMI_API_GLOBAL Attribute Attribute::as_pure_mutable() const
+OMI_API_EXPORT Attribute Attribute::as_pure_mutable() const
 {
     // error on invalid attributes
     check_state("as_pure_mutable() used on an invalid attribute");
@@ -329,12 +329,12 @@ OMI_API_GLOBAL Attribute Attribute::as_pure_mutable() const
 //                             PROTECTED CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Attribute(Definition* def)
+OMI_API_EXPORT Attribute::Attribute(Definition* def)
     : m_def(def)
 {
 }
 
-OMI_API_GLOBAL Attribute::Attribute(
+OMI_API_EXPORT Attribute::Attribute(
         Type type,
         bool immutable,
         Storage* storage)
@@ -346,18 +346,18 @@ OMI_API_GLOBAL Attribute::Attribute(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool Attribute::check_type(Type type) const
+OMI_API_EXPORT bool Attribute::check_type(Type type) const
 {
     // valid for anything that is not null
     return type != kTypeNull;
 }
 
-OMI_API_GLOBAL void Attribute::increase_ref()
+OMI_API_EXPORT void Attribute::increase_ref()
 {
     ++m_def->m_ref_count;
 }
 
-OMI_API_GLOBAL void Attribute::decrease_ref()
+OMI_API_EXPORT void Attribute::decrease_ref()
 {
     // delete?
     if(m_def->m_ref_count == 1)
@@ -371,7 +371,7 @@ OMI_API_GLOBAL void Attribute::decrease_ref()
     }
 }
 
-OMI_API_GLOBAL void Attribute::prepare_modifcation(bool soft)
+OMI_API_EXPORT void Attribute::prepare_modifcation(bool soft)
 {
     // throw if immutable
     if(m_def->m_immutable)
@@ -402,7 +402,7 @@ OMI_API_GLOBAL void Attribute::prepare_modifcation(bool soft)
     m_def->m_storage->invalidate_hash();
 }
 
-OMI_API_GLOBAL void Attribute::check_state(
+OMI_API_EXPORT void Attribute::check_state(
         const arc::str::UTF8String& message) const
 {
     if(!is_valid())
@@ -415,7 +415,7 @@ OMI_API_GLOBAL void Attribute::check_state(
  * \brief Appends the string representation of this attribute (using the
  *        given indentation amount) to the provided string.
  */
-OMI_API_GLOBAL void Attribute::string_repr(
+OMI_API_EXPORT void Attribute::string_repr(
         arc::str::UTF8String& s,
         std::size_t indentation) const
 {
@@ -440,7 +440,7 @@ OMI_API_GLOBAL void Attribute::string_repr(
 //                            PRIVATE MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Storage* Attribute::get_untyped_storage() const
+OMI_API_EXPORT Attribute::Storage* Attribute::get_untyped_storage() const
 {
     return m_def->m_storage;
 }
@@ -449,7 +449,7 @@ OMI_API_GLOBAL Attribute::Storage* Attribute::get_untyped_storage() const
 //                               EXTERNAL OPERATORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+OMI_API_EXPORT arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
         const omi::Attribute& a)
 {
@@ -457,7 +457,7 @@ OMI_API_GLOBAL arc::str::UTF8String& operator<<(
     return s;
 }
 
-OMI_API_GLOBAL std::ostream& operator<<(
+OMI_API_EXPORT std::ostream& operator<<(
         std::ostream& s,
         const omi::Attribute& a)
 {
@@ -467,7 +467,7 @@ OMI_API_GLOBAL std::ostream& operator<<(
     return s;
 }
 
-OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+OMI_API_EXPORT arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
         const omi::Attribute::Hash& h)
 {
@@ -475,7 +475,7 @@ OMI_API_GLOBAL arc::str::UTF8String& operator<<(
     return s;
 }
 
-OMI_API_GLOBAL std::ostream& operator<<(
+OMI_API_EXPORT std::ostream& operator<<(
         std::ostream& s,
         const omi::Attribute::Hash& h)
 {

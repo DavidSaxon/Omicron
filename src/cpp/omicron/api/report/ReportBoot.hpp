@@ -26,12 +26,12 @@ namespace report
 /*!
  * \brief Initializes the report module.
  */
-OMI_API_GLOBAL bool startup_routine();
+OMI_API_EXPORT bool startup_routine();
 
 /*!
  * \brief Shutsdown the report module.
  */
-OMI_API_GLOBAL bool shutdown_routine();
+OMI_API_EXPORT bool shutdown_routine();
 
 } // namespace report
 } // namespace omi

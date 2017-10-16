@@ -25,7 +25,7 @@ static StringAttribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type StringAttribute::kTypeString =
+OMI_API_EXPORT Attribute::Type StringAttribute::kTypeString =
     DataAttribute::kTypeDataBits |
     (typeid(StringAttribute::DataType).hash_code() >> 8);
 
@@ -35,7 +35,7 @@ OMI_API_GLOBAL Attribute::Type StringAttribute::kTypeString =
 
 //---------------------------C O N S T R U C T O R S----------------------------
 
-OMI_API_GLOBAL StringAttribute::StringStorage::StringStorage(
+OMI_API_EXPORT StringAttribute::StringStorage::StringStorage(
         std::size_t tuple_size)
     : TypedDataStorage<DataType>(tuple_size)
 {
@@ -43,13 +43,13 @@ OMI_API_GLOBAL StringAttribute::StringStorage::StringStorage(
 
 //-----------------------------D E S T R U C T O R------------------------------
 
-OMI_API_GLOBAL StringAttribute::StringStorage::~StringStorage()
+OMI_API_EXPORT StringAttribute::StringStorage::~StringStorage()
 {
 }
 
 //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
 
-OMI_API_GLOBAL Attribute::Hash StringAttribute::StringStorage::get_hash(
+OMI_API_EXPORT Attribute::Hash StringAttribute::StringStorage::get_hash(
         arc::uint64 seed) const
 {
     // hash need recomputing?
@@ -79,12 +79,12 @@ OMI_API_GLOBAL Attribute::Hash StringAttribute::StringStorage::get_hash(
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StringAttribute::StringAttribute()
+OMI_API_EXPORT StringAttribute::StringAttribute()
     : DataAttribute(kTypeString, true, new StringStorage(0))
 {
 }
 
-OMI_API_GLOBAL StringAttribute::StringAttribute(DataType value, bool immutable)
+OMI_API_EXPORT StringAttribute::StringAttribute(DataType value, bool immutable)
     : DataAttribute(
         kTypeString,
         immutable,
@@ -93,7 +93,7 @@ OMI_API_GLOBAL StringAttribute::StringAttribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL StringAttribute::StringAttribute(
+OMI_API_EXPORT StringAttribute::StringAttribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -105,13 +105,13 @@ OMI_API_GLOBAL StringAttribute::StringAttribute(
 {
 }
 
-OMI_API_GLOBAL StringAttribute::StringAttribute(const Attribute& other)
+OMI_API_EXPORT StringAttribute::StringAttribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL StringAttribute::StringAttribute(const StringAttribute& other)
+OMI_API_EXPORT StringAttribute::StringAttribute(const StringAttribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -121,7 +121,7 @@ OMI_API_GLOBAL StringAttribute::StringAttribute(const StringAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StringAttribute::~StringAttribute()
+OMI_API_EXPORT StringAttribute::~StringAttribute()
 {
 }
 
@@ -129,7 +129,7 @@ OMI_API_GLOBAL StringAttribute::~StringAttribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String StringAttribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String StringAttribute::get_type_string()
 {
     return "StringAttribute";
 }
@@ -138,7 +138,7 @@ OMI_API_GLOBAL arc::str::UTF8String StringAttribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StringAttribute::DataType StringAttribute::get_value() const
+OMI_API_EXPORT StringAttribute::DataType StringAttribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -158,7 +158,7 @@ OMI_API_GLOBAL StringAttribute::DataType StringAttribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const StringAttribute::ArrayType& StringAttribute::get_values() const
 {
     // valid?
@@ -168,7 +168,7 @@ const StringAttribute::ArrayType& StringAttribute::get_values() const
     return get_storage<StringStorage>()->m_data;
 }
 
-OMI_API_GLOBAL const StringAttribute::DataType& StringAttribute::at(
+OMI_API_EXPORT const StringAttribute::DataType& StringAttribute::at(
         std::size_t index) const
 {
     // valid?
@@ -190,7 +190,7 @@ OMI_API_GLOBAL const StringAttribute::DataType& StringAttribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void StringAttribute::set_value(DataType value)
+OMI_API_EXPORT void StringAttribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -200,7 +200,7 @@ OMI_API_GLOBAL void StringAttribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void StringAttribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void StringAttribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -209,7 +209,7 @@ OMI_API_GLOBAL void StringAttribute::set_values(const ArrayType& values)
     get_storage<StringStorage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void StringAttribute::set_at(
+OMI_API_EXPORT void StringAttribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -239,7 +239,7 @@ OMI_API_GLOBAL void StringAttribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool StringAttribute::check_type(Type type) const
+OMI_API_EXPORT bool StringAttribute::check_type(Type type) const
 {
     return type == kTypeString;
 }

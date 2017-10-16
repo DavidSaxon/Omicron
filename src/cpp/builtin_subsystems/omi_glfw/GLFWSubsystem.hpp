@@ -38,6 +38,8 @@ public:
     virtual bool startup_routine() override;
 
     virtual bool shutdown_routine() override;
+
+    virtual void main_loop(EngineCycleFunc* engine_cycle_func) override;
 };
 
 } // namespace omi_glfw

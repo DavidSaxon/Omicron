@@ -81,7 +81,7 @@ public:
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL AssetLibrary* AssetLibrary::instance()
+OMI_API_EXPORT AssetLibrary* AssetLibrary::instance()
 {
     static AssetLibrary inst;
     return &inst;
@@ -91,17 +91,17 @@ OMI_API_GLOBAL AssetLibrary* AssetLibrary::instance()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool AssetLibrary::startup_routine()
+OMI_API_EXPORT bool AssetLibrary::startup_routine()
 {
     return m_impl->startup_routine();
 }
 
-OMI_API_GLOBAL bool AssetLibrary::shutdown_routine()
+OMI_API_EXPORT bool AssetLibrary::shutdown_routine()
 {
     return m_impl->shutdown_routine();
 }
 
-OMI_API_GLOBAL omi::asset::Geometry* AssetLibrary::get_geometry(
+OMI_API_EXPORT omi::asset::Geometry* AssetLibrary::get_geometry(
         const arc::str::UTF8String& id)
 {
     return m_impl->get_geometry(id);

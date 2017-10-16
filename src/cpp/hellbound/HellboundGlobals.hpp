@@ -1,25 +1,24 @@
 /*!
  * \file
  * \author David Saxon
- * \brief Globals for Omi Qt.
  */
-#ifndef OMI_QT_GLOBALS_HPP_
-#define OMI_QT_GLOBALS_HPP_
+#ifndef HELLBOUND_GLOBALS_HPP_
+#define HELLBOUND_GLOBALS_HPP_
 
 #include <arcanecore/log/Input.hpp>
 
 
-namespace omi_qt
+namespace hell
 {
 namespace global
 {
 
 /*!
- * \brief The logging input to be used by Omi Qt.
+ * \brief The logging input to be used by Hellbound.
  */
 extern arc::log::Input* logger;
 
 } // namespace global
-} // namespace omi_qt
+} // namespace hell
 
 #endif

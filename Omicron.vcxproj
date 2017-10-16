@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="hellbound|Win32">
+      <Configuration>hellbound</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="omicron_api|Win32">
       <Configuration>omicron_api</Configuration>
       <Platform>Win32</Platform>
@@ -23,14 +27,6 @@
     </ProjectConfiguration>
     <ProjectConfiguration Include="omi_gl|Win32">
       <Configuration>omi_gl</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="omi_qt|Win32">
-      <Configuration>omi_qt</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="pxtrace|Win32">
-      <Configuration>pxtrace</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="tests|Win32">
@@ -78,6 +74,7 @@
     <ClCompile Include="src\cpp\omicron\runtime\RuntimeGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\boot\BootLogging.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\boot\BootRoutines.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\game\GameBinding.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\subsystem\ContextSSDL.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\subsystem\SubsystemManager.cpp" />
   </ItemGroup>
@@ -88,32 +85,25 @@
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Int32Attribute_TestSuite.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\MapAttribute_TestSuite.cpp" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)'=='omi_qt'">
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtBootstrap.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtGlobals.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_qt\QtMainWindow.cpp" />
-    <ClCompile Include="gen\omi_qt\*" />
-  </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_gl'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_gl\GLSubsystem.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_glfw'">
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWGlobals.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWSubsystem.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWSurface.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\OmiGLFWRegister.cpp" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)'=='pxtrace'">
-    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\Camera.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\FrameBuffer.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\PXGlobals.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\PXSubsystem.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\pxtrace\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_bullet'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_bullet\BulletSubsystem.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_al'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_al\ALSubsystem.cpp" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='hellbound'">
+    <ClCompile Include="src\cpp\hellbound\GameRegistration.cpp" />
+    <ClCompile Include="src\cpp\hellbound\HellboundGlobals.cpp" />
+    <ClCompile Include="src\cpp\hellbound\scripts\Startup.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ECB7C33C-5256-4E7C-B4BC-CAC7AB353B1C}</ProjectGuid>
@@ -142,13 +132,6 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -163,7 +146,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='pxtrace|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hellbound|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
@@ -196,16 +179,13 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omicron_api|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_glfw|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='pxtrace|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='hellbound|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_bullet|Win32'" Label="PropertySheets">
@@ -213,9 +193,6 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_al|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)'=='omi_qt'" Label="PropertySheets">
-    <Import Project="$(SolutionDir)\Omicron\omi_qt_moc.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omicron_runtime|Win32'">
@@ -236,12 +213,6 @@
     <TargetName>omicron_api</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'">
-    <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\subsystems\</OutDir>
-    <IntDir>intermediate\$(Configuration)\</IntDir>
-    <TargetName>omi_qt</TargetName>
-    <TargetExt>.dll</TargetExt>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\subsystems\</OutDir>
     <IntDir>intermediate\$(Configuration)\</IntDir>
@@ -254,10 +225,10 @@
     <TargetName>omi_glfw</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='pxtrace|Win32'">
-    <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\subsystems\</OutDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hellbound|Win32'">
+    <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\</OutDir>
     <IntDir>intermediate\$(Configuration)\</IntDir>
-    <TargetName>pxtrace</TargetName>
+    <TargetName>hellbound</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_bullet|Win32'">
@@ -314,7 +285,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>OMI_API_GLOBAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OMI_API_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -322,23 +293,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_qt|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Libraries\qt5-5.5.0-vs2013\qt5-x86-shared-release\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\Libraries\qt5-5.5.0-vs2013\qt5-x86-shared-release\lib;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'">
@@ -349,6 +303,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -366,7 +321,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\glfw-3.2.1\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDLL;OMI_API_GLOBAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -376,21 +331,22 @@
       <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;OpenGL32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='pxtrace|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hellbound|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\hellbound\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;glew32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_bullet|Win32'">
@@ -401,6 +357,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -418,6 +375,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>

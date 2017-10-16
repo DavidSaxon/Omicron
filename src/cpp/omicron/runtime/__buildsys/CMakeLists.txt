@@ -5,6 +5,7 @@ set(OMICRON_RUNTIME_SRC
     ../RuntimeGlobals.cpp
     ../boot/BootLogging.cpp
     ../boot/BootRoutines.cpp
+    ../game/GameBinding.cpp
     ../subsystem/ContextSSDL.cpp
     ../subsystem/SubsystemManager.cpp
 )

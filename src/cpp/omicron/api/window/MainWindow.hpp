@@ -31,7 +31,7 @@ public:
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL ~MainWindow();
+    OMI_API_EXPORT ~MainWindow();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
@@ -40,12 +40,12 @@ public:
     /*!
      * \brief Returns the singleton instance of the main window.
      */
-    OMI_API_GLOBAL static MainWindow* instance();
+    OMI_API_EXPORT static MainWindow* instance();
 
     // hide from doxygen
     #ifndef IN_DOXYGEN
 
-    OMI_API_GLOBAL static void set_host(
+    OMI_API_EXPORT static void set_host(
             omi::window::ss::MainWindowFactory* factory_func);
 
     #endif
@@ -87,7 +87,7 @@ protected:
     //                           PROTECTED CONSTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL MainWindow();
+    OMI_API_EXPORT MainWindow();
 
     //--------------------------------------------------------------------------
     //                         PROTECTED MEMBER FUNCTIONS

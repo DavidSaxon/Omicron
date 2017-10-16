@@ -32,7 +32,7 @@ public:
     //--------------------------------------------------------------------------
 
     // TODO:
-    OMI_API_GLOBAL AbstractAsset()
+    OMI_API_EXPORT AbstractAsset()
     {
     }
 
@@ -40,7 +40,7 @@ public:
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~AbstractAsset()
+    OMI_API_EXPORT virtual ~AbstractAsset()
     {
     }
 }

@@ -35,7 +35,7 @@ class StatsQuery;
  * \param title Option parameter that can be used to print a title for the
  *              query results.
  */
-OMI_API_GLOBAL void print_stats_query(
+OMI_API_EXPORT void print_stats_query(
         const StatsQuery& query,
         std::ostream& out_stream,
         const arc::str::UTF8String& title = "");

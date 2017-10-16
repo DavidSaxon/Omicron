@@ -54,7 +54,5 @@ add_subdirectory(src/cpp/builtin_subsystems/omi_bullet/__buildsys)
 add_subdirectory(src/cpp/builtin_subsystems/omi_gl/__buildsys)
 # GLFW subsystem
 add_subdirectory(src/cpp/builtin_subsystems/omi_glfw/__buildsys)
-# qt subsystem
-add_subdirectory(src/cpp/builtin_subsystems/omi_qt/__buildsys)
-# pxtrace subsystem
-add_subdirectory(src/cpp/builtin_subsystems/pxtrace/__buildsys)
+# hellbound
+add_subdirectory(src/cpp/hellbound/__buildsys)

@@ -71,21 +71,21 @@ public:
         /*!
          * \brief Creates new empty DataStorage with the given tuple size.
          */
-        OMI_API_GLOBAL DataStorage(std::size_t tuple_size);
+        OMI_API_EXPORT DataStorage(std::size_t tuple_size);
 
         //-------------------------D E S T R U C T O R--------------------------
 
-        OMI_API_GLOBAL virtual ~DataStorage();
+        OMI_API_EXPORT virtual ~DataStorage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const override;
+        OMI_API_EXPORT virtual bool is_data_pure_immutable() const override;
 
-        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const override;
+        OMI_API_EXPORT virtual bool is_data_pure_mutable() const override;
 
-        OMI_API_GLOBAL virtual Storage* as_pure_immutable() override;
+        OMI_API_EXPORT virtual Storage* as_pure_immutable() override;
 
-        OMI_API_GLOBAL virtual Storage* as_pure_mutable() override;
+        OMI_API_EXPORT virtual Storage* as_pure_mutable() override;
 
         /*!
          * \brief Returns the number of values in this DataStorage.
@@ -95,7 +95,7 @@ public:
         /*!
          * \brief Computes the hash of this storage.
          */
-        OMI_API_GLOBAL void compute_hash(
+        OMI_API_EXPORT void compute_hash(
                 const void* data,
                 std::size_t length,
                 arc::uint64 seed,
@@ -299,7 +299,7 @@ public:
      *
      * \note This attribute is immutable by definition.
      */
-    OMI_API_GLOBAL DataAttribute();
+    OMI_API_EXPORT DataAttribute();
 
     /*!
      * \brief Constructs a new reference count of the given Attribute.
@@ -307,18 +307,18 @@ public:
      * If the given attribute is not a valid data attribute this construct an
      * invalid DataAttribute.
      */
-    OMI_API_GLOBAL DataAttribute(const Attribute& other);
+    OMI_API_EXPORT DataAttribute(const Attribute& other);
 
     /*!
      * \brief Constructs a new reference count of the given DataAttribute.
      */
-    OMI_API_GLOBAL DataAttribute(const DataAttribute& other);
+    OMI_API_EXPORT DataAttribute(const DataAttribute& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL ~DataAttribute();
+    OMI_API_EXPORT ~DataAttribute();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -329,14 +329,14 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL std::size_t get_size() const;
+    OMI_API_EXPORT std::size_t get_size() const;
 
     /*!
      * \brief Returns the tuple size of this attribute.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL std::size_t get_tuple_size() const;
+    OMI_API_EXPORT std::size_t get_tuple_size() const;
 
     /*!
      * \brief Sets the tuple size of this attribute.
@@ -344,7 +344,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_tuple_size(std::size_t tuple_size);
+    OMI_API_EXPORT void set_tuple_size(std::size_t tuple_size);
 
 protected:
 
@@ -353,16 +353,16 @@ protected:
     //--------------------------------------------------------------------------
 
     // override
-    OMI_API_GLOBAL DataAttribute(Definition* def);
+    OMI_API_EXPORT DataAttribute(Definition* def);
 
     // override
-    OMI_API_GLOBAL DataAttribute(Type type, bool immutable, Storage* storage);
+    OMI_API_EXPORT DataAttribute(Type type, bool immutable, Storage* storage);
 
     //--------------------------------------------------------------------------
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
+    OMI_API_EXPORT virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

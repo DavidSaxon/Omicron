@@ -32,6 +32,9 @@ private:
     // the handle to the dynamic library to bind the subsystem from
     arc::io::dl::Handle m_lib_handle;
 
+    // the version of the context subsystem
+    arc::str::UTF8String m_version;
+
 public:
 
     //--------------------------C O N S T R U C T O R---------------------------
@@ -70,6 +73,25 @@ public:
                 << "error \"" << exc.what() << "\"" << std::endl;
             return false;
         }
+
+        // get the version function
+        omi::SubsytemGetVersionFunc* get_version_func = nullptr;
+        try
+        {
+            get_version_func =
+                arc::io::dl::bind_symbol<omi::SubsytemGetVersionFunc>(
+                    m_lib_handle,
+                    "OMI_CONTEXT_get_version"
+                );
+        }
+        catch(const std::exception& exc)
+        {
+            global::logger->error
+                << "Failed to bind context with error: " << exc.what()
+                << std::endl;
+        }
+        // get the version
+        m_version = arc::str::UTF8String(get_version_func());
 
         // get the subsystem functions
         omi::SubsystemObjectFactoryFunc* subsystem_factory_func = nullptr;
@@ -158,12 +180,17 @@ public:
         omi::context::Surface::destroy();
         omi::context::ContextSubsystem::destroy();
 
-        // Close the library
+        // close the library
         if(m_lib_handle != nullptr)
         {
             arc::io::dl::close_library(m_lib_handle);
             m_lib_handle = nullptr;
         }
+    }
+
+    const arc::str::UTF8String& get_version() const
+    {
+        return m_version;
     }
 };
 
@@ -197,6 +224,11 @@ bool ContextSSDL::bind(const arc::io::sys::Path& path)
 void ContextSSDL::release()
 {
     m_impl->release();
+}
+
+const arc::str::UTF8String& ContextSSDL::get_version() const
+{
+    return m_impl->get_version();
 }
 
 } // namespace ss

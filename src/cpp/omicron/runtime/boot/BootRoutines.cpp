@@ -19,6 +19,7 @@
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/boot/BootLogging.hpp"
+#include "omicron/runtime/game/GameBinding.hpp"
 #include "omicron/runtime/subsystem/SubsystemManager.hpp"
 
 #ifdef ARC_OS_WINDOWS
@@ -165,7 +166,7 @@ bool startup_routine()
         if(!omi::report::startup_routine())
         {
             global::logger->critical
-                << "Failed during startup routines of report module"
+                << "Failed during startup routine of report module"
                 << std::endl;
             return false;
         }
@@ -174,28 +175,43 @@ bool startup_routine()
         if(!omi::res::ResourceRegistry::instance()->startup_routine())
         {
             global::logger->critical
-                << "Failed during startup routines of the ResourceRegistry"
+                << "Failed during startup routine of the ResourceRegistry"
                 << std::endl;
             return false;
         }
         if(!omi::asset::AssetLibrary::instance()->startup_routine())
         {
             global::logger->critical
-                << "Failed during startup routines of the AssetLibrary"
+                << "Failed during startup routine of the AssetLibrary"
                 << std::endl;
             return false;
         }
         if(!omi::runtime::ss::SubsystemManager::instance()->startup_routine())
         {
             global::logger->critical
-                << "Failed during startup routines of the SubsystemManager"
+                << "Failed during startup routine of the SubsystemManager"
+                << std::endl;
+            return false;
+        }
+        if(!omi::runtime::game::GameBinding::instance()->startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routine of the GameBinding"
+                << std::endl;
+            return false;
+        }
+        if(!omi::runtime::game::GameBinding::instance()->game_startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routine of "
+                << omi::runtime::game::GameBinding::instance()->get_game_name()
                 << std::endl;
             return false;
         }
         if(!omi::context::ContextSubsystem::instance()->startup_routine())
         {
             global::logger->critical
-                << "Failed during startup routines of the ContextSubsystem"
+                << "Failed during startup routine of the ContextSubsystem"
                 << std::endl;
             return false;
         }
@@ -263,9 +279,12 @@ bool first_frame_routine()
         //     return false;
         // }
 
-        // engine is now live! run routines
-        if(!engine_live_routine())
+        if(!runtime::game::GameBinding::instance()->game_firstframe_routine())
         {
+            global::logger->critical
+                << "Failed during firstframe routine of "
+                << omi::runtime::game::GameBinding::instance()->get_game_name()
+                << std::endl;
             return false;
         }
     }
@@ -295,31 +314,6 @@ bool first_frame_routine()
     g_startup_config.reset(nullptr);
 
     g_first_frame_complete = true;
-    return true;
-}
-
-bool engine_live_routine()
-{
-    try
-    {
-        // perform a multi-threaded load of the initial engine resources
-        // TODO: should use some sort of "resource pack" to speicify what needs
-        //       to be loaded
-        // TODO: multi-threaded load function
-
-        // TODO: REMOVE ME
-        omi::res::ResourceRegistry::instance()->load_blocking(
-            omi::res::get_id("res/builtin/mesh/bunny.obj")
-        );
-    }
-    catch(const std::exception& exc)
-    {
-        get_critical_stream()
-            << "Encountered exception during engine live routines: "
-            << exc.what() << std::endl;
-        return false;
-    }
-
     return true;
 }
 
@@ -359,31 +353,46 @@ bool shutdown_routine()
     try
     {
         bool failure = false;
+        if(!runtime::game::GameBinding::instance()->game_shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routine of "
+                << omi::runtime::game::GameBinding::instance()->get_game_name()
+                << std::endl;
+            failure = true;
+        }
         if(!omi::context::ContextSubsystem::instance()->shutdown_routine())
         {
             global::logger->critical
-                << "Failed during shutdown routines of the ContextSubsystem"
+                << "Failed during shutdown routine of the ContextSubsystem"
+                << std::endl;
+            failure = true;
+        }
+        if(!omi::runtime::game::GameBinding::instance()->shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routine of the GameBinding"
                 << std::endl;
             failure = true;
         }
         if(!omi::runtime::ss::SubsystemManager::instance()->shutdown_routine())
         {
             global::logger->critical
-                << "Failed during shutdown routines of the SubsystemManager"
+                << "Failed during shutdown routine of the SubsystemManager"
                 << std::endl;
             failure = true;
         }
         if(!omi::asset::AssetLibrary::instance()->shutdown_routine())
         {
             global::logger->critical
-                << "Failed during shutdown routines of the AssetLibrary"
+                << "Failed during shutdown routine of the AssetLibrary"
                 << std::endl;
             failure = true;
         }
         if(!omi::res::ResourceRegistry::instance()->shutdown_routine())
         {
             global::logger->critical
-                << "Failed during shutdown routines of the ResourceRegistry"
+                << "Failed during shutdown routine of the ResourceRegistry"
                 << std::endl;
             failure = true;
         }

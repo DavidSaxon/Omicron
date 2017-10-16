@@ -51,7 +51,7 @@ public:
     /*!
      * \brief The type identifier for MapAttributes.
      */
-    OMI_API_GLOBAL static Type kTypeMap;
+    OMI_API_EXPORT static Type kTypeMap;
 
     //--------------------------------------------------------------------------
     //                                  STORAGE
@@ -87,7 +87,7 @@ public:
         /*!
          * \brief Creates a new empty MapStorage.
          */
-        OMI_API_GLOBAL MapStorage();
+        OMI_API_EXPORT MapStorage();
 
         /*!
          * \brief Creates new MapStorage using a copy of that data described
@@ -102,30 +102,30 @@ public:
 
         //-------------------------D E S T R U C T O R--------------------------
 
-        OMI_API_GLOBAL virtual ~MapStorage();
+        OMI_API_EXPORT virtual ~MapStorage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
-        OMI_API_GLOBAL virtual bool equals(const Storage* other) const override;
+        OMI_API_EXPORT virtual bool equals(const Storage* other) const override;
 
-        OMI_API_GLOBAL
+        OMI_API_EXPORT
         virtual bool less_than(const Storage* other) const override;
 
-        OMI_API_GLOBAL virtual bool is_data_pure_immutable() const override;
+        OMI_API_EXPORT virtual bool is_data_pure_immutable() const override;
 
-        OMI_API_GLOBAL virtual bool is_data_pure_mutable() const override;
+        OMI_API_EXPORT virtual bool is_data_pure_mutable() const override;
 
-        OMI_API_GLOBAL virtual Storage* as_pure_immutable() override;
+        OMI_API_EXPORT virtual Storage* as_pure_immutable() override;
 
-        OMI_API_GLOBAL virtual Storage* as_pure_mutable() override;
+        OMI_API_EXPORT virtual Storage* as_pure_mutable() override;
 
-        OMI_API_GLOBAL virtual Hash get_hash(arc::uint64 seed) const override;
+        OMI_API_EXPORT virtual Hash get_hash(arc::uint64 seed) const override;
 
-        OMI_API_GLOBAL virtual void invalidate_hash() override;
+        OMI_API_EXPORT virtual void invalidate_hash() override;
 
-        OMI_API_GLOBAL virtual Storage* copy_for_overwrite(bool soft) override;
+        OMI_API_EXPORT virtual Storage* copy_for_overwrite(bool soft) override;
 
-        OMI_API_GLOBAL virtual void string_repr(
+        OMI_API_EXPORT virtual void string_repr(
                 std::size_t indentation,
                 arc::str::UTF8String& s) const override;
     };
@@ -139,7 +139,7 @@ public:
      *
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL MapAttribute(bool immutable = true);
+    OMI_API_EXPORT MapAttribute(bool immutable = true);
 
     /*!
      * \brief Constructs a new MapAttribute using a copy of the data described
@@ -165,7 +165,7 @@ public:
      * \param data The data to copy the contents of this attribute's data from.
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL MapAttribute(const DataType& data, bool immutable = true);
+    OMI_API_EXPORT MapAttribute(const DataType& data, bool immutable = true);
 
     /*!
      * \brief Constructs a new reference count of the given Attribute.
@@ -173,7 +173,7 @@ public:
      * If the given attribute is not a valid map attribute this will construct
      * a null attribute and the reference count will not be increased.
      */
-    OMI_API_GLOBAL MapAttribute(const Attribute& other);
+    OMI_API_EXPORT MapAttribute(const Attribute& other);
 
     /*!
      * \brief Constructs a new reference count of the given Attribute.
@@ -181,13 +181,13 @@ public:
      * If the given attribute is invalid this will construct a null attribute
      * and the reference count will not be increased.
      */
-    OMI_API_GLOBAL MapAttribute(const MapAttribute& other);
+    OMI_API_EXPORT MapAttribute(const MapAttribute& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~MapAttribute();
+    OMI_API_EXPORT virtual ~MapAttribute();
 
     //--------------------------------------------------------------------------
     //                                 OPERATORS
@@ -202,7 +202,7 @@ public:
      * \throws arc::ex::KeyError If there is not attribute under the given name
      *                           in this MapAttribute.
      */
-    OMI_API_GLOBAL const Attribute& operator[](
+    OMI_API_EXPORT const Attribute& operator[](
             const arc::str::UTF8String& name) const;
 
     /*!
@@ -214,7 +214,7 @@ public:
      * \throws arc::ex::KeyError If there is not attribute under the given name
      *                           in this MapAttribute.
      */
-    OMI_API_GLOBAL Attribute& operator[](const arc::str::UTF8String& name);
+    OMI_API_EXPORT Attribute& operator[](const arc::str::UTF8String& name);
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -225,14 +225,14 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL std::size_t get_size() const;
+    OMI_API_EXPORT std::size_t get_size() const;
 
     /*!
      * \brief Returns whether this MapAttribute has no entries.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL bool is_empty() const;
+    OMI_API_EXPORT bool is_empty() const;
 
     /*!
      * \brief Returns the internal map structure of this MapAttribute.
@@ -242,14 +242,14 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL const DataType& get_values() const;
+    OMI_API_EXPORT const DataType& get_values() const;
 
     /*!
      * \brief Returns the names (keys) of the entries in this MapAttribute.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL std::vector<arc::str::UTF8String> get_names() const;
+    OMI_API_EXPORT std::vector<arc::str::UTF8String> get_names() const;
 
     /*!
      * \brief Returns the attributes (values) of the entries in this
@@ -257,7 +257,7 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL std::vector<Attribute> get_attributes() const;
+    OMI_API_EXPORT std::vector<Attribute> get_attributes() const;
 
     /*!
      * \brief Returns whether there is an entry in the map with the given name.
@@ -266,7 +266,7 @@ public:
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL bool has(const arc::str::UTF8String& name) const;
+    OMI_API_EXPORT bool has(const arc::str::UTF8String& name) const;
 
     /*!
      * \brief Returns the attribute in this MapAttribute under the given name.
@@ -277,7 +277,7 @@ public:
      * \throws arc::ex::KeyError If there is not attribute under the given name
      *                           in this MapAttribute.
      */
-    OMI_API_GLOBAL const Attribute& get(const arc::str::UTF8String& name) const;
+    OMI_API_EXPORT const Attribute& get(const arc::str::UTF8String& name) const;
 
     /*!
      * \brief Returns the attribute in this MapAttribute under the given name.
@@ -288,7 +288,7 @@ public:
      * \throws arc::ex::KeyError If there is not attribute under the given name
      *                           in this MapAttribute.
      */
-    OMI_API_GLOBAL Attribute& get(const arc::str::UTF8String& name);
+    OMI_API_EXPORT Attribute& get(const arc::str::UTF8String& name);
 
     /*!
      * \brief Inserts the given attribute into the map under the provided name.
@@ -301,7 +301,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void insert(
+    OMI_API_EXPORT void insert(
             const arc::str::UTF8String& name,
             const Attribute& attrribute);
 
@@ -315,7 +315,7 @@ public:
      *                           in this MapAttribute.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void erase(const arc::str::UTF8String& name);
+    OMI_API_EXPORT void erase(const arc::str::UTF8String& name);
 
     /*!
      * \brief Replaces the current data of this MapAttribute with the given
@@ -342,7 +342,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_values(const DataType& data);
+    OMI_API_EXPORT void set_values(const DataType& data);
 
     /*!
      * \brief Clears the contents of this MapAttribute - effectively replacing
@@ -351,7 +351,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void clear();
+    OMI_API_EXPORT void clear();
 
 protected:
 
@@ -359,7 +359,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
+    OMI_API_EXPORT virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

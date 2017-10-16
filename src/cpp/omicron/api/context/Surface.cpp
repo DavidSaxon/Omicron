@@ -24,18 +24,18 @@ static omi::SubsytemObject<Surface>* g_impl = nullptr;
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Surface* Surface::instance()
+OMI_API_EXPORT Surface* Surface::instance()
 {
     return g_impl->get();
 }
 
-OMI_API_GLOBAL void Surface::set_implementation(
+OMI_API_EXPORT void Surface::set_implementation(
         omi::SubsytemObject<Surface>* impl)
 {
     g_impl = impl;
 }
 
-OMI_API_GLOBAL void Surface::destroy()
+OMI_API_EXPORT void Surface::destroy()
 {
     if(g_impl != nullptr)
     {
@@ -48,7 +48,7 @@ OMI_API_GLOBAL void Surface::destroy()
 //                             PROTECTED CONSTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Surface::Surface()
+OMI_API_EXPORT Surface::Surface()
 {
 }
 
@@ -56,7 +56,7 @@ OMI_API_GLOBAL Surface::Surface()
 //                              PROTECTED DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Surface::~Surface()
+OMI_API_EXPORT Surface::~Surface()
 {
 }
 

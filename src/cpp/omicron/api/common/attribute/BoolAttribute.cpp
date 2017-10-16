@@ -25,7 +25,7 @@ static BoolAttribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type BoolAttribute::kTypeBool =
+OMI_API_EXPORT Attribute::Type BoolAttribute::kTypeBool =
     DataAttribute::kTypeDataBits |
     (typeid(BoolAttribute::DataType).hash_code() >> 8);
 
@@ -35,7 +35,7 @@ OMI_API_GLOBAL Attribute::Type BoolAttribute::kTypeBool =
 
 //---------------------------C O N S T R U C T O R S----------------------------
 
-OMI_API_GLOBAL BoolAttribute::BoolStorage::BoolStorage(
+OMI_API_EXPORT BoolAttribute::BoolStorage::BoolStorage(
         std::size_t tuple_size)
     : TypedDataStorage<DataType>(tuple_size)
 {
@@ -43,13 +43,13 @@ OMI_API_GLOBAL BoolAttribute::BoolStorage::BoolStorage(
 
 //-----------------------------D E S T R U C T O R------------------------------
 
-OMI_API_GLOBAL BoolAttribute::BoolStorage::~BoolStorage()
+OMI_API_EXPORT BoolAttribute::BoolStorage::~BoolStorage()
 {
 }
 
 //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
 
-OMI_API_GLOBAL Attribute::Hash BoolAttribute::BoolStorage::get_hash(
+OMI_API_EXPORT Attribute::Hash BoolAttribute::BoolStorage::get_hash(
         arc::uint64 seed) const
 {
     // hash need recomputing?
@@ -80,12 +80,12 @@ OMI_API_GLOBAL Attribute::Hash BoolAttribute::BoolStorage::get_hash(
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL BoolAttribute::BoolAttribute()
+OMI_API_EXPORT BoolAttribute::BoolAttribute()
     : DataAttribute(kTypeBool, true, new BoolStorage(0))
 {
 }
 
-OMI_API_GLOBAL BoolAttribute::BoolAttribute(DataType value, bool immutable)
+OMI_API_EXPORT BoolAttribute::BoolAttribute(DataType value, bool immutable)
     : DataAttribute(
         kTypeBool,
         immutable,
@@ -94,7 +94,7 @@ OMI_API_GLOBAL BoolAttribute::BoolAttribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL BoolAttribute::BoolAttribute(
+OMI_API_EXPORT BoolAttribute::BoolAttribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -106,13 +106,13 @@ OMI_API_GLOBAL BoolAttribute::BoolAttribute(
 {
 }
 
-OMI_API_GLOBAL BoolAttribute::BoolAttribute(const Attribute& other)
+OMI_API_EXPORT BoolAttribute::BoolAttribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL BoolAttribute::BoolAttribute(const BoolAttribute& other)
+OMI_API_EXPORT BoolAttribute::BoolAttribute(const BoolAttribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -122,7 +122,7 @@ OMI_API_GLOBAL BoolAttribute::BoolAttribute(const BoolAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL BoolAttribute::~BoolAttribute()
+OMI_API_EXPORT BoolAttribute::~BoolAttribute()
 {
 }
 
@@ -130,7 +130,7 @@ OMI_API_GLOBAL BoolAttribute::~BoolAttribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String BoolAttribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String BoolAttribute::get_type_string()
 {
     return "BoolAttribute";
 }
@@ -139,7 +139,7 @@ OMI_API_GLOBAL arc::str::UTF8String BoolAttribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL BoolAttribute::DataType BoolAttribute::get_value() const
+OMI_API_EXPORT BoolAttribute::DataType BoolAttribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -159,7 +159,7 @@ OMI_API_GLOBAL BoolAttribute::DataType BoolAttribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const BoolAttribute::ArrayType& BoolAttribute::get_values() const
 {
     // valid?
@@ -169,7 +169,7 @@ const BoolAttribute::ArrayType& BoolAttribute::get_values() const
     return get_storage<BoolStorage>()->m_data;
 }
 
-OMI_API_GLOBAL BoolAttribute::DataType BoolAttribute::at(
+OMI_API_EXPORT BoolAttribute::DataType BoolAttribute::at(
         std::size_t index) const
 {
     // valid?
@@ -191,7 +191,7 @@ OMI_API_GLOBAL BoolAttribute::DataType BoolAttribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void BoolAttribute::set_value(DataType value)
+OMI_API_EXPORT void BoolAttribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -201,7 +201,7 @@ OMI_API_GLOBAL void BoolAttribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void BoolAttribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void BoolAttribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -210,7 +210,7 @@ OMI_API_GLOBAL void BoolAttribute::set_values(const ArrayType& values)
     get_storage<BoolStorage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void BoolAttribute::set_at(
+OMI_API_EXPORT void BoolAttribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -240,7 +240,7 @@ OMI_API_GLOBAL void BoolAttribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool BoolAttribute::check_type(Type type) const
+OMI_API_EXPORT bool BoolAttribute::check_type(Type type) const
 {
     return type == kTypeBool;
 }

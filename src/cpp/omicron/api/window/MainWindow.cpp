@@ -18,7 +18,7 @@ omi::window::ss::MainWindowFactory* MainWindow::s_factory_func = nullptr;
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL MainWindow::~MainWindow()
+OMI_API_EXPORT MainWindow::~MainWindow()
 {
 }
 
@@ -26,7 +26,7 @@ OMI_API_GLOBAL MainWindow::~MainWindow()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL MainWindow* MainWindow::instance()
+OMI_API_EXPORT MainWindow* MainWindow::instance()
 {
     assert(s_factory_func != nullptr);
 
@@ -34,7 +34,7 @@ OMI_API_GLOBAL MainWindow* MainWindow::instance()
     return inst;
 }
 
-OMI_API_GLOBAL void MainWindow::set_host(
+OMI_API_EXPORT void MainWindow::set_host(
         omi::window::ss::MainWindowFactory* factory_func)
 {
     s_factory_func = factory_func;
@@ -44,7 +44,7 @@ OMI_API_GLOBAL void MainWindow::set_host(
 //                             PROTECTED CONSTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL MainWindow::MainWindow()
+OMI_API_EXPORT MainWindow::MainWindow()
 {
 }
 

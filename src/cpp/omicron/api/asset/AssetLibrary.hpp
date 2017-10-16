@@ -39,7 +39,7 @@ public:
     /*!
      * \brief Returns the singleton instance of the AssetLibrary.
      */
-    OMI_API_GLOBAL static AssetLibrary* instance();
+    OMI_API_EXPORT static AssetLibrary* instance();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -52,12 +52,12 @@ public:
     /*!
      * \brief Initialises Omicron's AssetLibrary.
      */
-    OMI_API_GLOBAL bool startup_routine();
+    OMI_API_EXPORT bool startup_routine();
 
     /*!
      * \brief Shutdowns Omicron's AssetLibrary.
      */
-    OMI_API_GLOBAL bool shutdown_routine();
+    OMI_API_EXPORT bool shutdown_routine();
 
     #endif
     // IN_DOXYGEN
@@ -67,7 +67,7 @@ public:
     // omi::asset::AbstractAsset* get();
 
     // TODO:
-    OMI_API_GLOBAL omi::asset::Geometry* get_geometry(
+    OMI_API_EXPORT omi::asset::Geometry* get_geometry(
             const arc::str::UTF8String& id);
 
     // TODO: how to run multi-threaded to get data onto GPU

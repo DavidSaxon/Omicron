@@ -24,7 +24,7 @@ static DoubleAttribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type DoubleAttribute::kTypeDouble =
+OMI_API_EXPORT Attribute::Type DoubleAttribute::kTypeDouble =
     DataAttribute::kTypeDataBits |
     (typeid(DoubleAttribute::DataType).hash_code() >> 8);
 
@@ -32,12 +32,12 @@ OMI_API_GLOBAL Attribute::Type DoubleAttribute::kTypeDouble =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL DoubleAttribute::DoubleAttribute()
+OMI_API_EXPORT DoubleAttribute::DoubleAttribute()
     : DataAttribute(kTypeDouble, true, new DoubleStorage(0))
 {
 }
 
-OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(DataType value, bool immutable)
+OMI_API_EXPORT DoubleAttribute::DoubleAttribute(DataType value, bool immutable)
     : DataAttribute(
         kTypeDouble,
         immutable,
@@ -46,7 +46,7 @@ OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(
+OMI_API_EXPORT DoubleAttribute::DoubleAttribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -58,13 +58,13 @@ OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(
 {
 }
 
-OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(const Attribute& other)
+OMI_API_EXPORT DoubleAttribute::DoubleAttribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(const DoubleAttribute& other)
+OMI_API_EXPORT DoubleAttribute::DoubleAttribute(const DoubleAttribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -74,7 +74,7 @@ OMI_API_GLOBAL DoubleAttribute::DoubleAttribute(const DoubleAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL DoubleAttribute::~DoubleAttribute()
+OMI_API_EXPORT DoubleAttribute::~DoubleAttribute()
 {
 }
 
@@ -82,7 +82,7 @@ OMI_API_GLOBAL DoubleAttribute::~DoubleAttribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String DoubleAttribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String DoubleAttribute::get_type_string()
 {
     return "DoubleAttribute";
 }
@@ -91,7 +91,7 @@ OMI_API_GLOBAL arc::str::UTF8String DoubleAttribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL DoubleAttribute::DataType DoubleAttribute::get_value() const
+OMI_API_EXPORT DoubleAttribute::DataType DoubleAttribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -111,7 +111,7 @@ OMI_API_GLOBAL DoubleAttribute::DataType DoubleAttribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const DoubleAttribute::ArrayType& DoubleAttribute::get_values() const
 {
     // valid?
@@ -121,7 +121,7 @@ const DoubleAttribute::ArrayType& DoubleAttribute::get_values() const
     return get_storage<DoubleStorage>()->m_data;
 }
 
-OMI_API_GLOBAL const DoubleAttribute::DataType& DoubleAttribute::at(
+OMI_API_EXPORT const DoubleAttribute::DataType& DoubleAttribute::at(
         std::size_t index) const
 {
     // valid?
@@ -143,7 +143,7 @@ OMI_API_GLOBAL const DoubleAttribute::DataType& DoubleAttribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void DoubleAttribute::set_value(DataType value)
+OMI_API_EXPORT void DoubleAttribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -153,7 +153,7 @@ OMI_API_GLOBAL void DoubleAttribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void DoubleAttribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void DoubleAttribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -162,7 +162,7 @@ OMI_API_GLOBAL void DoubleAttribute::set_values(const ArrayType& values)
     get_storage<DoubleStorage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void DoubleAttribute::set_at(
+OMI_API_EXPORT void DoubleAttribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -192,7 +192,7 @@ OMI_API_GLOBAL void DoubleAttribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool DoubleAttribute::check_type(Type type) const
+OMI_API_EXPORT bool DoubleAttribute::check_type(Type type) const
 {
     return type == kTypeDouble;
 }

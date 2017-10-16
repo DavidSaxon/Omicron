@@ -15,7 +15,7 @@ namespace omi
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type MapAttribute::kTypeMap = 2;
+OMI_API_EXPORT Attribute::Type MapAttribute::kTypeMap = 2;
 
 //------------------------------------------------------------------------------
 //                                    STORAGE
@@ -23,19 +23,19 @@ OMI_API_GLOBAL Attribute::Type MapAttribute::kTypeMap = 2;
 
 //----------------------------C O N S T U C T O R S-----------------------------
 
-OMI_API_GLOBAL MapAttribute::MapStorage::MapStorage()
+OMI_API_EXPORT MapAttribute::MapStorage::MapStorage()
 {
 }
 
 //----------------------------D E S T R U C T O R S-----------------------------
 
-OMI_API_GLOBAL MapAttribute::MapStorage::~MapStorage()
+OMI_API_EXPORT MapAttribute::MapStorage::~MapStorage()
 {
 }
 
 //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
 
-OMI_API_GLOBAL bool MapAttribute::MapStorage::equals(const Storage* other) const
+OMI_API_EXPORT bool MapAttribute::MapStorage::equals(const Storage* other) const
 {
     // cast
     const MapStorage* casted = dynamic_cast<const MapStorage*>(other);
@@ -66,7 +66,7 @@ OMI_API_GLOBAL bool MapAttribute::MapStorage::equals(const Storage* other) const
     return true;
 }
 
-OMI_API_GLOBAL bool MapAttribute::MapStorage::less_than(
+OMI_API_EXPORT bool MapAttribute::MapStorage::less_than(
         const Storage* other) const
 {
     // cast
@@ -79,7 +79,7 @@ OMI_API_GLOBAL bool MapAttribute::MapStorage::less_than(
     return m_data.size() < casted->m_data.size();
 }
 
-OMI_API_GLOBAL bool MapAttribute::MapStorage::is_data_pure_immutable() const
+OMI_API_EXPORT bool MapAttribute::MapStorage::is_data_pure_immutable() const
 {
     for(auto entry : m_data)
     {
@@ -91,7 +91,7 @@ OMI_API_GLOBAL bool MapAttribute::MapStorage::is_data_pure_immutable() const
     return true;
 }
 
-OMI_API_GLOBAL bool MapAttribute::MapStorage::is_data_pure_mutable() const
+OMI_API_EXPORT bool MapAttribute::MapStorage::is_data_pure_mutable() const
 {
     // check sub attributes
     for(auto entry : m_data)
@@ -104,7 +104,7 @@ OMI_API_GLOBAL bool MapAttribute::MapStorage::is_data_pure_mutable() const
     return true;
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 Attribute::Storage* MapAttribute::MapStorage::as_pure_immutable()
 {
     // is the data already pure immutable?
@@ -127,7 +127,7 @@ Attribute::Storage* MapAttribute::MapStorage::as_pure_immutable()
 
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 Attribute::Storage* MapAttribute::MapStorage::as_pure_mutable()
 {
     // copy data and create new storage
@@ -142,7 +142,7 @@ Attribute::Storage* MapAttribute::MapStorage::as_pure_mutable()
     return new MapStorage(pure_data.begin(), pure_data.end());
 }
 
-OMI_API_GLOBAL Attribute::Hash MapAttribute::MapStorage::get_hash(
+OMI_API_EXPORT Attribute::Hash MapAttribute::MapStorage::get_hash(
         arc::uint64 seed) const
 {
     // iterate the sub hashes to make sure none have gone out of date
@@ -211,14 +211,14 @@ OMI_API_GLOBAL Attribute::Hash MapAttribute::MapStorage::get_hash(
     return m_cached_hash;
 }
 
-OMI_API_GLOBAL void MapAttribute::MapStorage::invalidate_hash()
+OMI_API_EXPORT void MapAttribute::MapStorage::invalidate_hash()
 {
     m_cached_hash.part1 = 0;
     m_cached_hash.part2 = 0;
     m_sub_hashes.clear();
 }
 
-OMI_API_GLOBAL Attribute::Storage* MapAttribute::MapStorage::copy_for_overwrite(
+OMI_API_EXPORT Attribute::Storage* MapAttribute::MapStorage::copy_for_overwrite(
         bool soft)
 {
     // soft overwrite - so copy everything
@@ -230,7 +230,7 @@ OMI_API_GLOBAL Attribute::Storage* MapAttribute::MapStorage::copy_for_overwrite(
     return new MapStorage();
 }
 
-OMI_API_GLOBAL void MapAttribute::MapStorage::string_repr(
+OMI_API_EXPORT void MapAttribute::MapStorage::string_repr(
         std::size_t indentation,
         arc::str::UTF8String& s) const
 {
@@ -269,23 +269,23 @@ OMI_API_GLOBAL void MapAttribute::MapStorage::string_repr(
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL MapAttribute::MapAttribute(bool immutable)
+OMI_API_EXPORT MapAttribute::MapAttribute(bool immutable)
     : Attribute(kTypeMap, immutable, new MapStorage())
 {
 }
 
-OMI_API_GLOBAL MapAttribute::MapAttribute(const DataType& data, bool immutable)
+OMI_API_EXPORT MapAttribute::MapAttribute(const DataType& data, bool immutable)
     : Attribute(kTypeMap, immutable, new MapStorage(data.begin(), data.end()))
 {
 }
 
-OMI_API_GLOBAL MapAttribute::MapAttribute(const Attribute& other)
+OMI_API_EXPORT MapAttribute::MapAttribute(const Attribute& other)
     : Attribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL MapAttribute::MapAttribute(const MapAttribute& other)
+OMI_API_EXPORT MapAttribute::MapAttribute(const MapAttribute& other)
     : Attribute(nullptr)
 {
     assign(other);
@@ -295,7 +295,7 @@ OMI_API_GLOBAL MapAttribute::MapAttribute(const MapAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL MapAttribute::~MapAttribute()
+OMI_API_EXPORT MapAttribute::~MapAttribute()
 {
 }
 
@@ -303,13 +303,13 @@ OMI_API_GLOBAL MapAttribute::~MapAttribute()
 //                                   OPERATORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL const Attribute& MapAttribute::operator[](
+OMI_API_EXPORT const Attribute& MapAttribute::operator[](
             const arc::str::UTF8String& name) const
 {
     return get(name);
 }
 
-OMI_API_GLOBAL Attribute& MapAttribute::operator[](
+OMI_API_EXPORT Attribute& MapAttribute::operator[](
         const arc::str::UTF8String& name)
 {
     return get(name);
@@ -319,7 +319,7 @@ OMI_API_GLOBAL Attribute& MapAttribute::operator[](
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL std::size_t MapAttribute::get_size() const
+OMI_API_EXPORT std::size_t MapAttribute::get_size() const
 {
     // valid?
     check_state("get_size() used on an invalid attribute");
@@ -327,7 +327,7 @@ OMI_API_GLOBAL std::size_t MapAttribute::get_size() const
     return get_storage<MapStorage>()->m_data.size();
 }
 
- OMI_API_GLOBAL bool MapAttribute::is_empty() const
+ OMI_API_EXPORT bool MapAttribute::is_empty() const
  {
     // valid?
     check_state("get_size() used on an invalid attribute");
@@ -335,7 +335,7 @@ OMI_API_GLOBAL std::size_t MapAttribute::get_size() const
     return get_storage<MapStorage>()->m_data.empty();
  }
 
-OMI_API_GLOBAL const MapAttribute::DataType& MapAttribute::get_values() const
+OMI_API_EXPORT const MapAttribute::DataType& MapAttribute::get_values() const
 {
     // valid?
     check_state("get_values() used on an invalid attribute");
@@ -343,7 +343,7 @@ OMI_API_GLOBAL const MapAttribute::DataType& MapAttribute::get_values() const
     return get_storage<MapStorage>()->m_data;
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 std::vector<arc::str::UTF8String> MapAttribute::get_names() const
 {
     // valid?
@@ -358,7 +358,7 @@ std::vector<arc::str::UTF8String> MapAttribute::get_names() const
     return names;
 }
 
-OMI_API_GLOBAL std::vector<Attribute> MapAttribute::get_attributes() const
+OMI_API_EXPORT std::vector<Attribute> MapAttribute::get_attributes() const
 {
     // valid?
     check_state("get_attributes() used on an invalid attribute");
@@ -372,7 +372,7 @@ OMI_API_GLOBAL std::vector<Attribute> MapAttribute::get_attributes() const
     return attributes;
 }
 
-OMI_API_GLOBAL bool MapAttribute::has(const arc::str::UTF8String& name) const
+OMI_API_EXPORT bool MapAttribute::has(const arc::str::UTF8String& name) const
 {
     // valid?
     check_state("has() used on an invalid attribute");
@@ -400,7 +400,7 @@ OMI_API_GLOBAL bool MapAttribute::has(const arc::str::UTF8String& name) const
     }
 }
 
-OMI_API_GLOBAL const Attribute& MapAttribute::get(
+OMI_API_EXPORT const Attribute& MapAttribute::get(
         const arc::str::UTF8String& name) const
 {
     // valid?
@@ -443,7 +443,7 @@ OMI_API_GLOBAL const Attribute& MapAttribute::get(
     }
 }
 
-OMI_API_GLOBAL Attribute& MapAttribute::get(const arc::str::UTF8String& name)
+OMI_API_EXPORT Attribute& MapAttribute::get(const arc::str::UTF8String& name)
 {
     // valid?
     check_state("get() used on an invalid attribute");
@@ -485,7 +485,7 @@ OMI_API_GLOBAL Attribute& MapAttribute::get(const arc::str::UTF8String& name)
     }
 }
 
-OMI_API_GLOBAL void MapAttribute::insert(
+OMI_API_EXPORT void MapAttribute::insert(
         const arc::str::UTF8String& name,
         const Attribute& attrribute)
 {
@@ -526,7 +526,7 @@ OMI_API_GLOBAL void MapAttribute::insert(
     }
 }
 
-OMI_API_GLOBAL void MapAttribute::erase(const arc::str::UTF8String& name)
+OMI_API_EXPORT void MapAttribute::erase(const arc::str::UTF8String& name)
 {
     // valid?
     check_state("erase() used on an invalid attribute");
@@ -569,7 +569,7 @@ OMI_API_GLOBAL void MapAttribute::erase(const arc::str::UTF8String& name)
     }
 }
 
-OMI_API_GLOBAL void MapAttribute::set_values(const DataType& data)
+OMI_API_EXPORT void MapAttribute::set_values(const DataType& data)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -577,7 +577,7 @@ OMI_API_GLOBAL void MapAttribute::set_values(const DataType& data)
     get_storage<MapStorage>()->m_data = DataType(data.begin(), data.end());
 }
 
-OMI_API_GLOBAL void MapAttribute::clear()
+OMI_API_EXPORT void MapAttribute::clear()
 {
     // valid?
     check_state("clear() used on an invalid attribute");
@@ -589,7 +589,7 @@ OMI_API_GLOBAL void MapAttribute::clear()
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool MapAttribute::check_type(Type type) const
+OMI_API_EXPORT bool MapAttribute::check_type(Type type) const
 {
     return type == kTypeMap;
 }

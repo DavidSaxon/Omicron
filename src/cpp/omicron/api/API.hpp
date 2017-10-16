@@ -23,19 +23,36 @@ namespace omi
 #define OMI_API_MODE_PRODUCTION
 #endif
 
-//------------------------------EXPORT DEFINITION-------------------------------
+//----------------------------API EXPORT DEFINITION-----------------------------
 #ifdef ARC_OS_WINDOWS
-    #ifdef OMI_API_GLOBAL_EXPORT
-        #define OMI_API_GLOBAL __declspec(dllexport)
+    #ifdef OMI_API_ENABLE_EXPORT
+        #define OMI_API_EXPORT __declspec(dllexport)
     #else
-        #define OMI_API_GLOBAL __declspec(dllimport)
+        #define OMI_API_EXPORT __declspec(dllimport)
     #endif
 #else
-    #define OMI_API_GLOBAL
+    #define OMI_API_EXPORT
+#endif
+//------------------------------------------------------------------------------
+
+//---------------------------PLUGIN EXPORT DEFINITION---------------------------
+#ifdef ARC_OS_WINDOWS
+    #ifdef OMI_PLUGIN_ENABLE_EXPORT
+        #define OMI_PLUGIN_EXPORT __declspec(dllexport)
+    #else
+        #define OMI_PLUGIN_EXPORT __declspec(dllimport)
+    #endif
+#else
+    #define OMI_PLUGIN_EXPORT
 #endif
 //------------------------------------------------------------------------------
 
 //------------------------------SUBSYSTEM EXCHANGE------------------------------
+
+/*!
+ * \brief Function signature for getting the version of a subsystem.
+ */
+typedef const char* (SubsytemGetVersionFunc)();
 
 /*!
  * \brief Function signature for a subsystem object factory function passed via

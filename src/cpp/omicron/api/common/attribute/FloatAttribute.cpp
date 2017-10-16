@@ -24,7 +24,7 @@ static FloatAttribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type FloatAttribute::kTypeFloat =
+OMI_API_EXPORT Attribute::Type FloatAttribute::kTypeFloat =
     DataAttribute::kTypeDataBits |
     (typeid(FloatAttribute::DataType).hash_code() >> 8);
 
@@ -32,12 +32,12 @@ OMI_API_GLOBAL Attribute::Type FloatAttribute::kTypeFloat =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL FloatAttribute::FloatAttribute()
+OMI_API_EXPORT FloatAttribute::FloatAttribute()
     : DataAttribute(kTypeFloat, true, new FloatStorage(0))
 {
 }
 
-OMI_API_GLOBAL FloatAttribute::FloatAttribute(DataType value, bool immutable)
+OMI_API_EXPORT FloatAttribute::FloatAttribute(DataType value, bool immutable)
     : DataAttribute(
         kTypeFloat,
         immutable,
@@ -46,7 +46,7 @@ OMI_API_GLOBAL FloatAttribute::FloatAttribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL FloatAttribute::FloatAttribute(
+OMI_API_EXPORT FloatAttribute::FloatAttribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -58,13 +58,13 @@ OMI_API_GLOBAL FloatAttribute::FloatAttribute(
 {
 }
 
-OMI_API_GLOBAL FloatAttribute::FloatAttribute(const Attribute& other)
+OMI_API_EXPORT FloatAttribute::FloatAttribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL FloatAttribute::FloatAttribute(const FloatAttribute& other)
+OMI_API_EXPORT FloatAttribute::FloatAttribute(const FloatAttribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -74,7 +74,7 @@ OMI_API_GLOBAL FloatAttribute::FloatAttribute(const FloatAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL FloatAttribute::~FloatAttribute()
+OMI_API_EXPORT FloatAttribute::~FloatAttribute()
 {
 }
 
@@ -82,7 +82,7 @@ OMI_API_GLOBAL FloatAttribute::~FloatAttribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String FloatAttribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String FloatAttribute::get_type_string()
 {
     return "FloatAttribute";
 }
@@ -91,7 +91,7 @@ OMI_API_GLOBAL arc::str::UTF8String FloatAttribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL FloatAttribute::DataType FloatAttribute::get_value() const
+OMI_API_EXPORT FloatAttribute::DataType FloatAttribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -111,7 +111,7 @@ OMI_API_GLOBAL FloatAttribute::DataType FloatAttribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const FloatAttribute::ArrayType& FloatAttribute::get_values() const
 {
     // valid?
@@ -121,7 +121,7 @@ const FloatAttribute::ArrayType& FloatAttribute::get_values() const
     return get_storage<FloatStorage>()->m_data;
 }
 
-OMI_API_GLOBAL const FloatAttribute::DataType& FloatAttribute::at(
+OMI_API_EXPORT const FloatAttribute::DataType& FloatAttribute::at(
         std::size_t index) const
 {
     // valid?
@@ -143,7 +143,7 @@ OMI_API_GLOBAL const FloatAttribute::DataType& FloatAttribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void FloatAttribute::set_value(DataType value)
+OMI_API_EXPORT void FloatAttribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -153,7 +153,7 @@ OMI_API_GLOBAL void FloatAttribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void FloatAttribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void FloatAttribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -162,7 +162,7 @@ OMI_API_GLOBAL void FloatAttribute::set_values(const ArrayType& values)
     get_storage<FloatStorage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void FloatAttribute::set_at(
+OMI_API_EXPORT void FloatAttribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -192,7 +192,7 @@ OMI_API_GLOBAL void FloatAttribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool FloatAttribute::check_type(Type type) const
+OMI_API_EXPORT bool FloatAttribute::check_type(Type type) const
 {
     return type == kTypeFloat;
 }

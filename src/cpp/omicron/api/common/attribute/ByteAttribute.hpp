@@ -41,7 +41,7 @@ public:
     /*!
      * \brief The type identifier for ByteAttributes.
      */
-    OMI_API_GLOBAL static Type kTypeByte;
+    OMI_API_EXPORT static Type kTypeByte;
 
     //--------------------------------------------------------------------------
     //                                  STORAGE
@@ -60,7 +60,7 @@ public:
      * \brief Constructs a new empty immutable ByteAttribute with a tuple size
      *        of 0.
      */
-    OMI_API_GLOBAL ByteAttribute();
+    OMI_API_EXPORT ByteAttribute();
 
     /*!
      * \brief Constructs a new ByteAttribute with a single value and a tuple
@@ -69,7 +69,7 @@ public:
      * \param value The single value of this attribute.
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL ByteAttribute(DataType value, bool immutable = true);
+    OMI_API_EXPORT ByteAttribute(DataType value, bool immutable = true);
 
     /*!
      * \brief Constructs a new ByteAttribute using a copy of the data described
@@ -102,7 +102,7 @@ public:
      * \param tuple_size The tuple size of this attribute.
      * \param immutable Whether this attribute is immutable or not.
      */
-    OMI_API_GLOBAL ByteAttribute(
+    OMI_API_EXPORT ByteAttribute(
             const ArrayType& values,
             std::size_t tuple_size = 0,
             bool immutable = true);
@@ -113,7 +113,7 @@ public:
      * If the given attribute is not a valid Int64Attribute this will construct
      * a null attribute and the reference count will not be increased.
      */
-    OMI_API_GLOBAL ByteAttribute(const Attribute& other);
+    OMI_API_EXPORT ByteAttribute(const Attribute& other);
 
     /*!
      * \brief Constructs a new reference count of the given attribute.
@@ -121,13 +121,13 @@ public:
      * If the given attribute is invalid this will construct a null attribute
      * and the reference count will not be increased.
      */
-    OMI_API_GLOBAL ByteAttribute(const ByteAttribute& other);
+    OMI_API_EXPORT ByteAttribute(const ByteAttribute& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~ByteAttribute();
+    OMI_API_EXPORT virtual ~ByteAttribute();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC STATIC FUNCTIONS
@@ -136,7 +136,7 @@ public:
     /*!
      * \brief Returns the of this attribute as a string.
      */
-    OMI_API_GLOBAL static arc::str::UTF8String get_type_string();
+    OMI_API_EXPORT static arc::str::UTF8String get_type_string();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -148,14 +148,14 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IndexOutOfBoundsError If this attribute has no values.
      */
-    OMI_API_GLOBAL DataType get_value() const;
+    OMI_API_EXPORT DataType get_value() const;
 
     /*!
      * \brief Returns the array of values of this attribute.
      *
      * \throw arc::ex::StateError If this attribute is not valid.
      */
-    OMI_API_GLOBAL const ArrayType& get_values() const;
+    OMI_API_EXPORT const ArrayType& get_values() const;
 
     /*!
      * \brief Returns the single value at the given index.
@@ -164,7 +164,7 @@ public:
      * \throw arc::ex::IndexOutOfBoundsError If the index is out of this
      *                                       attribute's bounds.
      */
-    OMI_API_GLOBAL const DataType& at(std::size_t index) const;
+    OMI_API_EXPORT const DataType& at(std::size_t index) const;
 
     /*!
      * \brief Sets the value of this attribute to be a size 1 array holding the
@@ -173,7 +173,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_value(DataType value);
+    OMI_API_EXPORT void set_value(DataType value);
 
     /*!
      * \brief Sets the value of this attribute to be a copy of the array
@@ -200,7 +200,7 @@ public:
      * \throw arc::ex::StateError If this attribute is not valid.
      * \throw arc::ex::IllegalActionError If this attribute is immutable.
      */
-    OMI_API_GLOBAL void set_values(const ArrayType& values);
+    OMI_API_EXPORT void set_values(const ArrayType& values);
 
     /*!
      * \brief Sets the single value at the given index.
@@ -210,7 +210,7 @@ public:
      * \throw arc::ex::IndexOutOfBoundsError If the index is out of this
      *                                       attribute's bounds.
      */
-    OMI_API_GLOBAL void set_at(std::size_t index, DataType value);
+    OMI_API_EXPORT void set_at(std::size_t index, DataType value);
 
 protected:
 
@@ -218,7 +218,7 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual bool check_type(Type type) const override;
+    OMI_API_EXPORT virtual bool check_type(Type type) const override;
 };
 
 } // namespace omi

@@ -65,7 +65,7 @@ public:
     /*!
      * \brief Returns the singleton instance of the ResourceRegistry.
      */
-    OMI_API_GLOBAL static ResourceRegistry* instance();
+    OMI_API_EXPORT static ResourceRegistry* instance();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -78,12 +78,12 @@ public:
     /*!
      * \brief Initialises Omicron's ResourceRegistry.
      */
-    OMI_API_GLOBAL bool startup_routine();
+    OMI_API_EXPORT bool startup_routine();
 
     /*!
      * \brief Shutdowns Omicron's ResourceRegistry.
      */
-    OMI_API_GLOBAL bool shutdown_routine();
+    OMI_API_EXPORT bool shutdown_routine();
 
     /*!
      * \brief Adds a new resource loader function to the registry.
@@ -92,7 +92,7 @@ public:
      *                 file stream.
      * \param extension The file extension this function should be used to load.
      */
-    OMI_API_GLOBAL void define_loader(
+    OMI_API_EXPORT void define_loader(
             LoaderFunc* function,
             const arc::str::UTF8String& extension);
 
@@ -103,16 +103,16 @@ public:
     /*!
      * \brief Returns whether the resource is currently loaded or not.
      */
-    OMI_API_GLOBAL bool is_loaded(ResourceId id) const;
+    OMI_API_EXPORT bool is_loaded(ResourceId id) const;
 
     // TOOD: in async queue?
 
     // TODO: DOC once async loading is thing
     // TODO: this resource could be an mutable copy or the true mutable version
-    OMI_API_GLOBAL omi::Attribute get(ResourceId id);
+    OMI_API_EXPORT omi::Attribute get(ResourceId id);
 
     // TODO: DOC
-    OMI_API_GLOBAL void load_blocking(ResourceId id);
+    OMI_API_EXPORT void load_blocking(ResourceId id);
 
     // TODO: load blocking from id
     // TODO: load async from id

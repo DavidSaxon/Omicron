@@ -78,7 +78,7 @@ private:
     //                                  FRIENDS
     //--------------------------------------------------------------------------
 
-    friend OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+    friend OMI_API_EXPORT arc::str::UTF8String& operator<<(
             arc::str::UTF8String&,
             const Attribute&);
 
@@ -100,7 +100,7 @@ public:
     /*!
      * \brief The type identifier for null attributes.
      */
-    OMI_API_GLOBAL static Type kTypeNull;
+    OMI_API_EXPORT static Type kTypeNull;
 
     //--------------------------------------------------------------------------
     //                                    HASH
@@ -244,11 +244,11 @@ public:
         /*!
          * \brief Storage super constructor.
          */
-        OMI_API_GLOBAL Storage();
+        OMI_API_EXPORT Storage();
 
         //-------------------------D E S T R U C T O R--------------------------
 
-        OMI_API_GLOBAL virtual ~Storage();
+        OMI_API_EXPORT virtual ~Storage();
 
         //-----------P U B L I C    M E M B E R    F U N C T I O N S------------
 
@@ -332,18 +332,18 @@ public:
      *
      * \note This attribute is immutable by definition.
      */
-    OMI_API_GLOBAL Attribute();
+    OMI_API_EXPORT Attribute();
 
     /*!
      * \brief Constructs a new reference count of the given attribute.
      */
-    OMI_API_GLOBAL Attribute(const Attribute& other);
+    OMI_API_EXPORT Attribute(const Attribute& other);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~Attribute();
+    OMI_API_EXPORT virtual ~Attribute();
 
     //--------------------------------------------------------------------------
     //                                 OPERATORS
@@ -352,22 +352,22 @@ public:
     /*!
      * \brief Assignment operator.
      */
-    OMI_API_GLOBAL Attribute& operator=(const Attribute& other);
+    OMI_API_EXPORT Attribute& operator=(const Attribute& other);
 
     /*!
      * \brief Equality operator.
      */
-    OMI_API_GLOBAL bool operator==(const Attribute& other) const;
+    OMI_API_EXPORT bool operator==(const Attribute& other) const;
 
     /*!
      * \brief Inequality operator.
      */
-    OMI_API_GLOBAL bool operator!=(const Attribute& other) const;
+    OMI_API_EXPORT bool operator!=(const Attribute& other) const;
 
     /*!
      * \brief Less than operator.
      */
-    OMI_API_GLOBAL bool operator<(const Attribute& other) const;
+    OMI_API_EXPORT bool operator<(const Attribute& other) const;
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -380,7 +380,7 @@ public:
      * the type of a base class attribute can be to check what the original type
      * of the attribute is.
      */
-    OMI_API_GLOBAL Type get_type() const;
+    OMI_API_EXPORT Type get_type() const;
 
     /*!
      * \brief Returns whether this attribute is valid.
@@ -391,7 +391,7 @@ public:
      * Invalid attributes will always return their type as
      * omi::Attribute::kTypeNull.
      */
-    OMI_API_GLOBAL bool is_valid() const;
+    OMI_API_EXPORT bool is_valid() const;
 
     /*!
      * \brief Returns whether this attribute is immutable or not.
@@ -399,19 +399,19 @@ public:
      * Immutable attributes will never copy storage and mutable attributes will
      * only copy storage when they're modified.
      */
-    OMI_API_GLOBAL bool is_immutable() const;
+    OMI_API_EXPORT bool is_immutable() const;
 
     /*!
      * \brief Returns whether this attribute and all of its descendants are
      *        immutable.
      */
-    OMI_API_GLOBAL bool is_pure_immutable() const;
+    OMI_API_EXPORT bool is_pure_immutable() const;
 
     /*!
      * \brief Returns whether this attribute and all of its descendants are
      *        mutable.
      */
-    OMI_API_GLOBAL bool is_pure_mutable() const;
+    OMI_API_EXPORT bool is_pure_mutable() const;
 
     /*!
      * \brief Returns a hash that represents this attribute.
@@ -423,7 +423,7 @@ public:
      * \note The hash may be calculated at the time this function is called if
      *       the currently stored hash is out of date (lazy computation).
      */
-    OMI_API_GLOBAL Hash get_hash() const;
+    OMI_API_EXPORT Hash get_hash() const;
 
     /*!
      * \brief Attempts to a new reference count of the given Attribute.
@@ -431,7 +431,7 @@ public:
      * If the given attribute is not a valid attribute type to copy from this
      * will construct an invalid attribute.
      */
-    OMI_API_GLOBAL void assign(const Attribute& other);
+    OMI_API_EXPORT void assign(const Attribute& other);
 
     /*!
      * \brief Returns an immutable version of this attribute.
@@ -443,7 +443,7 @@ public:
      *
      * \throws arc::ex::StateError If this attribute is invalid.
      */
-    OMI_API_GLOBAL Attribute as_immutable() const;
+    OMI_API_EXPORT Attribute as_immutable() const;
 
     /*!
      * \brief Returns an mutable version of this attribute.
@@ -455,7 +455,7 @@ public:
      *
      * \throws arc::ex::StateError If this attribute is invalid.
      */
-    OMI_API_GLOBAL Attribute as_mutable() const;
+    OMI_API_EXPORT Attribute as_mutable() const;
 
     /*!
      * \brief Returns a pure immutable version of this attribute.
@@ -465,7 +465,7 @@ public:
      *
      * \throws arc::ex::StateError If this attribute is invalid.
      */
-    OMI_API_GLOBAL Attribute as_pure_immutable() const;
+    OMI_API_EXPORT Attribute as_pure_immutable() const;
 
     /*!
      * \brief Returns a pure mutable version of this attribute.
@@ -475,7 +475,7 @@ public:
      *
      * \throws arc::ex::StateError If this attribute is invalid.
      */
-    OMI_API_GLOBAL Attribute as_pure_mutable() const;
+    OMI_API_EXPORT Attribute as_pure_mutable() const;
 
     /*!
      * \brief Appends the string representation of this attribute (using the
@@ -485,7 +485,7 @@ public:
      * \param indentation The amount of indentation (in spaces) this attribute
      *                    should be indented by.
      */
-    OMI_API_GLOBAL void string_repr(
+    OMI_API_EXPORT void string_repr(
             arc::str::UTF8String& s,
             std::size_t indentation = 0) const;
 
@@ -509,7 +509,7 @@ protected:
      * \brief Super constructor which assigns the internal definition to the
      *        given object **without** reference counting it.
      */
-    OMI_API_GLOBAL Attribute(Definition* def);
+    OMI_API_EXPORT Attribute(Definition* def);
 
     /*!
      * \brief Super constructor for derived types.
@@ -519,7 +519,7 @@ protected:
      * \param storage The internal storage object this attribute will use (can
      *                be null).
      */
-    OMI_API_GLOBAL Attribute(Type type, bool immutable, Storage* storage);
+    OMI_API_EXPORT Attribute(Type type, bool immutable, Storage* storage);
 
     //--------------------------------------------------------------------------
     //                         PROTECTED MEMBER FUNCTIONS
@@ -528,20 +528,20 @@ protected:
     /*!
      * \brief Checks whether the given type is valid for this attribute.
      */
-    OMI_API_GLOBAL virtual bool check_type(Type type) const;
+    OMI_API_EXPORT virtual bool check_type(Type type) const;
 
     /*!
      * \brief Increases the reference count this attribute's internal
      *        definition.
      */
-    OMI_API_GLOBAL void increase_ref();
+    OMI_API_EXPORT void increase_ref();
 
     /*!
      * \brief Decreases the reference count of this attribute's internal
      *        definition, if the reference count reaches 0, the definition is
      *        deleted.
      */
-    OMI_API_GLOBAL void decrease_ref();
+    OMI_API_EXPORT void decrease_ref();
 
     /*!
      * \brief Returns the storage object of this attribute's definition casted
@@ -554,14 +554,14 @@ protected:
     }
 
     // TODO: DOC: throws IllegalActionError
-    OMI_API_GLOBAL void prepare_modifcation(bool soft = false);
+    OMI_API_EXPORT void prepare_modifcation(bool soft = false);
 
     /*!
      * \brief Convenience function that checks whether this attribute is valid
      *        and if it is not throws an arc::ex::StateError with the given
      *        message.
      */
-    OMI_API_GLOBAL void check_state(const arc::str::UTF8String& message) const;
+    OMI_API_EXPORT void check_state(const arc::str::UTF8String& message) const;
 
 private:
 
@@ -577,7 +577,7 @@ private:
     //--------------------------------------------------------------------------
 
     // Returns the storage of this attribute as is
-    OMI_API_GLOBAL Storage* get_untyped_storage() const;
+    OMI_API_EXPORT Storage* get_untyped_storage() const;
 };
 
 //------------------------------------------------------------------------------
@@ -588,14 +588,14 @@ private:
  * \brief Appends a string representation of the Attribute to the given
  *        UTF8String.
  */
-OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+OMI_API_EXPORT arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
         const omi::Attribute& a);
 
 /*!
  * \brief Appends a string representation of the Attribute to the given stream.
  */
-OMI_API_GLOBAL std::ostream& operator<<(
+OMI_API_EXPORT std::ostream& operator<<(
         std::ostream& s,
         const omi::Attribute& a);
 
@@ -603,7 +603,7 @@ OMI_API_GLOBAL std::ostream& operator<<(
  * \brief Appends a string representation of the Attribute Hash to the given
  *        UTF8String.
  */
-OMI_API_GLOBAL arc::str::UTF8String& operator<<(
+OMI_API_EXPORT arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
         const omi::Attribute::Hash& h);
 
@@ -611,7 +611,7 @@ OMI_API_GLOBAL arc::str::UTF8String& operator<<(
  * \brief Appends a string representation of the Attribute Hash to the given
  *        stream.
  */
-OMI_API_GLOBAL std::ostream& operator<<(
+OMI_API_EXPORT std::ostream& operator<<(
         std::ostream& s,
         const omi::Attribute::Hash& h);
 

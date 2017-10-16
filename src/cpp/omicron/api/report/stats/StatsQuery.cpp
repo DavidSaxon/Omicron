@@ -14,11 +14,11 @@ namespace report
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StatsQuery::StatsQuery()
+OMI_API_EXPORT StatsQuery::StatsQuery()
 {
 }
 
-OMI_API_GLOBAL StatsQuery::StatsQuery(const arc::io::sys::Path& path)
+OMI_API_EXPORT StatsQuery::StatsQuery(const arc::io::sys::Path& path)
 {
     // open a reader to the file
     arc::io::sys::FileReader reader(path);
@@ -37,13 +37,13 @@ OMI_API_GLOBAL StatsQuery::StatsQuery(const arc::io::sys::Path& path)
     m_patterns = PatternArray(lines.begin(), lines.end());
 }
 
-OMI_API_GLOBAL StatsQuery::StatsQuery(const StatsQuery& other)
+OMI_API_EXPORT StatsQuery::StatsQuery(const StatsQuery& other)
     : m_patterns(other.m_patterns)
     , m_result  (other.m_result)
 {
 }
 
-OMI_API_GLOBAL StatsQuery::StatsQuery(StatsQuery&& other)
+OMI_API_EXPORT StatsQuery::StatsQuery(StatsQuery&& other)
     : m_patterns(other.m_patterns)
     , m_result  (other.m_result)
 {
@@ -55,7 +55,7 @@ OMI_API_GLOBAL StatsQuery::StatsQuery(StatsQuery&& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StatsQuery::~StatsQuery()
+OMI_API_EXPORT StatsQuery::~StatsQuery()
 {
 }
 
@@ -63,14 +63,14 @@ OMI_API_GLOBAL StatsQuery::~StatsQuery()
 //                                   OPERATORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL StatsQuery& StatsQuery::operator=(const StatsQuery& other)
+OMI_API_EXPORT StatsQuery& StatsQuery::operator=(const StatsQuery& other)
 {
     m_patterns = other.m_patterns;
     m_result   = other.m_result;
     return *this;
 }
 
-OMI_API_GLOBAL StatsQuery& StatsQuery::operator=(StatsQuery&& other)
+OMI_API_EXPORT StatsQuery& StatsQuery::operator=(StatsQuery&& other)
 {
     m_patterns = other.m_patterns;
     m_result   = other.m_result;
@@ -83,22 +83,22 @@ OMI_API_GLOBAL StatsQuery& StatsQuery::operator=(StatsQuery&& other)
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL const StatsQuery::PatternArray& StatsQuery::get_patterns() const
+OMI_API_EXPORT const StatsQuery::PatternArray& StatsQuery::get_patterns() const
 {
     return m_patterns;
 }
 
-OMI_API_GLOBAL void StatsQuery::add_pattern(const arc::str::UTF8String& s)
+OMI_API_EXPORT void StatsQuery::add_pattern(const arc::str::UTF8String& s)
 {
     m_patterns.push_back(s);
 }
 
-OMI_API_GLOBAL const StatsQuery::Result& StatsQuery::get_result() const
+OMI_API_EXPORT const StatsQuery::Result& StatsQuery::get_result() const
 {
     return m_result;
 }
 
-OMI_API_GLOBAL void StatsQuery::clear()
+OMI_API_EXPORT void StatsQuery::clear()
 {
     m_patterns.clear();
     m_result.clear();

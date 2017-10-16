@@ -36,9 +36,11 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    bool bind(const arc::io::sys::Path& path) override;
+    virtual bool bind(const arc::io::sys::Path& path) override;
 
-    void release() override;
+    virtual void release() override;
+
+    virtual const arc::str::UTF8String& get_version() const override;
 
 private:
 

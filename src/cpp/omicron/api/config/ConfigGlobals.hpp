@@ -28,7 +28,7 @@ namespace global
 /*!
  * \brief The root directory where all Omicron config data is located within.
  */
-OMI_API_GLOBAL extern const arc::io::sys::Path root_dir;
+OMI_API_EXPORT extern const arc::io::sys::Path root_dir;
 
 } // namespace global
 } // namespace config

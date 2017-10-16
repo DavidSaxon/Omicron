@@ -109,6 +109,7 @@ public:
         {
             global::logger->error
                 << "No subsystem search paths provided." << std::endl;
+            return false;
         }
 
         // get the subsystem extension
@@ -247,6 +248,8 @@ private:
             return false;
         }
 
+        bool ret = m_context_dl.bind(f_path->second);
+
         // record stats
         #ifndef OMI_API_MODE_PRODUCTION
             omi::report::StatsDatabase::instance()->define_entry(
@@ -261,9 +264,15 @@ private:
                 "The path to the implementation being used for the context "
                 "subsystem."
             );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Subsystem.Context.Version",
+                omi::StringAttribute(m_context_dl.get_version(), false),
+                "The version of the implementation being used for the context "
+                "subsystem."
+            );
         #endif
 
-        return m_context_dl.bind(f_path->second);
+        return ret;
     }
 };
 

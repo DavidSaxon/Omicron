@@ -25,7 +25,7 @@ static PathAttribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type PathAttribute::kTypePath =
+OMI_API_EXPORT Attribute::Type PathAttribute::kTypePath =
     DataAttribute::kTypeDataBits |
     (typeid(PathAttribute::DataType).hash_code() >> 8);
 
@@ -35,7 +35,7 @@ OMI_API_GLOBAL Attribute::Type PathAttribute::kTypePath =
 
 //---------------------------C O N S T R U C T O R S----------------------------
 
-OMI_API_GLOBAL PathAttribute::PathStorage::PathStorage(
+OMI_API_EXPORT PathAttribute::PathStorage::PathStorage(
         std::size_t tuple_size)
     : TypedDataStorage<DataType>(tuple_size)
 {
@@ -43,13 +43,13 @@ OMI_API_GLOBAL PathAttribute::PathStorage::PathStorage(
 
 //-----------------------------D E S T R U C T O R------------------------------
 
-OMI_API_GLOBAL PathAttribute::PathStorage::~PathStorage()
+OMI_API_EXPORT PathAttribute::PathStorage::~PathStorage()
 {
 }
 
 //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
 
-OMI_API_GLOBAL Attribute::Hash PathAttribute::PathStorage::get_hash(
+OMI_API_EXPORT Attribute::Hash PathAttribute::PathStorage::get_hash(
         arc::uint64 seed) const
 {
     // hash need recomputing?
@@ -83,12 +83,12 @@ OMI_API_GLOBAL Attribute::Hash PathAttribute::PathStorage::get_hash(
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL PathAttribute::PathAttribute()
+OMI_API_EXPORT PathAttribute::PathAttribute()
     : DataAttribute(kTypePath, true, new PathStorage(0))
 {
 }
 
-OMI_API_GLOBAL PathAttribute::PathAttribute(DataType value, bool immutable)
+OMI_API_EXPORT PathAttribute::PathAttribute(DataType value, bool immutable)
     : DataAttribute(
         kTypePath,
         immutable,
@@ -97,7 +97,7 @@ OMI_API_GLOBAL PathAttribute::PathAttribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL PathAttribute::PathAttribute(
+OMI_API_EXPORT PathAttribute::PathAttribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -109,13 +109,13 @@ OMI_API_GLOBAL PathAttribute::PathAttribute(
 {
 }
 
-OMI_API_GLOBAL PathAttribute::PathAttribute(const Attribute& other)
+OMI_API_EXPORT PathAttribute::PathAttribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL PathAttribute::PathAttribute(const PathAttribute& other)
+OMI_API_EXPORT PathAttribute::PathAttribute(const PathAttribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -125,7 +125,7 @@ OMI_API_GLOBAL PathAttribute::PathAttribute(const PathAttribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL PathAttribute::~PathAttribute()
+OMI_API_EXPORT PathAttribute::~PathAttribute()
 {
 }
 
@@ -133,7 +133,7 @@ OMI_API_GLOBAL PathAttribute::~PathAttribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String PathAttribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String PathAttribute::get_type_string()
 {
     return "PathAttribute";
 }
@@ -142,7 +142,7 @@ OMI_API_GLOBAL arc::str::UTF8String PathAttribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL PathAttribute::DataType PathAttribute::get_value() const
+OMI_API_EXPORT PathAttribute::DataType PathAttribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -162,7 +162,7 @@ OMI_API_GLOBAL PathAttribute::DataType PathAttribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const PathAttribute::ArrayType& PathAttribute::get_values() const
 {
     // valid?
@@ -172,7 +172,7 @@ const PathAttribute::ArrayType& PathAttribute::get_values() const
     return get_storage<PathStorage>()->m_data;
 }
 
-OMI_API_GLOBAL const PathAttribute::DataType& PathAttribute::at(
+OMI_API_EXPORT const PathAttribute::DataType& PathAttribute::at(
         std::size_t index) const
 {
     // valid?
@@ -194,7 +194,7 @@ OMI_API_GLOBAL const PathAttribute::DataType& PathAttribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void PathAttribute::set_value(DataType value)
+OMI_API_EXPORT void PathAttribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -204,7 +204,7 @@ OMI_API_GLOBAL void PathAttribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void PathAttribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void PathAttribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -213,7 +213,7 @@ OMI_API_GLOBAL void PathAttribute::set_values(const ArrayType& values)
     get_storage<PathStorage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void PathAttribute::set_at(
+OMI_API_EXPORT void PathAttribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -243,7 +243,7 @@ OMI_API_GLOBAL void PathAttribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool PathAttribute::check_type(Type type) const
+OMI_API_EXPORT bool PathAttribute::check_type(Type type) const
 {
     return type == kTypePath;
 }

@@ -33,7 +33,7 @@ public:
     /*!
      * \brief Returns the singleton instance of the Omicron surface.
      */
-    OMI_API_GLOBAL static Surface* instance();
+    OMI_API_EXPORT static Surface* instance();
 
     //-----------------------------ENGINE INTERNALS-----------------------------
     // hide from doxygen
@@ -42,13 +42,13 @@ public:
     /*!
      * \brief Sets the implementation that will be used by the current runtime.
      */
-    OMI_API_GLOBAL static void set_implementation(
+    OMI_API_EXPORT static void set_implementation(
             omi::SubsytemObject<Surface>* impl);
 
     /*!
      * \brief Destroys the current implementation object.
      */
-    OMI_API_GLOBAL static void destroy();
+    OMI_API_EXPORT static void destroy();
 
     #endif
     // IN_DOXYGEN
@@ -78,13 +78,13 @@ protected:
     //                           PROTECTED CONSTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL Surface();
+    OMI_API_EXPORT Surface();
 
     //--------------------------------------------------------------------------
     //                            PROTECTED DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    OMI_API_GLOBAL virtual ~Surface();
+    OMI_API_EXPORT virtual ~Surface();
 };
 
 } // namespace context

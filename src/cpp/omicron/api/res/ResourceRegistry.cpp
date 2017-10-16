@@ -427,7 +427,7 @@ public:
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL ResourceRegistry* ResourceRegistry::instance()
+OMI_API_EXPORT ResourceRegistry* ResourceRegistry::instance()
 {
     static ResourceRegistry inst;
     return &inst;
@@ -437,34 +437,34 @@ OMI_API_GLOBAL ResourceRegistry* ResourceRegistry::instance()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool ResourceRegistry::startup_routine()
+OMI_API_EXPORT bool ResourceRegistry::startup_routine()
 {
     return m_impl->startup_routine();
 }
 
-OMI_API_GLOBAL bool ResourceRegistry::shutdown_routine()
+OMI_API_EXPORT bool ResourceRegistry::shutdown_routine()
 {
     return m_impl->shutdown_routine();
 }
 
-OMI_API_GLOBAL void ResourceRegistry::define_loader(
+OMI_API_EXPORT void ResourceRegistry::define_loader(
         LoaderFunc* function,
         const arc::str::UTF8String& extension)
 {
     m_impl->define_loader(function, extension);
 }
 
-OMI_API_GLOBAL bool ResourceRegistry::is_loaded(ResourceId id) const
+OMI_API_EXPORT bool ResourceRegistry::is_loaded(ResourceId id) const
 {
     return m_impl->is_loaded(id);
 }
 
-OMI_API_GLOBAL omi::Attribute ResourceRegistry::get(ResourceId id)
+OMI_API_EXPORT omi::Attribute ResourceRegistry::get(ResourceId id)
 {
     return m_impl->get(id);
 }
 
-OMI_API_GLOBAL void ResourceRegistry::load_blocking(ResourceId id)
+OMI_API_EXPORT void ResourceRegistry::load_blocking(ResourceId id)
 {
     m_impl->load_blocking(id);
 }

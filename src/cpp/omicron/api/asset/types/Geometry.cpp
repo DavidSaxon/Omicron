@@ -79,7 +79,7 @@ public:
 //                                  CONSTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Geometry::Geometry()
+OMI_API_EXPORT Geometry::Geometry()
     : m_impl(new GeometryImpl())
 {
 }
@@ -88,7 +88,7 @@ OMI_API_GLOBAL Geometry::Geometry()
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Geometry::~Geometry()
+OMI_API_EXPORT Geometry::~Geometry()
 {
     delete m_impl;
 }
@@ -97,22 +97,22 @@ OMI_API_GLOBAL Geometry::~Geometry()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL void Geometry::init(const omi::MapAttribute& data)
+OMI_API_EXPORT void Geometry::init(const omi::MapAttribute& data)
 {
     m_impl->init(data);
 }
 
-OMI_API_GLOBAL void Geometry::release()
+OMI_API_EXPORT void Geometry::release()
 {
     m_impl->release();
 }
 
-OMI_API_GLOBAL std::size_t Geometry::get_vertex_size() const
+OMI_API_EXPORT std::size_t Geometry::get_vertex_size() const
 {
     return m_impl->get_vertex_size();
 }
 
-OMI_API_GLOBAL const std::vector<float>& Geometry::get_positions() const
+OMI_API_EXPORT const std::vector<float>& Geometry::get_positions() const
 {
     return m_impl->get_positions();
 }

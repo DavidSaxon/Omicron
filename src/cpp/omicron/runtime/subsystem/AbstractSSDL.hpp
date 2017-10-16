@@ -63,6 +63,12 @@ public:
      *          SubsystemManager.
      */
     virtual void release() = 0;
+
+    /*!
+     * \brief Returns the version string of the subsystem bound from the dynamic
+     *        library.
+     */
+    virtual const arc::str::UTF8String& get_version() const = 0;
 };
 
 } // namespace ss

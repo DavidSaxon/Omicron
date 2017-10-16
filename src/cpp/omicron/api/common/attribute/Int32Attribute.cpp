@@ -24,7 +24,7 @@ static Int32Attribute::ArrayType g_empty;
 //                               STATIC ATTRIBUTES
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Attribute::Type Int32Attribute::kTypeInt32 =
+OMI_API_EXPORT Attribute::Type Int32Attribute::kTypeInt32 =
     DataAttribute::kTypeDataBits |
     (typeid(Int32Attribute::DataType).hash_code() >> 8);
 
@@ -32,12 +32,12 @@ OMI_API_GLOBAL Attribute::Type Int32Attribute::kTypeInt32 =
 //                                  CONSTRUCTORS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Int32Attribute::Int32Attribute()
+OMI_API_EXPORT Int32Attribute::Int32Attribute()
     : DataAttribute(kTypeInt32, true, new Int32Storage(0))
 {
 }
 
-OMI_API_GLOBAL Int32Attribute::Int32Attribute(DataType value, bool immutable)
+OMI_API_EXPORT Int32Attribute::Int32Attribute(DataType value, bool immutable)
     : DataAttribute(
         kTypeInt32,
         immutable,
@@ -46,7 +46,7 @@ OMI_API_GLOBAL Int32Attribute::Int32Attribute(DataType value, bool immutable)
 {
 }
 
-OMI_API_GLOBAL Int32Attribute::Int32Attribute(
+OMI_API_EXPORT Int32Attribute::Int32Attribute(
         const ArrayType& values,
         std::size_t tuple_size,
         bool immutable)
@@ -58,13 +58,13 @@ OMI_API_GLOBAL Int32Attribute::Int32Attribute(
 {
 }
 
-OMI_API_GLOBAL Int32Attribute::Int32Attribute(const Attribute& other)
+OMI_API_EXPORT Int32Attribute::Int32Attribute(const Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
 }
 
-OMI_API_GLOBAL Int32Attribute::Int32Attribute(const Int32Attribute& other)
+OMI_API_EXPORT Int32Attribute::Int32Attribute(const Int32Attribute& other)
     : DataAttribute(nullptr)
 {
     assign(other);
@@ -74,7 +74,7 @@ OMI_API_GLOBAL Int32Attribute::Int32Attribute(const Int32Attribute& other)
 //                                   DESTRUCTOR
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Int32Attribute::~Int32Attribute()
+OMI_API_EXPORT Int32Attribute::~Int32Attribute()
 {
 }
 
@@ -82,7 +82,7 @@ OMI_API_GLOBAL Int32Attribute::~Int32Attribute()
 //                            PUBLIC STATIC FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL arc::str::UTF8String Int32Attribute::get_type_string()
+OMI_API_EXPORT arc::str::UTF8String Int32Attribute::get_type_string()
 {
     return "Int32Attribute";
 }
@@ -91,7 +91,7 @@ OMI_API_GLOBAL arc::str::UTF8String Int32Attribute::get_type_string()
 //                            PUBLIC MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL Int32Attribute::DataType Int32Attribute::get_value() const
+OMI_API_EXPORT Int32Attribute::DataType Int32Attribute::get_value() const
 {
     // valid?
     check_state("get_value() used on an invalid attribute");
@@ -111,7 +111,7 @@ OMI_API_GLOBAL Int32Attribute::DataType Int32Attribute::get_value() const
     return storage->m_data.front();
 }
 
-OMI_API_GLOBAL
+OMI_API_EXPORT
 const Int32Attribute::ArrayType& Int32Attribute::get_values() const
 {
     // valid?
@@ -121,7 +121,7 @@ const Int32Attribute::ArrayType& Int32Attribute::get_values() const
     return get_storage<Int32Storage>()->m_data;
 }
 
-OMI_API_GLOBAL const Int32Attribute::DataType& Int32Attribute::at(
+OMI_API_EXPORT const Int32Attribute::DataType& Int32Attribute::at(
         std::size_t index) const
 {
     // valid?
@@ -143,7 +143,7 @@ OMI_API_GLOBAL const Int32Attribute::DataType& Int32Attribute::at(
     return storage->m_data[index];
 }
 
-OMI_API_GLOBAL void Int32Attribute::set_value(DataType value)
+OMI_API_EXPORT void Int32Attribute::set_value(DataType value)
 {
     // valid?
     check_state("set_value() used on an invalid attribute");
@@ -153,7 +153,7 @@ OMI_API_GLOBAL void Int32Attribute::set_value(DataType value)
     storage->m_data = {value};
 }
 
-OMI_API_GLOBAL void Int32Attribute::set_values(const ArrayType& values)
+OMI_API_EXPORT void Int32Attribute::set_values(const ArrayType& values)
 {
     // valid?
     check_state("set_values() used on an invalid attribute");
@@ -162,7 +162,7 @@ OMI_API_GLOBAL void Int32Attribute::set_values(const ArrayType& values)
     get_storage<Int32Storage>()->m_data = values;
 }
 
-OMI_API_GLOBAL void Int32Attribute::set_at(
+OMI_API_EXPORT void Int32Attribute::set_at(
         std::size_t index,
         DataType value)
 {
@@ -192,7 +192,7 @@ OMI_API_GLOBAL void Int32Attribute::set_at(
 //                           PROTECTED MEMBER FUNCTIONS
 //------------------------------------------------------------------------------
 
-OMI_API_GLOBAL bool Int32Attribute::check_type(Type type) const
+OMI_API_EXPORT bool Int32Attribute::check_type(Type type) const
 {
     return type == kTypeInt32;
 }

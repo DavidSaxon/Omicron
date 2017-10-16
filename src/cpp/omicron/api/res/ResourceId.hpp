@@ -34,12 +34,12 @@ typedef arc::uint64 ResourceId;
  * \brief Returns a ResourceId for the given resource path (represented
  *        as a string).
  */
-OMI_API_GLOBAL ResourceId get_id(const arc::str::UTF8String& resource_path);
+OMI_API_EXPORT ResourceId get_id(const arc::str::UTF8String& resource_path);
 
 /*!
  * \brief Returns a ResourceId for the given resource path.
  */
-OMI_API_GLOBAL ResourceId get_id(const arc::io::sys::Path& resource_path);
+OMI_API_EXPORT ResourceId get_id(const arc::io::sys::Path& resource_path);
 
 } // namespace res
 } // namespace omi
