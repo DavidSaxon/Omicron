@@ -36,6 +36,9 @@ set(API_SRC
     ../res/loaders/OBJLoader.cpp
     ../res/loaders/RawLoader.cpp
 
+    ../scene/Entity.cpp
+    ../scene/SceneState.cpp
+
     ../window/MainWindow.cpp
 )
 

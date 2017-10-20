@@ -5,6 +5,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 set(HELLBOUND_SRC
     ../GameRegistration.cpp
     ../HellboundGlobals.cpp
+    ../entities/prototype/Enemy.cpp
+    ../entities/prototype/ProtoEntity.cpp
     ../scripts/Startup.cpp
 )
 

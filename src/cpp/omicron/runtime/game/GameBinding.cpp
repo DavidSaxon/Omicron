@@ -44,6 +44,9 @@ private:
     omi::GameStartupRoutineFunc* m_startup_routine_func;
     omi::GameStartupRoutineFunc* m_firstframe_routine_func;
     omi::GameShutdownRoutineFunc* m_shutdown_routine_func;
+    omi::GameEntityTypeCountFunc* m_entity_count_func;
+    omi::GameEntityTypeNamesFunc* m_entity_name_func;
+
 
 public:
 
@@ -54,6 +57,8 @@ public:
         , m_startup_routine_func   (nullptr)
         , m_firstframe_routine_func(nullptr)
         , m_shutdown_routine_func  (nullptr)
+        , m_entity_count_func      (nullptr)
+        , m_entity_name_func       (nullptr)
     {
     }
 
@@ -131,8 +136,9 @@ public:
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind game with error: " << exc.what()
                 << std::endl;
+            return false;
         }
         omi::GameGetVersionFunc* get_version_func = nullptr;
         try
@@ -146,8 +152,9 @@ public:
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind game with error: " << exc.what()
                 << std::endl;
+            return false;
         }
 
         // get the name and version
@@ -206,6 +213,92 @@ public:
             global::logger->debug
                 << m_game_name << " has no shutdown_routine defined."
                 << std::endl;
+        }
+
+        // get the entity count and names function
+        try
+        {
+            m_entity_count_func =
+                arc::io::dl::bind_symbol<omi::GameEntityTypeCountFunc>(
+                    m_lib_handle,
+                    "OMI_GAME_entity_type_count"
+                );
+        }
+        catch(const std::exception& exc)
+        {
+            global::logger->error
+                << "Failed to bind game with error: " << exc.what()
+                << std::endl;
+            return false;
+        }
+        try
+        {
+            m_entity_name_func =
+                arc::io::dl::bind_symbol<omi::GameEntityTypeNamesFunc>(
+                    m_lib_handle,
+                    "OMI_GAME_entity_type_names"
+                );
+        }
+        catch(const std::exception& exc)
+        {
+            global::logger->error
+                << "Failed to bind game with error: " << exc.what()
+                << std::endl;
+            return false;
+        }
+
+        // get the number of entities registered
+        uint64_t entity_count = m_entity_count_func();
+        global::logger->debug
+            << entity_count << " entity types registered from " << m_game_name
+            << std::endl;
+
+        // get the names of the entities registered
+        const char** entity_names = m_entity_name_func();
+
+        // bind their functions into the SceneState
+        for(uint64_t i = 0; i < entity_count; ++i)
+        {
+            arc::str::UTF8String entity_name(entity_names[i]);
+
+            // get the factory function
+            omi::GameEntityFactory* factory_func = nullptr;
+            try
+            {
+                factory_func = arc::io::dl::bind_symbol<omi::GameEntityFactory>(
+                    m_lib_handle,
+                    entity_name + "_factory"
+                );
+            }
+            catch(const std::exception& exc)
+            {
+                global::logger->error
+                    << "Failed to bind factory function for entity \""
+                    << entity_name << "\" with error: " << exc.what()
+                    << std::endl;
+                return false;
+            }
+
+            // get the destroy function
+            omi::GameEntityDestroy* destroy_func = nullptr;
+            try
+            {
+                destroy_func = arc::io::dl::bind_symbol<omi::GameEntityDestroy>(
+                    m_lib_handle,
+                    entity_name + "_destroy"
+                );
+            }
+            catch(const std::exception& exc)
+            {
+                global::logger->error
+                    << "Failed to bind destroy function for entity \""
+                    << entity_name << "\" with error: " << exc.what()
+                    << std::endl;
+                return false;
+            }
+
+            // pass to the scene state
+            // TODO:
         }
 
         return true;
