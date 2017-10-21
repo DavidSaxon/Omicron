@@ -2,6 +2,7 @@
 Lifecycle.Start At
 Lifecycle.Active Time (ms)
 Lifecycle.Startup.*
+Scene.Registered Entity Types
 Subsystem.*
 System.*
 Resources.Loads

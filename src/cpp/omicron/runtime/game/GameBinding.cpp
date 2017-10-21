@@ -6,6 +6,7 @@
 
 #include <omicron/api/GameInterface.hpp>
 #include <omicron/api/config/ConfigInline.hpp>
+#include <omicron/api/scene/SceneState.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 
@@ -262,12 +263,12 @@ public:
             arc::str::UTF8String entity_name(entity_names[i]);
 
             // get the factory function
-            omi::GameEntityFactory* factory_func = nullptr;
+            omi::GameEntityCreate* factory_func = nullptr;
             try
             {
-                factory_func = arc::io::dl::bind_symbol<omi::GameEntityFactory>(
+                factory_func = arc::io::dl::bind_symbol<omi::GameEntityCreate>(
                     m_lib_handle,
-                    entity_name + "_factory"
+                    entity_name + "_create"
                 );
             }
             catch(const std::exception& exc)
@@ -298,7 +299,11 @@ public:
             }
 
             // pass to the scene state
-            // TODO:
+            omi::scene::SceneState::instance().define_entity(
+                entity_name,
+                factory_func,
+                destroy_func
+            );
         }
 
         return true;

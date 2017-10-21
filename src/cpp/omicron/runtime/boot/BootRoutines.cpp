@@ -16,6 +16,7 @@
 #include <omicron/api/report/stats/StatsOperations.hpp>
 #include <omicron/api/report/stats/StatsQuery.hpp>
 #include <omicron/api/res/ResourceRegistry.hpp>
+#include <omicron/api/scene/SceneState.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/boot/BootLogging.hpp"
@@ -190,6 +191,13 @@ bool startup_routine()
         {
             global::logger->critical
                 << "Failed during startup routine of the SubsystemManager"
+                << std::endl;
+            return false;
+        }
+        if(!omi::scene::SceneState::instance().startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routine of the SceneState"
                 << std::endl;
             return false;
         }
@@ -372,6 +380,13 @@ bool shutdown_routine()
         {
             global::logger->critical
                 << "Failed during shutdown routine of the GameBinding"
+                << std::endl;
+            failure = true;
+        }
+        if(!omi::scene::SceneState::instance().shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routine of the SceneState"
                 << std::endl;
             failure = true;
         }

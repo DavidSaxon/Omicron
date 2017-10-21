@@ -66,7 +66,7 @@ typedef const char** (GameEntityTypeNamesFunc)();
 /*!
  * \brief The function signature used to construct a game entity.
  */
-typedef void* (GameEntityFactory)(
+typedef void* (GameEntityCreate)(
         const arc::str::UTF8String&,
         const omi::Attribute&);
 
@@ -171,6 +171,7 @@ typedef void (GameEntityDestroy)(void*);
     }                                                                          \
     }
 
+// TODO: create function not really C-wall compatible
 /*!
  * \brief Registers an entity for use within the game engine.
  *
@@ -197,7 +198,7 @@ typedef void (GameEntityDestroy)(void*);
     }                                                                          \
     extern "C"                                                                 \
     {                                                                          \
-    OMI_PLUGIN_EXPORT void* id##_factory(                                      \
+    OMI_PLUGIN_EXPORT void* id##_create(                                       \
             const arc::str::UTF8String& name,                                  \
             const omi::Attribute& data)                                        \
     {                                                                          \

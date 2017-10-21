@@ -39,7 +39,6 @@ protected:
 
     virtual void update() override
     {
-        global::logger->notice << "Enemy!" << std::endl;
     }
 };
 

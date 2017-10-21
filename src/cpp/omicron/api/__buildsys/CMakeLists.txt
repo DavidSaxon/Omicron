@@ -37,7 +37,9 @@ set(API_SRC
     ../res/loaders/RawLoader.cpp
 
     ../scene/Entity.cpp
+    ../scene/SceneGlobals.cpp
     ../scene/SceneState.cpp
+    ../scene/component/renderable/Mesh.cpp
 
     ../window/MainWindow.cpp
 )

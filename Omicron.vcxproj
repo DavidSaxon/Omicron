@@ -66,6 +66,10 @@
     <ClCompile Include="src\cpp\omicron\api\res\ResourceRegistry.cpp" />
     <ClCompile Include="src\cpp\omicron\api\res\loaders\OBJLoader.cpp" />
     <ClCompile Include="src\cpp\omicron\api\res\loaders\RawLoader.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\Entity.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\SceneGlobals.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\SceneState.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\renderable\Mesh.cpp" />
     <ClCompile Include="src\cpp\omicron\api\window\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">
@@ -103,6 +107,8 @@
   <ItemGroup Condition="'$(Configuration)'=='hellbound'">
     <ClCompile Include="src\cpp\hellbound\GameRegistration.cpp" />
     <ClCompile Include="src\cpp\hellbound\HellboundGlobals.cpp" />
+    <ClCompile Include="src\cpp\hellbound\entities\prototype\Enemy.cpp" />
+    <ClCompile Include="src\cpp\hellbound\entities\prototype\ProtoEntity.cpp" />
     <ClCompile Include="src\cpp\hellbound\scripts\Startup.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

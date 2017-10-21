@@ -2,6 +2,7 @@
 
 #include <omicron/api/report/Logging.hpp>
 #include <omicron/api/res/ResourceRegistry.hpp>
+#include <omicron/api/scene/SceneState.hpp>
 
 #include "hellbound/HellboundGlobals.hpp"
 
@@ -42,6 +43,8 @@ bool firstframe_routine()
         omi::res::ResourceRegistry::instance()->load_blocking(
             omi::res::get_id("res/builtin/mesh/bunny.obj")
         );
+
+        omi::scene::SceneState::instance().new_entity("hell_ProtoEntity");
     }
     catch(const std::exception& exc)
     {

@@ -1,6 +1,7 @@
 #include "omicron/runtime/Engine.hpp"
 
 #include <omicron/api/context/ContextSubsystem.hpp>
+#include <omicron/api/scene/SceneState.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/boot/BootRoutines.hpp"
@@ -80,9 +81,16 @@ private:
             return false;
         }
 
+        // TODO: don't update more than 60fps (config based)
+
+        // update the scene state
+        omi::scene::SceneState::instance().update();
+
         // TODO:
         // render the frame
         // m_renderer->render();
+
+        // TODO: delay (if frame cap)
 
         return true;
     }

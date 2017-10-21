@@ -5,6 +5,8 @@
 #ifndef OMICRON_API_SCENE_ENTITY_HPP_
 #define OMICRON_API_SCENE_ENTITY_HPP_
 
+#include <list>
+
 #include <arcanecore/base/lang/Restrictors.hpp>
 #include <arcanecore/base/str/UTF8String.hpp>
 
@@ -21,6 +23,8 @@ namespace scene
 //                              FORWARD DECLARATIONS
 //------------------------------------------------------------------------------
 
+class AbstractComponent;
+class AbstractRenderable;
 class SceneState;
 
 /*!
@@ -74,6 +78,12 @@ public:
      */
     OMI_API_EXPORT const arc::str::UTF8String& get_name() const;
 
+    /*!
+     * \brief Returns the list of current renderable components of this entity.
+     */
+    OMI_API_EXPORT
+    const std::list<AbstractRenderable*>& get_renderable_components() const;
+
 protected:
 
     //--------------------------------------------------------------------------
@@ -86,13 +96,21 @@ protected:
      * \brief Is called once per frame before rendering to update the state of
      *        this Entity.
      */
-    virtual void update() = 0;
+    OMI_API_EXPORT virtual void update() = 0;
 
     // TODO: physics update?
 
     //--------------------------------------------------------------------------
 
-    // TODO: add component
+    /*!
+     * \brief Adds the given component to this entity.
+     *
+     * This entity will manage deleting the component.
+     *
+     * \throw arc::ex::ValueError If this component has already been added to
+     *                            this entity.
+     */
+    OMI_API_EXPORT void add_component(AbstractComponent* component);
 
     // TODO: add update dependencies
 

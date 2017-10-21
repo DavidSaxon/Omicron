@@ -1,5 +1,8 @@
 #include <omicron/api/GameInterface.hpp>
+#include <omicron/api/res/ResourceId.hpp>
 #include <omicron/api/scene/Entity.hpp>
+#include <omicron/api/scene/SceneState.hpp>
+#include <omicron/api/scene/component/renderable/Mesh.hpp>
 
 #include "hellbound/HellboundGlobals.hpp"
 
@@ -21,6 +24,10 @@ public:
             const omi::Attribute& data)
         : omi::scene::Entity(name)
     {
+        // TODO: add component
+        add_component(
+            new omi::scene::Mesh(omi::res::get_id("res/builtin/mesh/bunny.obj"))
+        );
     }
 
     //--------------------------------------------------------------------------
@@ -39,7 +46,6 @@ protected:
 
     virtual void update() override
     {
-        global::logger->notice << "PROTO ENTITY!" << std::endl;
     }
 };
 
@@ -75,7 +81,12 @@ protected:
 
     virtual void update() override
     {
-        global::logger->notice << "Player!" << std::endl;
+        static bool do_once = true;
+        if(do_once)
+        {
+            omi::scene::SceneState::instance().new_entity("hell_Enemy");
+            do_once = false;
+        }
     }
 };
 
