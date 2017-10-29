@@ -1,6 +1,7 @@
 #include "omicron/runtime/Engine.hpp"
 
 #include <omicron/api/context/ContextSubsystem.hpp>
+#include <omicron/api/render/RenderSubsystem.hpp>
 #include <omicron/api/scene/SceneState.hpp>
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
@@ -76,7 +77,7 @@ private:
     bool cycle()
     {
         // first frame setup
-        if(!omi::runtime::boot::first_frame_routine())
+        if(!omi::runtime::boot::firstframe_routine())
         {
             return false;
         }
@@ -86,9 +87,8 @@ private:
         // update the scene state
         omi::scene::SceneState::instance().update();
 
-        // TODO:
         // render the frame
-        // m_renderer->render();
+        omi::render::RenderSubsystem::instance().render();
 
         // TODO: delay (if frame cap)
 

@@ -13,6 +13,7 @@
 
 #include "omicron/runtime/RuntimeGlobals.hpp"
 #include "omicron/runtime/subsystem/ContextSSDL.hpp"
+#include "omicron/runtime/subsystem/RenderSSDL.hpp"
 
 
 namespace omi
@@ -46,6 +47,7 @@ private:
 
     // the names of the subsystems to use
     arc::str::UTF8String m_context_name;
+    arc::str::UTF8String m_render_name;
     // TODO: MORE SUBSYSTEMS
 
     // mapping from subsystem names to the paths they should be loaded from
@@ -53,6 +55,9 @@ private:
 
     // the context subsystem DL manager
     ContextSSDL m_context_dl;
+    // the render subsystem DL manaher
+    RenderSSDL m_render_dl;
+    // TODO: MORE SUBSYSTEMS
 
 public:
 
@@ -123,6 +128,10 @@ public:
             "roles.context",
             AC_U8STRV
         );
+        m_render_name = *m_config->get(
+            "roles.render",
+            AC_U8STRV
+        );
         // TODO: more subsystems
 
         collect_paths(search_path);
@@ -130,6 +139,10 @@ public:
         bool success = true;
         // bind the subsystems
         if(!bind_context())
+        {
+            success = false;
+        }
+        if(!bind_render())
         {
             success = false;
         }
@@ -143,6 +156,7 @@ public:
     {
         global::logger->debug << "SubsystemManager shutdown." << std::endl;
 
+        m_render_dl.release();
         m_context_dl.release();
 
         m_initialised = false;
@@ -157,7 +171,10 @@ private:
     void collect_paths(const std::vector<arc::io::sys::Path>& search_path)
     {
         // TODO: more subsystems
-        std::unordered_set<arc::str::UTF8String> names{m_context_name};
+        std::unordered_set<arc::str::UTF8String> names{
+            m_context_name,
+            m_render_name
+        };
 
         // iterate over each path
         for(const arc::io::sys::Path& path : search_path)
@@ -268,6 +285,47 @@ private:
                 "Subsystem.Context.Version",
                 omi::StringAttribute(m_context_dl.get_version(), false),
                 "The version of the implementation being used for the context "
+                "subsystem."
+            );
+        #endif
+
+        return ret;
+    }
+
+    // loads and binds the render subsystem
+    bool bind_render()
+    {
+        // check the required subsystem path has been found
+        auto f_path = m_paths.find(m_render_name);
+        if(f_path == m_paths.end())
+        {
+            global::logger->error
+                << "Failed to load and bind render subsystem as no library "
+                << "with the name \"" << m_render_name << "\" was found "
+                << "in the search paths." << std::endl;
+            return false;
+        }
+
+        bool ret = m_render_dl.bind(f_path->second);
+
+        // record stats
+        #ifndef OMI_API_MODE_PRODUCTION
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Subsystem.Render.Name",
+                omi::StringAttribute(m_render_name, false),
+                "The name of the implementation being used for the render "
+                "subsystem."
+            );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Subsystem.Render.Path",
+                omi::PathAttribute(f_path->second, false),
+                "The path to the implementation being used for the render "
+                "subsystem."
+            );
+            omi::report::StatsDatabase::instance()->define_entry(
+                "Subsystem.Render.Version",
+                omi::StringAttribute(m_render_dl.get_version(), false),
+                "The version of the implementation being used for the render "
                 "subsystem."
             );
         #endif

@@ -35,7 +35,7 @@ bool startup_routine();
  *
  * This setup is performed with a valid GL context.
  */
-bool first_frame_routine();
+bool firstframe_routine();
 
 /*!
  * \brief Performs the shutdown subroutines of Omicron.

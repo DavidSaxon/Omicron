@@ -50,9 +50,9 @@ add_subdirectory(tests/cpp/__buildsys)
 add_subdirectory(src/cpp/builtin_subsystems/omi_al/__buildsys)
 # Bullet subsystem
 add_subdirectory(src/cpp/builtin_subsystems/omi_bullet/__buildsys)
-# OpenGL subsystem
-add_subdirectory(src/cpp/builtin_subsystems/omi_gl/__buildsys)
 # GLFW subsystem
 add_subdirectory(src/cpp/builtin_subsystems/omi_glfw/__buildsys)
+# DeathRay subsystem
+add_subdirectory(src/cpp/builtin_subsystems/omi_deathray/__buildsys)
 # hellbound
 add_subdirectory(src/cpp/hellbound/__buildsys)

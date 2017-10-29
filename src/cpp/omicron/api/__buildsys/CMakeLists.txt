@@ -22,6 +22,8 @@ set(API_SRC
     ../asset/AssetLibrary.cpp
     ../asset/types/Geometry.cpp
 
+    ../render/RenderSubsystem.cpp
+
     ../report/Logging.cpp
     ../report/ReportBoot.cpp
     ../report/ReportGlobals.cpp
@@ -40,8 +42,6 @@ set(API_SRC
     ../scene/SceneGlobals.cpp
     ../scene/SceneState.cpp
     ../scene/component/renderable/Mesh.cpp
-
-    ../window/MainWindow.cpp
 )
 
 add_library(omicron_api SHARED ${API_SRC})

@@ -21,12 +21,12 @@
       <Configuration>omi_bullet</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="omi_glfw|Win32">
-      <Configuration>omi_glfw</Configuration>
+    <ProjectConfiguration Include="omi_deathray|Win32">
+      <Configuration>omi_deathray</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="omi_gl|Win32">
-      <Configuration>omi_gl</Configuration>
+    <ProjectConfiguration Include="omi_glfw|Win32">
+      <Configuration>omi_glfw</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="tests|Win32">
@@ -54,6 +54,7 @@
     <ClCompile Include="src\cpp\omicron\api\asset\AssetGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\asset\AssetLibrary.cpp" />
     <ClCompile Include="src\cpp\omicron\api\asset\types\Geometry.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\render\RenderSubsystem.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportGlobals.cpp" />
@@ -70,7 +71,6 @@
     <ClCompile Include="src\cpp\omicron\api\scene\SceneGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\SceneState.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\component\renderable\Mesh.cpp" />
-    <ClCompile Include="src\cpp\omicron\api\window\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">
     <ClCompile Include="src\cpp\omicron\runtime\Main.cpp" />
@@ -80,6 +80,7 @@
     <ClCompile Include="src\cpp\omicron\runtime\boot\BootRoutines.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\game\GameBinding.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\subsystem\ContextSSDL.cpp" />
+    <ClCompile Include="src\cpp\omicron\runtime\subsystem\RenderSSDL.cpp" />
     <ClCompile Include="src\cpp\omicron\runtime\subsystem\SubsystemManager.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='tests'">
@@ -89,8 +90,15 @@
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\Int32Attribute_TestSuite.cpp" />
     <ClCompile Include="tests\cpp\omicron\api\common\attribute\MapAttribute_TestSuite.cpp" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)'=='omi_gl'">
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_gl\GLSubsystem.cpp" />
+  <ItemGroup Condition="'$(Configuration)'=='omi_deathray'">
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\DeathGlobals.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\DeathSubsystem.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\renderable\DeathMesh.cpp" />
+
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\Geometry.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\Renderer.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\TraceOctant.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_glfw'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWGlobals.cpp" />
@@ -138,7 +146,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_deathray|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
@@ -185,7 +193,7 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omicron_api|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_deathray|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='omi_glfw|Win32'" Label="PropertySheets">
@@ -219,10 +227,10 @@
     <TargetName>omicron_api</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_deathray|Win32'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\win_x86\subsystems\</OutDir>
     <IntDir>intermediate\$(Configuration)\</IntDir>
-    <TargetName>omi_gl</TargetName>
+    <TargetName>omi_deathray</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='omi_glfw|Win32'">
@@ -301,15 +309,15 @@
       <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_gl|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_deathray|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems\omi_deathray;D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;DEATH_API_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>

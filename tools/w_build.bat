@@ -16,7 +16,7 @@ msbuild ..\Omicron.sln /v:n /p:Configuration=omi_glfw
 echo ----------------
 echo omi_gl
 echo ----------------
-msbuild ..\Omicron.sln /v:n /p:Configuration=omi_gl
+msbuild ..\Omicron.sln /v:n /p:Configuration=omi_deathray
 
 echo ----------------
 echo omi_bullet

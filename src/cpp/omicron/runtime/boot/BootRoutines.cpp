@@ -10,6 +10,7 @@
 #include <omicron/api/common/Attributes.hpp>
 #include <omicron/api/config/ConfigInline.hpp>
 #include <omicron/api/context/ContextSubsystem.hpp>
+#include <omicron/api/render/RenderSubsystem.hpp>
 #include <omicron/api/report/ReportBoot.hpp>
 #include <omicron/api/report/SystemMonitor.hpp>
 #include <omicron/api/report/stats/StatsDatabase.hpp>
@@ -223,6 +224,13 @@ bool startup_routine()
                 << std::endl;
             return false;
         }
+        if(!omi::render::RenderSubsystem::instance().startup_routine())
+        {
+            global::logger->critical
+                << "Failed during startup routine of the RenderSubsystem"
+                << std::endl;
+            return false;
+        }
 
     }
     catch(const std::exception& exc)
@@ -256,7 +264,7 @@ static void os_startup_routine()
     #endif
 }
 
-bool first_frame_routine()
+bool firstframe_routine()
 {
     // TODO: should this be moved?
     // stat the active time
@@ -274,19 +282,13 @@ bool first_frame_routine()
     global::logger->info << "Performing first-frame setup" << std::endl;
     try
     {
-        // TODO: setup rendering
-        // try
-        // {
-        //     m_renderer->setup_rendering();
-        // }
-        // catch(const std::exception& exc)
-        // {
-        //     global::logger->critical
-        //         << "Renderer setup failed with error: " << exc.what()
-        //         << std::endl;
-        //     return false;
-        // }
-
+        if(!omi::render::RenderSubsystem::instance().firstframe_routine())
+        {
+            global::logger->critical
+                << "Failed during RenderSubsystem firstframe routine"
+                << std::endl;
+            return false;
+        }
         if(!runtime::game::GameBinding::instance()->game_firstframe_routine())
         {
             global::logger->critical
@@ -366,6 +368,13 @@ bool shutdown_routine()
             global::logger->critical
                 << "Failed during shutdown routine of "
                 << omi::runtime::game::GameBinding::instance()->get_game_name()
+                << std::endl;
+            failure = true;
+        }
+        if(!omi::render::RenderSubsystem::instance().shutdown_routine())
+        {
+            global::logger->critical
+                << "Failed during shutdown routine of the RenderSubsystem"
                 << std::endl;
             failure = true;
         }

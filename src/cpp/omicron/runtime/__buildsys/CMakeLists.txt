@@ -7,6 +7,7 @@ set(OMICRON_RUNTIME_SRC
     ../boot/BootRoutines.cpp
     ../game/GameBinding.cpp
     ../subsystem/ContextSSDL.cpp
+    ../subsystem/RenderSSDL.cpp
     ../subsystem/SubsystemManager.cpp
 )
 

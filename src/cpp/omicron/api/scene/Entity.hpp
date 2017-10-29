@@ -6,6 +6,7 @@
 #define OMICRON_API_SCENE_ENTITY_HPP_
 
 #include <list>
+#include <vector>
 
 #include <arcanecore/base/lang/Restrictors.hpp>
 #include <arcanecore/base/str/UTF8String.hpp>
@@ -24,7 +25,6 @@ namespace scene
 //------------------------------------------------------------------------------
 
 class AbstractComponent;
-class AbstractRenderable;
 class SceneState;
 
 /*!
@@ -79,10 +79,9 @@ public:
     OMI_API_EXPORT const arc::str::UTF8String& get_name() const;
 
     /*!
-     * \brief Returns the list of current renderable components of this entity.
+     * \brief Returns the list of current components of this entity.
      */
-    OMI_API_EXPORT
-    const std::list<AbstractRenderable*>& get_renderable_components() const;
+    OMI_API_EXPORT const std::list<AbstractComponent*>& get_components() const;
 
 protected:
 
@@ -113,6 +112,31 @@ protected:
     OMI_API_EXPORT void add_component(AbstractComponent* component);
 
     // TODO: add update dependencies
+
+    //-----------------------------ENGINE INTERNALS-----------------------------
+    // hide from doxygen
+    #ifndef IN_DOXYGEN
+
+    /*!
+     * \brief Returns (and clears) the array of components that have been added
+     *        to this entity since the last time this function was called.
+     */
+    OMI_API_EXPORT std::vector<AbstractComponent*> retrieve_new_components();
+
+    /*!
+     * \brief Returns (and clears) the array of components that have been
+     *        removed from the entity since the last time this function was
+     *        called.
+     *
+     * \warning It is up to the Engine to delete these components after calling
+     *          this function.
+     */
+    OMI_API_EXPORT
+    std::vector<AbstractComponent*> retrieve_removed_components();
+
+    #endif
+    // IN_DOXYGEN
+    //--------------------------------------------------------------------------
 
 private:
 

@@ -7,10 +7,13 @@
 
 #include <arcanecore/base/Exceptions.hpp>
 
+#include "omicron/api/render/RenderSubsystem.hpp"
 #include "omicron/api/report/Logging.hpp"
 #include "omicron/api/report/stats/StatsDatabase.hpp"
 #include "omicron/api/scene/Entity.hpp"
 #include "omicron/api/scene/SceneGlobals.hpp"
+#include "omicron/api/scene/component/AbstractComponent.hpp"
+#include "omicron/api/scene/component/renderable/AbstractRenderable.hpp"
 
 
 namespace omi
@@ -176,6 +179,9 @@ public:
             m_entities.insert(m_entities.end(), temp.begin(), temp.end());
         }
 
+        process_removed_components();
+        process_new_components();
+
         m_in_update = false;
     }
 
@@ -210,6 +216,72 @@ public:
         else
         {
             m_new_entities.push_back(entity);
+        }
+    }
+
+private:
+
+    //------------P R I V A T E    M E M B E R    F U N C T I O N S-------------
+
+    // processes components that have been removed from the scene (and removes
+    // them from the respective subsystems).
+    void process_removed_components()
+    {
+        for(Entity* entity : m_entities)
+        {
+            for(AbstractComponent* component :
+                entity->retrieve_removed_components())
+            {
+                switch(component->get_component_type())
+                {
+                    case ComponentType::kRenderable:
+                    {
+                        AbstractRenderable* renderable =
+                            static_cast<AbstractRenderable*>(component);
+                        render::RenderSubsystem::instance().remove_renderable(
+                            renderable
+                        );
+                        break;
+                    }
+                    default:
+                    {
+                        // do nothing
+                        break;
+                    }
+                }
+                delete component;
+            }
+        }
+    }
+
+    // processes components that have been newly added to the scene (and adds
+    // them to the respective subsystems).
+    void process_new_components()
+    {
+        for(Entity* entity : m_entities)
+        {
+            for(AbstractComponent* component :
+                entity->retrieve_new_components())
+            {
+                switch(component->get_component_type())
+                {
+                    case ComponentType::kRenderable:
+                    {
+                        AbstractRenderable* renderable =
+                            static_cast<AbstractRenderable*>(component);
+                        render::RenderSubsystem::instance().add_renderable(
+                            renderable
+                        );
+                        break;
+                    }
+                    default:
+                    {
+                        // do nothing
+                        break;
+                    }
+                }
+                delete component;
+            }
         }
     }
 };

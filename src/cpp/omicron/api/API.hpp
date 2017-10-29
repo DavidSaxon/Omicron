@@ -22,6 +22,7 @@ namespace omi
 #if !defined(OMI_API_MODE_DEBUG) && !defined(OMI_API_MODE_DEVELOPER)
 #define OMI_API_MODE_PRODUCTION
 #endif
+//------------------------------------------------------------------------------
 
 //----------------------------API EXPORT DEFINITION-----------------------------
 #ifdef ARC_OS_WINDOWS
@@ -55,10 +56,10 @@ namespace omi
 typedef const char* (SubsytemGetVersionFunc)();
 
 /*!
- * \brief Function signature for a subsystem object factory function passed via
+ * \brief Function signature for a subsystem object create function passed via
  *        a C interface.
  */
-typedef void* (SubsystemObjectFactoryFunc)();
+typedef void* (SubsystemObjectCreateFunc)();
 
 /*!
  * \brief Function signature for a subsystem object destroy function passed via
@@ -81,7 +82,7 @@ class SubsytemObject
 public:
 
     SubsytemObject(
-            SubsystemObjectFactoryFunc* factory_func,
+            SubsystemObjectCreateFunc* factory_func,
             SubsystemObjectDestroyFunc* destroy_func)
         : m_factory_func(factory_func)
         , m_destroy_func(destroy_func)
@@ -111,7 +112,7 @@ public:
 
 private:
 
-    SubsystemObjectFactoryFunc* m_factory_func;
+    SubsystemObjectCreateFunc* m_factory_func;
     SubsystemObjectDestroyFunc* m_destroy_func;
     T_ObjectType* m_object;
 };

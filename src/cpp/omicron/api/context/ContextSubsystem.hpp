@@ -15,12 +15,6 @@ namespace omi
 namespace context
 {
 
-//------------------------------------------------------------------------------
-//                              FORWARD DECLARATIONS
-//------------------------------------------------------------------------------
-
-class Surface;
-
 /*!
  * \brief Abstract base class that should be implemented by an Omicron context
  *        subsystem.
@@ -135,7 +129,7 @@ protected:
     {                                                                          \
         return version;                                                        \
     }                                                                          \
-    OMI_PLUGIN_EXPORT void* OMI_CONTEXT_subsystem_factory()                    \
+    OMI_PLUGIN_EXPORT void* OMI_CONTEXT_subsystem_create()                     \
     {                                                                          \
         return new ContextSubsystemType();                                     \
     }                                                                          \
@@ -143,7 +137,7 @@ protected:
     {                                                                          \
         delete static_cast<ContextSubsystemType*>(self);                       \
     }                                                                          \
-    OMI_PLUGIN_EXPORT void* OMI_CONTEXT_surface_factory()                      \
+    OMI_PLUGIN_EXPORT void* OMI_CONTEXT_surface_create()                       \
     {                                                                          \
         return new SurfaceType();                                              \
     }                                                                          \

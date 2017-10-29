@@ -15,10 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="hellbound\src\cpp\GameRegistration.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWGlobals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hellbound\src\cpp\scripts\Startup.cpp">
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWSubsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\OmiGLFWRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

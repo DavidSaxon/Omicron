@@ -5,9 +5,6 @@
 #include "omicron/api/common/Attributes.hpp"
 #include "omicron/api/res/DefineLoader.hpp"
 
-// TODO: REMOVE ME
-#include <iostream>
-
 
 namespace omi
 {
@@ -30,9 +27,6 @@ static const std::size_t POSITION_STRIDE = 3;
 // loads a Wavefront obj file into Omicron attributes
 static omi::Attribute load_obj(arc::io::sys::FileReader& reader)
 {
-    // TODO: REMOVE ME
-    std::cout << "LOADING OBJ FILE!" << std::endl;
-
     // TODO: time this an optimise file reading
 
     // per point positions
@@ -60,8 +54,6 @@ static omi::Attribute load_obj(arc::io::sys::FileReader& reader)
             // right number of values?
             if(values.size() != (POSITION_STRIDE + 1))
             {
-                // TODO: REMOVE ME
-                std::cout << "throwing out" << std::endl;
                 throw arc::ex::ParseError(
                     "Invalid position line: \"" + line + "\""
                 );
@@ -84,14 +76,15 @@ static omi::Attribute load_obj(arc::io::sys::FileReader& reader)
             // TODO: support normals and uv etc
             // get indices
             std::size_t i0 =
-                static_cast<std::size_t>(values[1].to_uint64()) *
-                POSITION_STRIDE;
+                static_cast<std::size_t>(values[1].to_uint64());
             std::size_t i1 =
-                static_cast<std::size_t>(values[2].to_uint64()) *
-                POSITION_STRIDE;
+                static_cast<std::size_t>(values[2].to_uint64());
             std::size_t i2 =
-                static_cast<std::size_t>(values[3].to_uint64()) *
-                POSITION_STRIDE;
+                static_cast<std::size_t>(values[3].to_uint64());
+
+            i0 = (i0 - 1) * POSITION_STRIDE;
+            i1 = (i1 - 1) * POSITION_STRIDE;
+            i2 = (i2 - 1) * POSITION_STRIDE;
 
             // add to vertex positions
             // point 0
@@ -126,9 +119,6 @@ static omi::Attribute load_obj(arc::io::sys::FileReader& reader)
     omi::MapAttribute::DataType root_data = {
         {"geometry", omi::MapAttribute(geometry_map_data, false)}
     };
-
-    // TODO: REMOVE ME
-    std::cout << "OBJ LOAD SUCCESS!" << std::endl;
 
     return omi::MapAttribute(root_data, false);
 };

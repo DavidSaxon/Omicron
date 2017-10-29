@@ -15,6 +15,9 @@ namespace runtime
 namespace ss
 {
 
+/*!
+ * \brief Subsystem Dynamic Library for binding the context subsystem.
+ */
 class ContextSSDL
     : public AbstractSSDL
 {
@@ -55,6 +58,5 @@ private:
 } // namespace ss
 } // namespace runtime
 } // namespace omi
-
 
 #endif

@@ -1,5 +1,7 @@
 #include "omi_glfw/GLFWSubsystem.hpp"
 
+#include <arcanecore/base/clock/ClockOperations.hpp>
+
 #include <omicron/api/report/Logging.hpp>
 
 #include <GLFW/glfw3.h>
@@ -35,8 +37,9 @@ GLFWSubsystem::~GLFWSubsystem()
 bool GLFWSubsystem::startup_routine()
 {
     // set up logging
-    global::logger =
-        omi::report::log_handler.vend_input(arc::log::Profile("OMICRON-GLFW"));
+    global::logger = omi::report::log_handler.vend_input(
+        arc::log::Profile("OMICRON-GLFW")
+    );
 
     global::logger->debug
         << "Starting Omicron GLFW context subsystem." << std::endl;
@@ -78,14 +81,25 @@ void GLFWSubsystem::main_loop(EngineCycleFunc* engine_cycle_func)
     GLFWSurface* surface =
         static_cast<GLFWSurface*>(omi::context::Surface::instance());
 
-    while (!surface->should_close())
+    while(!surface->should_close())
     {
-        engine_cycle_func();
+        // TODO: stat frame time
+        arc::uint64 start_time = arc::clock::get_current_time();
+
+        if(!engine_cycle_func())
+        {
+            break;
+        }
 
         surface->swap_buffers();
 
         // TODO:
         glfwPollEvents();
+
+        arc::uint64 frame_time = arc::clock::get_current_time() - start_time;
+
+        global::logger->notice
+            << "Frame time: " << frame_time << std::endl;
     }
 }
 

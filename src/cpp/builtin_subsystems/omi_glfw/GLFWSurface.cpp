@@ -29,7 +29,13 @@ GLFWSurface::~GLFWSurface()
 bool GLFWSurface::open()
 {
     // TODO: where to get arguments from
-    m_glfw_window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
+    m_glfw_window = glfwCreateWindow(
+        350,
+        350,
+        "DeathRay Development",
+        nullptr,
+        nullptr
+    );
     if(m_glfw_window == nullptr)
     {
         return false;

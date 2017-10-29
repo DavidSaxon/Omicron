@@ -87,26 +87,26 @@ public:
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind context subsystem with error: " << exc.what()
                 << std::endl;
         }
         // get the version
         m_version = arc::str::UTF8String(get_version_func());
 
         // get the subsystem functions
-        omi::SubsystemObjectFactoryFunc* subsystem_factory_func = nullptr;
+        omi::SubsystemObjectCreateFunc* subsystem_create_func = nullptr;
         try
         {
-            subsystem_factory_func =
-                arc::io::dl::bind_symbol<omi::SubsystemObjectFactoryFunc>(
+            subsystem_create_func =
+                arc::io::dl::bind_symbol<omi::SubsystemObjectCreateFunc>(
                     m_lib_handle,
-                    "OMI_CONTEXT_subsystem_factory"
+                    "OMI_CONTEXT_subsystem_create"
                 );
         }
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind context subsystem with error: " << exc.what()
                 << std::endl;
         }
         omi::SubsystemObjectDestroyFunc* subsystem_destroy_func = nullptr;
@@ -121,24 +121,24 @@ public:
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind context subsystem with error: " << exc.what()
                 << std::endl;
         }
 
         // get the surface functions
-        omi::SubsystemObjectFactoryFunc* surface_factory_func = nullptr;
+        omi::SubsystemObjectCreateFunc* surface_create_func = nullptr;
         try
         {
-            surface_factory_func =
-                arc::io::dl::bind_symbol<omi::SubsystemObjectFactoryFunc>(
+            surface_create_func =
+                arc::io::dl::bind_symbol<omi::SubsystemObjectCreateFunc>(
                     m_lib_handle,
-                    "OMI_CONTEXT_surface_factory"
+                    "OMI_CONTEXT_surface_create"
                 );
         }
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind context subsystem with error: " << exc.what()
                 << std::endl;
         }
         omi::SubsystemObjectDestroyFunc* surface_destroy_func = nullptr;
@@ -153,20 +153,20 @@ public:
         catch(const std::exception& exc)
         {
             global::logger->error
-                << "Failed to bind context with error: " << exc.what()
+                << "Failed to bind context subsystem with error: " << exc.what()
                 << std::endl;
         }
 
         // build objects and pass to the respective parts of the engine
         omi::context::ContextSubsystem::set_implementation(
             new omi::SubsytemObject<omi::context::ContextSubsystem>(
-                subsystem_factory_func,
+                subsystem_create_func,
                 subsystem_destroy_func
             )
         );
         omi::context::Surface::set_implementation(
             new omi::SubsytemObject<omi::context::Surface>(
-                surface_factory_func,
+                surface_create_func,
                 surface_destroy_func
             )
         );

@@ -4,7 +4,7 @@
     "roles":
     {
         "context": "omi_glfw",
-        "renderer": "omi_deathray",
+        "render": "omi_deathray",
         "physics": "omi_bullet",
         "audio": "omi_al"
     }

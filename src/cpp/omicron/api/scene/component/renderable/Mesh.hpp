@@ -5,6 +5,8 @@
 #ifndef OMICRON_API_SCENE_COMPONENT_RENDERABLE_MESH_HPP_
 #define OMICRON_API_SCENE_COMPONENT_RENDERABLE_MESH_HPP_
 
+#include <vector>
+
 #include "omicron/api/scene/component/renderable/AbstractRenderable.hpp"
 
 #include "omicron/api/API.hpp"
@@ -12,6 +14,7 @@
 
 namespace omi
 {
+
 namespace scene
 {
 
@@ -53,6 +56,11 @@ public:
     //--------------------------------------------------------------------------
 
     OMI_API_EXPORT virtual RenderableType get_renderable_type() const override;
+
+    /*!
+     * \brief Returns the vertex positions of the mesh.
+     */
+    OMI_API_EXPORT const std::vector<float>& get_vertex_positions() const;
 
     // TODO: deindex
 

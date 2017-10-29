@@ -2,8 +2,8 @@
 
 #include <arcanecore/base/Exceptions.hpp>
 
+#include "omicron/api/scene/SceneGlobals.hpp"
 #include "omicron/api/scene/component/AbstractComponent.hpp"
-#include "omicron/api/scene/component/renderable/AbstractRenderable.hpp"
 
 
 namespace omi
@@ -28,7 +28,12 @@ private:
     const arc::str::UTF8String m_name;
 
     // the lists of the various components of this entity
-    std::list<AbstractRenderable*> m_renderables;
+    std::list<AbstractComponent*> m_components;
+
+    // the components that are new for this entity
+    std::list<AbstractComponent*> m_new_components;
+    // the components that have been removed from this entity
+    std::list<AbstractComponent*> m_removed_components;
 
 public:
 
@@ -43,6 +48,33 @@ public:
 
     ~EntityImpl()
     {
+        #ifndef OMI_API_MODE_PRODUCTION
+            if(!m_components.empty())
+            {
+                global::logger->warning
+                    << "Entity: \"" << get_name() << "\" had remaining "
+                    << "components at destruction - these should have been "
+                    << "handled by the engine." << std::endl;
+            }
+            if(!m_removed_components.empty())
+            {
+                global::logger->warning
+                    << "Entity: \"" << get_name() << "\" had remaining removed "
+                    << "components at destruction - these should have been "
+                    << "handled by the engine." << std::endl;
+            }
+        #endif
+
+        // delete any remaining removed components
+        for(AbstractComponent* component : m_removed_components)
+        {
+            delete component;
+        }
+        // delete any remaining components
+        for(AbstractComponent* component : m_components)
+        {
+            delete component;
+        }
     }
 
     //-------------P U B L I C    M E M B E R    F U N C T I O N S--------------
@@ -52,46 +84,48 @@ public:
         return m_name;
     }
 
-    const std::list<AbstractRenderable*>& get_renderable_components() const
+    const std::list<AbstractComponent*>& get_components() const
     {
-        return m_renderables;
+        return m_components;
     }
 
     void add_component(AbstractComponent* component)
     {
-        // determine the type of the component
-        switch(component->get_component_type())
-        {
-            case omi::scene::ComponentType::kRenderable:
+        // check for duplicates
+        #ifndef OMI_API_MODE_PRODUCTION
+            for(AbstractComponent* c : m_components)
             {
-                AbstractRenderable* renderable =
-                    static_cast<AbstractRenderable*>(component);
-
-                // check for duplicates
-                #ifndef OMI_API_MODE_PRODUCTION
-                    for(AbstractRenderable* renderable : m_renderables)
-                    {
-                        if(renderable == renderable)
-                        {
-                            throw arc::ex::ValueError(
-                                "Duplicate renderable component added to entity"
-                            );
-                        }
-                    }
-                #endif
-
-                m_renderables.push_back(renderable);
-                break;
+                if(component == c)
+                {
+                    throw arc::ex::ValueError(
+                        "Duplicate component added to entity"
+                    );
+                }
             }
-            default:
-            {
-                arc::str::UTF8String error_message;
-                error_message
-                    << "Component of unknown type added: "
-                    << static_cast<int>(component->get_component_type());
-                throw arc::ex::TypeError(error_message);
-            }
-        }
+        #endif
+
+        m_components.push_back(component);
+        m_new_components.push_back(component);
+    }
+
+    std::vector<AbstractComponent*> retrieve_new_components()
+    {
+        std::vector<AbstractComponent*> ret(
+            m_new_components.begin(),
+            m_new_components.end()
+        );
+        m_new_components.clear();
+        return ret;
+    }
+
+    std::vector<AbstractComponent*> retrieve_removed_components()
+    {
+        std::vector<AbstractComponent*> ret(
+            m_removed_components.begin(),
+            m_removed_components.end()
+        );
+        m_removed_components.clear();
+        return ret;
     }
 };
 
@@ -123,9 +157,9 @@ OMI_API_EXPORT const arc::str::UTF8String& Entity::get_name() const
 }
 
 OMI_API_EXPORT
-const std::list<AbstractRenderable*>& Entity::get_renderable_components() const
+const std::list<AbstractComponent*>& Entity::get_components() const
 {
-    return m_impl->get_renderable_components();
+    return m_impl->get_components();
 }
 
 //------------------------------------------------------------------------------
@@ -135,6 +169,18 @@ const std::list<AbstractRenderable*>& Entity::get_renderable_components() const
 OMI_API_EXPORT void Entity::add_component(AbstractComponent* component)
 {
     m_impl->add_component(component);
+}
+
+OMI_API_EXPORT
+std::vector<AbstractComponent*> Entity::retrieve_new_components()
+{
+    return m_impl->retrieve_new_components();
+}
+
+OMI_API_EXPORT
+std::vector<AbstractComponent*> Entity::retrieve_removed_components()
+{
+    return m_impl->retrieve_removed_components();
 }
 
 } // namespace scene
