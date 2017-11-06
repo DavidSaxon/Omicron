@@ -10,6 +10,8 @@
 
 #include <omicron/api/scene/component/renderable/Mesh.hpp>
 
+#include <deathray/api/Scene.h>
+
 
 namespace omi_death
 {
@@ -31,7 +33,7 @@ public:
     /*!
      * \brief Creates a new handler for the given mesh component.
      */
-    DeathMesh(omi::scene::Mesh* component);
+    DeathMesh(omi::scene::Mesh* component, DeathSceneHandle scene);
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR

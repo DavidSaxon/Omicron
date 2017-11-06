@@ -30,8 +30,8 @@ bool GLFWSurface::open()
 {
     // TODO: where to get arguments from
     m_glfw_window = glfwCreateWindow(
-        350,
-        350,
+        1000,
+        1000,
         "DeathRay Development",
         nullptr,
         nullptr

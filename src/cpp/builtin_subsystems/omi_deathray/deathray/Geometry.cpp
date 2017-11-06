@@ -136,7 +136,7 @@ private:
 
         // TODO: retain face data
 
-        static const float cell_size = 0.01F;
+        static const float cell_size = 0.005F;
         static const float half_cell = cell_size / 2.0F;
 
 

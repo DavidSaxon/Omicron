@@ -98,8 +98,9 @@ void GLFWSubsystem::main_loop(EngineCycleFunc* engine_cycle_func)
 
         arc::uint64 frame_time = arc::clock::get_current_time() - start_time;
 
-        global::logger->notice
-            << "Frame time: " << frame_time << std::endl;
+        // TODO:
+        // global::logger->notice
+        //     << "Frame time: " << frame_time << std::endl;
     }
 }
 

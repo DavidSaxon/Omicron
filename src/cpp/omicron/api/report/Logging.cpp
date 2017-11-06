@@ -44,11 +44,11 @@ static arc::config::VariantPtr g_config_data;
 /*!
  * \brief The logging output to std::cout and std::cerr.
  */
-arc::log::StdOutput* std_output;
+static arc::log::StdOutput* std_output;
 /*!
  * \brief The logging output for writing to the file system.
  */
-arc::log::FileOutput* file_output;
+static arc::log::FileOutput* file_output;
 
 //------------------------------------------------------------------------------
 //                                    CLASSES

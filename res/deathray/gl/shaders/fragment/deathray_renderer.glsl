@@ -19,8 +19,8 @@ void main()
         float lookup = float(i) / float(u_bvh_size);
         vec3 bvh_pos = texture(u_bvh, lookup).xyz;
 
-        vec2 bvh_min = bvh_pos.xy -= 0.01;
-        vec2 bvh_max = bvh_pos.xy += 0.01;
+        vec2 bvh_min = bvh_pos.xy -= 0.005;
+        vec2 bvh_max = bvh_pos.xy += 0.005;
 
         if(world_space.x >= bvh_min.x &&
            world_space.x <= bvh_max.x &&

@@ -55,6 +55,29 @@ bool DeathSubsystem::firstframe_routine()
         << "First-frame setup of Omicron DeathRay render subsystem."
         << std::endl;
 
+    // TODO; why crash??
+    // generate the death ray scene
+    death_scene_gen(&m_scene);
+    death_scene_set_resolution(m_scene, 1000, 1000);
+
+    // generate the camera
+    death_cam_gen(1, &m_camera);
+    // TODO:
+    death_cam_set_properties(
+        m_camera,
+        2.0F,                // focal length
+        0.0F,                // filmback origin x
+        0.0F,                // filmback origin y
+        1.0F,                // filmback width
+        1.0F                 // filmback height
+    );
+    // attach the camera to the scene
+    death_scene_set_camera(m_scene, m_camera);
+
+    // TODO: REMOVE BELOW
+    //--------------------------------------------------------------------------
+
+    // TODO: ensure this can safely done twice
     // initialise GLEW
     GLenum glew_error = glewInit();
     if(glew_error != GLEW_OK)
@@ -67,16 +90,16 @@ bool DeathSubsystem::firstframe_routine()
     // TODO: check OpenGL version (or do inside DeathRay)
 
     // TODO: TESTING
-    glClearColor(0.7F, 0.7F, 0.7F, 1.0F);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
-    glEnable(GL_DEPTH_TEST);
+    // glClearColor(0.7F, 0.7F, 0.7F, 1.0F);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glEnable(GL_CULL_FACE);
+    // glFrontFace(GL_CCW);
+    // glCullFace(GL_BACK);
+    // glEnable(GL_DEPTH_TEST);
 
-    // TODO: get from context (needs to handle updates - could be called once
-    //       per frame)
-    glViewport(0, 0, 350, 350);
+    // // TODO: get from context (needs to handle updates - could be called once
+    // //       per frame)
+    // glViewport(0, 0, 350, 350);
 
     // TODO: TESTING
     float fov = 90.0F;
@@ -86,7 +109,7 @@ bool DeathSubsystem::firstframe_routine()
     m_projection_matrix = arc::lx::perspective_44f(fov, aspect, z_near, z_far);
 
     // set up renderer
-    death::Renderer::instance().setup();
+    // death::Renderer::instance().setup();
 
     return true;
 }
@@ -96,6 +119,9 @@ bool DeathSubsystem::shutdown_routine()
     global::logger->debug
         << "Shutting down Omicron DeathRay render subsystem."
         << std::endl;
+
+    death_cam_delete(1, &m_camera);
+    death_scene_delete(&m_scene);
 
     // remove the logger (NOTE: this shouldn't need to be done, but on Windows:
     // closing this DLL causes the memory for the logging input to be freed,
@@ -114,7 +140,7 @@ void DeathSubsystem::add_renderable(
         {
             omi::scene::Mesh* component =
                 static_cast<omi::scene::Mesh*>(renderable);
-            m_meshes.push_back(new DeathMesh(component));
+            m_meshes.push_back(new DeathMesh(component, m_scene));
             break;
         }
         default:
@@ -138,17 +164,31 @@ void DeathSubsystem::remove_renderable(
 
 void DeathSubsystem::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     // TODO:
     m_rotation(1) += 0.25F * 0.0174533F;
     // TODO: testing
     m_view_matrix = arc::lx::Matrix44f::Identity();
     m_view_matrix *=
-        arc::lx::translate_44f(arc::lx::Vector3f(0.0F, -0.085F, -0.25F));
+        arc::lx::translate_44f(arc::lx::Vector3f(0.0F, -0.085F, -0.225F));
     m_view_matrix *= arc::lx::rotate_euler_44f(m_rotation);
 
-    death::Renderer::instance().render();
+    death_cam_set_transform(m_camera, &m_view_matrix(0, 0));
+    death_scene_render(m_scene);
+
+    // // TODO: REMOVE BELOW HERE
+    //--------------------------------------------------------------------------
+
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // // TODO:
+    // m_rotation(1) += 0.25F * 0.0174533F;
+    // // TODO: testing
+    // m_view_matrix = arc::lx::Matrix44f::Identity();
+    // m_view_matrix *=
+    //     arc::lx::translate_44f(arc::lx::Vector3f(0.0F, -0.085F, -0.25F));
+    // m_view_matrix *= arc::lx::rotate_euler_44f(m_rotation);
+
+    // death::Renderer::instance().render();
 
     // TODO: revert
     // for(DeathMesh* mesh : m_meshes)

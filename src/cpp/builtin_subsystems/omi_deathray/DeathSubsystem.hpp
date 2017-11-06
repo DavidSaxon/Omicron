@@ -7,6 +7,9 @@
 
 #include <omicron/api/render/RenderSubsystem.hpp>
 
+#include <deathray/api/Camera.h>
+#include <deathray/api/Scene.h>
+
 // TODO: MOVE TO SOURCE?
 #include <list>
 #include <GL/glew.h>
@@ -70,6 +73,12 @@ private:
     //--------------------------------------------------------------------------
     //                             PRIVATE ATTRIBUTES
     //--------------------------------------------------------------------------
+
+    // the DeathRay scene
+    DeathSceneHandle m_scene;
+    // the DeathRay camera
+    DeathCameraHandle m_camera;
+
 
     // TODO: REMOVE ME
     std::list<DeathMesh*> m_meshes;
