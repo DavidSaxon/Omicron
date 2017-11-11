@@ -25,9 +25,9 @@ public:
         : omi::scene::Entity(name)
     {
         // TODO: add component
-        add_component(
-            new omi::scene::Mesh(omi::res::get_id("res/builtin/mesh/bunny.obj"))
-        );
+        add_component(new omi::scene::Mesh(
+            omi::res::get_id("res/builtin/mesh/shapes.obj")
+        ));
     }
 
     //--------------------------------------------------------------------------

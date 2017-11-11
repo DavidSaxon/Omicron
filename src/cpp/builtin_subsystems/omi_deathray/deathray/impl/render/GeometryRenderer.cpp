@@ -76,7 +76,7 @@ public:
 
         death::Camera* camera = scene->get_camera();
         arc::lx::Matrix44f mvp_matrix = camera->get_projection_matrix();
-        mvp_matrix *= camera->get_transform();
+        mvp_matrix *= camera->get_transform().inverse();
         m_shader_program.set_uniform_44f("u_mvp_matrix", mvp_matrix);
 
         // draw gl geometry
@@ -107,7 +107,11 @@ public:
 
             for(death::Geometric* geometric : spatial->get_geometrics())
             {
-                geometric->get_debug_geo()->draw();
+                death::GLGeometry* geo = geometric->get_debug_geo();
+                if(geo != nullptr)
+                {
+                    geo->draw();
+                }
             }
         }
 

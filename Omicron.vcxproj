@@ -100,24 +100,31 @@
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Globals.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Camera.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Geometric.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Octant.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Octree.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\PipelineController.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Scene.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Spatial.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\VBO.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\DebugPipeline.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\GLCells.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\GLGeometry.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\GLOctree.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\prefab\PrefabricationPipeline.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\RenderPipeline.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\BoundRenderer.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\CellRenderer.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\GeometryRenderer.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\OctreeRenderer.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\OrientationRenderer.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\PathTracer.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\render\View.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\util\DataUtil.cpp" />
-
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\ErrorState.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\Framebuffer.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\ShaderProgram.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\Texture2D.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\image\PNG.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_glfw'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWGlobals.cpp" />
@@ -335,15 +342,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems\omi_deathray;D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\zlib-1.2.3\include;C:\Dropbox\Development\Omicron\Omicron\ext\libpng-1.2.37\include;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems\omi_deathray;D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;DEATH_API_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_thread.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\zlib-1.2.3\lib;C:\Dropbox\Development\Omicron\Omicron\ext\libpng-1.2.37\lib;D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_thread.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;zlib.lib;libpng.lib;OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_glfw|Win32'">

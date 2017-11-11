@@ -20,7 +20,11 @@
 
 #include "deathray/impl/Scene.hpp"
 #include "deathray/impl/render/BoundRenderer.hpp"
+#include "deathray/impl/render/CellRenderer.hpp"
 #include "deathray/impl/render/GeometryRenderer.hpp"
+#include "deathray/impl/render/OrientationRenderer.hpp"
+#include "deathray/impl/render/PathTracer.hpp"
+#include "deathray/impl/render/OctreeRenderer.hpp"
 
 
 namespace death
@@ -219,14 +223,29 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // handle the various render modes
+        if(m_render_modes & kRenderModePathTracer)
+        {
+            death::PathTracer::instance().render(scene);
+        }
         if(m_render_modes & kRenderModeGeometric)
         {
             death::GeometryRenderer::instance().render(scene);
+        }
+        if(m_render_modes & kRenderModeCell)
+        {
+            death::CellRenderer::instance().render(scene);
         }
         if(m_render_modes & kRenderModeBound)
         {
             death::BoundRenderer::instance().render(scene);
         }
+        if(m_render_modes & kRenderModeOctree)
+        {
+            death::OctreeRenderer::instance().render(scene);
+        }
+
+        // TODO: control with something
+        // death::OrientationRenderer::instance().render(scene);
 
         m_framebuffer.unbind();
 

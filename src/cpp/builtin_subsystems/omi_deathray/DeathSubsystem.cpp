@@ -20,7 +20,7 @@ DeathSubsystem::DeathSubsystem()
     // TODO: REMOVE ME
     , m_projection_matrix(arc::lx::Matrix44f::Identity())
     , m_view_matrix      (arc::lx::Matrix44f::Identity())
-    , m_rotation         (25.0F * 0.0174533F, 0.0F, 0.0F)
+    , m_rotation         (0.0F * 0.0174533F, 0.0F, 0.0F)
 {
 }
 
@@ -168,9 +168,13 @@ void DeathSubsystem::render()
     m_rotation(1) += 0.25F * 0.0174533F;
     // TODO: testing
     m_view_matrix = arc::lx::Matrix44f::Identity();
-    m_view_matrix *=
-        arc::lx::translate_44f(arc::lx::Vector3f(0.0F, -0.085F, -0.225F));
     m_view_matrix *= arc::lx::rotate_euler_44f(m_rotation);
+    m_view_matrix *=
+        // arc::lx::translate_44f(arc::lx::Vector3f(0.0F, 1.0F, 2.0F));
+        arc::lx::translate_44f(arc::lx::Vector3f(0.0F, 0.0F, 4.0F));
+    // m_view_matrix *= arc::lx::rotate_euler_44f(
+        // arc::lx::Vector3f(-25.0F * 0.0174533F, 0.0F, 0.0F));
+
 
     death_cam_set_transform(m_camera, &m_view_matrix(0, 0));
     death_scene_render(m_scene);

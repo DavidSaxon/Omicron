@@ -73,11 +73,12 @@ public:
 
         // set state
         glEnable(GL_DEPTH_TEST);
+        glLineWidth(1.0F);
 
         // get camera data
         death::Camera* camera = scene->get_camera();
         arc::lx::Matrix44f mvp_matrix = camera->get_projection_matrix();
-        mvp_matrix *= camera->get_transform();
+        mvp_matrix *= camera->get_transform().inverse();
 
         // bind
         glBindVertexArray(m_vao);

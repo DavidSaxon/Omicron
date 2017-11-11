@@ -11,6 +11,9 @@
 
 #include <arcanecore/base/lang/Restrictors.hpp>
 #include <arcanecore/lx/AABB.hpp>
+#include <arcanecore/lx/Matrix.hpp>
+
+#include "deathray/api/API.h"
 
 
 namespace death
@@ -20,6 +23,8 @@ namespace death
 //                              FORWARD DECLARATIONS
 //------------------------------------------------------------------------------
 
+class GLCells;
+class GLOctree;
 class Spatial;
 
 
@@ -57,6 +62,35 @@ public:
      *        this Octree is associated with.
      */
     const arc::lx::AABB3f& get_true_bounds() const;
+
+    /*!
+     * \brief Returns the size of the top level of the octree.
+     */
+    float get_root_size() const;
+
+    /*!
+     * \brief Returns the offset matrix to use to transform the octree from
+     *        world origin to model origin.
+     */
+    const arc::lx::Matrix44f& get_offset() const;
+
+    /*!
+     * \brief Returns the debug GLOctree for this OCtree.
+     *
+     * \note If the GLOctree doesn't exist (or is out-of-date) it is created
+     *       by this function. However if this geometric has no valid data, null
+     *       is returned.
+     */
+    death::GLOctree* get_debug_octree();
+
+    /*!
+     * \brief Returns the debug GLCells for this OCtree.
+     *
+     * \note If the GLCells doesn't exist (or is out-of-date) it is created
+     *       by this function. However if this geometric has no valid data, null
+     *       is returned.
+     */
+    death::GLCells* get_debug_cells();
 
 private:
 

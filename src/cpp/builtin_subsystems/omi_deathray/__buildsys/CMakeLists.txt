@@ -18,16 +18,23 @@ set(OMI_DEATHRAY_SRC
     ../deathray/impl/Globals.cpp
     ../deathray/impl/Camera.cpp
     ../deathray/impl/Geometric.cpp
+    ../deathray/impl/Octant.cpp
     ../deathray/impl/Octree.cpp
     ../deathray/impl/PipelineController.cpp
     ../deathray/impl/Scene.cpp
     ../deathray/impl/Spatial.cpp
     ../deathray/impl/VBO.cpp
     ../deathray/impl/debug/DebugPipeline.cpp
+    ../deathray/impl/debug/GLCells.cpp
     ../deathray/impl/debug/GLGeometry.cpp
+    ../deathray/impl/debug/GLOctree.cpp
     ../deathray/impl/prefab/PrefabricationPipeline.cpp
     ../deathray/impl/render/BoundRenderer.cpp
+    ../deathray/impl/render/CellRenderer.cpp
     ../deathray/impl/render/GeometryRenderer.cpp
+    ../deathray/impl/render/OctreeRenderer.cpp
+    ../deathray/impl/render/OrientationRenderer.cpp
+    ../deathray/impl/render/PathTracer.cpp
     ../deathray/impl/render/RenderPipeline.cpp
     ../deathray/impl/render/View.cpp
     ../deathray/impl/util/DataUtil.cpp
@@ -36,6 +43,8 @@ set(OMI_DEATHRAY_SRC
     ../deathray/gl/Framebuffer.cpp
     ../deathray/gl/ShaderProgram.cpp
     ../deathray/gl/Texture2D.cpp
+
+    ../deathray/image/PNG.cpp
 )
 
 # build the omicron runtime executable
@@ -50,6 +59,8 @@ set_target_properties(omi_deathray
 # link libraries
 target_link_libraries(omi_deathray
     ${GLEW_LIBRARIES}
+    png
+    z
     omicron_api
     arcanecore_collate
     arcanecore_config
