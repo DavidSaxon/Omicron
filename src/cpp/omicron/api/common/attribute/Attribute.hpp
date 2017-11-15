@@ -12,6 +12,7 @@
 #include <arcanecore/base/str/UTF8String.hpp>
 
 #include "omicron/api/API.hpp"
+#include "omicron/api/common/Hash.hpp"
 
 
 namespace omi
@@ -101,118 +102,6 @@ public:
      * \brief The type identifier for null attributes.
      */
     OMI_API_EXPORT static Type kTypeNull;
-
-    //--------------------------------------------------------------------------
-    //                                    HASH
-    //--------------------------------------------------------------------------
-
-    /*!
-     * \brief Represents a 128-bit hash of an attribute.
-     *
-     * Attribute hashes can be used to cheaply determine whether an attribute
-     * has changed since the last time it was inspected.
-     */
-    class Hash
-    {
-    public:
-
-        //------------------P U B L I C    A T T R I B U T E S------------------
-
-        /*!
-         * \brief The first 64-bits of the hash.
-         */
-        arc::uint64 part1;
-        /*!
-         * \brief The second 64-bits of the hash.
-         */
-        arc::uint64 part2;
-
-        //-----------------------C O N S T R U C T O R S------------------------
-
-        /*!
-         * \brief Creates a new zero'd hash.
-         */
-        Hash()
-            : part1(0)
-            , part2(0)
-        {
-        }
-
-        /*!
-         * \brief Creates a new 128-bit hash from the 2 64-bit values.
-         */
-        Hash(arc::uint64 in_part1, arc::uint64 in_part2)
-            : part1(in_part1)
-            , part2(in_part2)
-        {
-        }
-
-        /*!
-         * \brief Copy constructor.
-         */
-        Hash(const Hash& other)
-            : part1(other.part1)
-            , part2(other.part2)
-        {
-        }
-
-        /*!
-         * \brief Move constructor.
-         */
-        Hash(Hash&& other)
-            : part1(other.part1)
-            , part2(other.part2)
-        {
-            other.part1 = 0;
-            other.part2 = 0;
-        }
-
-        //-------------------------D E S T R U C T O R--------------------------
-
-        ~Hash()
-        {
-        }
-
-        //--------------------------O P E R A T O R S---------------------------
-
-        /*!
-         * \brief Assignment operator.
-         */
-        Hash& operator=(const Hash& other)
-        {
-            part1 = other.part1;
-            part2 = other.part2;
-            return *this;
-        }
-
-        /*!
-         * \brief Move assignment operator.
-         */
-        Hash& operator=(Hash&& other)
-        {
-            part1 = other.part1;
-            part2 = other.part2;
-            other.part1 = 0;
-            other.part2 = 0;
-            return *this;
-        }
-
-        /*!
-         * \brief Equality operator.
-         */
-        bool operator==(const Hash& other) const
-        {
-            return part1 == other.part1 && part2 == other.part2;
-        }
-
-        /*!
-         * \brief Inequality operator.
-         */
-        bool operator!=(const Hash& other) const
-        {
-            return !((*this) == other);
-        }
-    };
 
     //--------------------------------------------------------------------------
     //                                  STORAGE
@@ -605,7 +494,7 @@ OMI_API_EXPORT std::ostream& operator<<(
  */
 OMI_API_EXPORT arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
-        const omi::Attribute::Hash& h);
+        const omi::Hash& h);
 
 /*!
  * \brief Appends a string representation of the Attribute Hash to the given
@@ -613,7 +502,7 @@ OMI_API_EXPORT arc::str::UTF8String& operator<<(
  */
 OMI_API_EXPORT std::ostream& operator<<(
         std::ostream& s,
-        const omi::Attribute::Hash& h);
+        const omi::Hash& h);
 
 } // namespace omi
 

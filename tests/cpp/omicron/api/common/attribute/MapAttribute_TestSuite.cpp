@@ -1048,9 +1048,9 @@ ARC_TEST_UNIT(hash)
         omi::MapAttribute a(map_data3, false);
         omi::MapAttribute b(map_data3, true);
         ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
-        omi::Attribute::Hash hash1 = a.get_hash();
+        omi::Hash hash1 = a.get_hash();
         a.insert("string_key", omi::StringAttribute({"hello", "world"}, 0));
-        omi::Attribute::Hash hash2 = a.get_hash();
+        omi::Hash hash2 = a.get_hash();
         ARC_CHECK_NOT_EQUAL(hash1, hash2);
         a.erase("map_key.int64_key");
         hash1 = a.get_hash();

@@ -49,7 +49,7 @@ OMI_API_EXPORT PathAttribute::PathStorage::~PathStorage()
 
 //---------------P U B L I C    M E M B E R    F U N C T I O N S----------------
 
-OMI_API_EXPORT Attribute::Hash PathAttribute::PathStorage::get_hash(
+OMI_API_EXPORT Hash PathAttribute::PathStorage::get_hash(
         arc::uint64 seed) const
 {
     // hash need recomputing?

@@ -66,22 +66,22 @@ public:
     DeathFloat get_focal_length() const;
 
     /*!
-     * \brief Returns the filmback origin of this camera.
+     * \brief Returns the sensor size of this camera.
      */
-    const arc::lx::Vector2f& get_filmback_origin() const;
+    const arc::lx::Vector2f& get_sensor_size() const;
 
     /*!
-     * \brief Returns the filmback size of this camera.
+     * \brief Returns the sensor offset of this camera.
      */
-    const arc::lx::Vector2f& get_filmback_size() const;
+    const arc::lx::Vector2f& get_sensor_offset() const;
 
     /*!
      * \brief Implementation of the death_cam_set_properties function.
      */
     DeathError set_properties(
             DeathFloat focal_length,
-            const arc::lx::Vector2f& filmback_origin,
-            const arc::lx::Vector2f& filmback_size);
+            const arc::lx::Vector2f& sensor_size,
+            const arc::lx::Vector2f& sensor_offset);
 
 private:
 

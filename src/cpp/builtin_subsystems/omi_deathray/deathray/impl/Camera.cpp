@@ -37,8 +37,8 @@ private:
     arc::lx::Matrix44f m_projection_matrix;
     // camera properties
     DeathFloat m_focal_length;
-    arc::lx::Vector2f m_filmback_origin;
-    arc::lx::Vector2f m_filmback_size;
+    arc::lx::Vector2f m_sensor_size;
+    arc::lx::Vector2f m_sensor_offset;
 
 public:
 
@@ -47,7 +47,9 @@ public:
     //--------------------------C O N S T R U C T O R---------------------------
 
     CameraImpl(DeathCameraHandle handle)
-        : m_handle(handle)
+        : m_handle           (handle)
+        , m_transform        (arc::lx::Matrix44f::Identity())
+        , m_projection_matrix(arc::lx::Matrix44f::Identity())
     {
     }
 
@@ -82,28 +84,28 @@ public:
         return m_focal_length;
     }
 
-    const arc::lx::Vector2f& get_filmback_origin() const
+    const arc::lx::Vector2f& get_sensor_size() const
     {
-        return m_filmback_origin;
+        return m_sensor_size;
     }
 
-    const arc::lx::Vector2f& get_filmback_size() const
+    const arc::lx::Vector2f& get_sensor_offset() const
     {
-        return m_filmback_size;
+        return m_sensor_offset;
     }
 
     DeathError set_properties(
             DeathFloat focal_length,
-            const arc::lx::Vector2f& filmback_origin,
-            const arc::lx::Vector2f& filmback_size)
+            const arc::lx::Vector2f& sensor_size,
+            const arc::lx::Vector2f& sensor_offset)
     {
         // TODO: sanity check here?
 
-        m_focal_length    = focal_length;
-        m_filmback_origin = filmback_origin;
-        m_filmback_size   = filmback_size;
+        m_focal_length  = focal_length;
+        m_sensor_size   = sensor_size;
+        m_sensor_offset = sensor_offset;
 
-
+        // TODO: move this to Views
         // TODO: do this calculation properly
         float fov = 90.0F;
         float aspect = 1000.0F / 1000.0F;
@@ -158,25 +160,25 @@ DeathFloat Camera::get_focal_length() const
     return m_impl->get_focal_length();
 }
 
-const arc::lx::Vector2f& Camera::get_filmback_origin() const
+const arc::lx::Vector2f& Camera::get_sensor_size() const
 {
-    return m_impl->get_filmback_origin();
+    return m_impl->get_sensor_size();
 }
 
-const arc::lx::Vector2f& Camera::get_filmback_size() const
+const arc::lx::Vector2f& Camera::get_sensor_offset() const
 {
-    return m_impl->get_filmback_size();
+    return m_impl->get_sensor_offset();
 }
 
 DeathError Camera::set_properties(
         DeathFloat focal_length,
-        const arc::lx::Vector2f& filmback_origin,
-        const arc::lx::Vector2f& filmback_size)
+        const arc::lx::Vector2f& sensor_size,
+        const arc::lx::Vector2f& sensor_offset)
 {
     return m_impl->set_properties(
         focal_length,
-        filmback_origin,
-        filmback_size
+        sensor_size,
+        sensor_offset
     );
 }
 
@@ -255,10 +257,10 @@ DEATH_API_EXPORT DeathError death_cam_set_transform(
 DEATH_API_EXPORT DeathError death_cam_set_properties(
         DeathCameraHandle camera,
         DeathFloat focal_length,
-        DeathFloat filmback_origin_x,
-        DeathFloat filmback_origin_y,
-        DeathFloat filmback_width,
-        DeathFloat filmback_height)
+        DeathFloat sensor_width,
+        DeathFloat sensor_height,
+        DeathFloat sensor_offset_x,
+        DeathFloat sensor_offset_y)
 {
     if(camera == nullptr)
     {
@@ -267,7 +269,7 @@ DEATH_API_EXPORT DeathError death_cam_set_properties(
 
     return camera->impl->set_properties(
         focal_length,
-        arc::lx::Vector2f(filmback_origin_x, filmback_origin_y),
-        arc::lx::Vector2f(filmback_width, filmback_height)
+        arc::lx::Vector2f(sensor_width, sensor_height),
+        arc::lx::Vector2f(sensor_offset_x, sensor_offset_y)
     );
 }

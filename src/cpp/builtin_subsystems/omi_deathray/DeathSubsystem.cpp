@@ -17,6 +17,7 @@ namespace omi_death
 
 DeathSubsystem::DeathSubsystem()
     : omi::render::RenderSubsystem()
+    , m_active_camera             (nullptr)
     // TODO: REMOVE ME
     , m_projection_matrix(arc::lx::Matrix44f::Identity())
     , m_view_matrix      (arc::lx::Matrix44f::Identity())
@@ -59,20 +60,6 @@ bool DeathSubsystem::firstframe_routine()
     // generate the death ray scene
     death_scene_gen(&m_scene);
     death_scene_set_resolution(m_scene, 1000, 1000);
-
-    // generate the camera
-    death_cam_gen(1, &m_camera);
-    // TODO:
-    death_cam_set_properties(
-        m_camera,
-        2.0F,                // focal length
-        0.0F,                // filmback origin x
-        0.0F,                // filmback origin y
-        1.0F,                // filmback width
-        1.0F                 // filmback height
-    );
-    // attach the camera to the scene
-    death_scene_set_camera(m_scene, m_camera);
 
     // TODO: REMOVE BELOW
     //--------------------------------------------------------------------------
@@ -120,7 +107,6 @@ bool DeathSubsystem::shutdown_routine()
         << "Shutting down Omicron DeathRay render subsystem."
         << std::endl;
 
-    death_cam_delete(1, &m_camera);
     death_scene_delete(&m_scene);
 
     // remove the logger (NOTE: this shouldn't need to be done, but on Windows:
@@ -136,6 +122,16 @@ void DeathSubsystem::add_renderable(
 {
     switch(renderable->get_renderable_type())
     {
+        case omi::scene::RenderableType::kCamera:
+        {
+            omi::scene::Camera* component =
+                static_cast<omi::scene::Camera*>(renderable);
+            m_cameras.insert(std::make_pair(
+                component->get_id(),
+                new DeathCamera(component, m_scene)
+            ));
+            break;
+        }
         case omi::scene::RenderableType::kMesh:
         {
             omi::scene::Mesh* component =
@@ -157,26 +153,56 @@ void DeathSubsystem::add_renderable(
 void DeathSubsystem::remove_renderable(
         omi::scene::AbstractRenderable* renderable)
 {
+    // TODO: implement!
+
     // TODO: REMOVE ME
     global::logger->notice
         << "renderable remove" << std::endl;
 }
 
+void DeathSubsystem::set_active_camera(const omi::scene::Camera* camera)
+{
+    if(camera == nullptr)
+    {
+        m_active_camera = nullptr;
+        return;
+    }
+
+    // find the wrapper object we've created
+    auto f_camera = m_cameras.find(camera->get_id());
+    if(f_camera == m_cameras.end())
+    {
+        global::logger->warning
+            << "Attempted to set active camera with: " << camera->get_id()
+            << " but a component with this id is not managed by this subsystem."
+            << std::endl;
+        m_active_camera = nullptr;
+        return;
+    }
+
+    m_active_camera = f_camera->second;
+}
+
 void DeathSubsystem::render()
 {
-    // TODO:
-    m_rotation(1) += 0.25F * 0.0174533F;
-    // TODO: testing
-    m_view_matrix = arc::lx::Matrix44f::Identity();
-    m_view_matrix *= arc::lx::rotate_euler_44f(m_rotation);
-    m_view_matrix *=
-        // arc::lx::translate_44f(arc::lx::Vector3f(0.0F, 1.0F, 2.0F));
-        arc::lx::translate_44f(arc::lx::Vector3f(0.0F, 0.0F, 4.0F));
-    // m_view_matrix *= arc::lx::rotate_euler_44f(
-        // arc::lx::Vector3f(-25.0F * 0.0174533F, 0.0F, 0.0F));
+    // // TODO:
+    // m_rotation(1) += 0.25F * 0.0174533F;
+    // // TODO: testing
+    // m_view_matrix = arc::lx::Matrix44f::Identity();
+    // m_view_matrix *= arc::lx::rotate_euler_44f(m_rotation);
+    // m_view_matrix *=
+    //     // arc::lx::translate_44f(arc::lx::Vector3f(0.0F, 1.0F, 2.0F));
+    //     arc::lx::translate_44f(arc::lx::Vector3f(0.0F, 0.0F, 3.0F));
+    // // m_view_matrix *= arc::lx::rotate_euler_44f(
+    //     // arc::lx::Vector3f(-25.0F * 0.0174533F, 0.0F, 0.0F));
 
 
-    death_cam_set_transform(m_camera, &m_view_matrix(0, 0));
+    // apply the active camera
+    if(m_active_camera != nullptr)
+    {
+        m_active_camera->apply();
+    }
+
     death_scene_render(m_scene);
 
     // // TODO: REMOVE BELOW HERE

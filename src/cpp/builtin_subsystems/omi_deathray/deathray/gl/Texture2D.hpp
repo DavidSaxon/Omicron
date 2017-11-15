@@ -11,6 +11,7 @@
 
 #include <arcanecore/base/lang/Restrictors.hpp>
 #include <arcanecore/lx/Vector.hpp>
+#include <arcanecore/io/sys/Path.hpp>
 
 #include <GL/glew.h>
 
@@ -70,6 +71,17 @@ public:
             const GLvoid* data);
 
     // TODO: subimage
+
+    // only support image loading in development builds
+    #ifndef DEATH_API_MODE_PRODUCTION
+
+    /*!
+     * \brief Initializes the texture and loads the data from the given image
+     *        file.
+     */
+    DEATH_API_EXPORT void load_from_file(const arc::io::sys::Path& file_path);
+
+    #endif
 
     /*!
      * \brief Releases the current data of this texture.

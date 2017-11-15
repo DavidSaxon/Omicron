@@ -142,7 +142,7 @@ Attribute::Storage* MapAttribute::MapStorage::as_pure_mutable()
     return new MapStorage(pure_data.begin(), pure_data.end());
 }
 
-OMI_API_EXPORT Attribute::Hash MapAttribute::MapStorage::get_hash(
+OMI_API_EXPORT Hash MapAttribute::MapStorage::get_hash(
         arc::uint64 seed) const
 {
     // iterate the sub hashes to make sure none have gone out of date

@@ -5,9 +5,8 @@
 #ifndef OMICRON_API_SCENE_COMPONENT_RENDERABLE_ABSTRACTRENDERABLE_HPP_
 #define OMICRON_API_SCENE_COMPONENT_RENDERABLE_ABSTRACTRENDERABLE_HPP_
 
-#include "omicron/api/scene/component/AbstractComponent.hpp"
-
 #include "omicron/api/API.hpp"
+#include "omicron/api/scene/component/AbstractComponent.hpp"
 
 
 namespace omi
@@ -24,6 +23,7 @@ namespace scene
  */
 enum class RenderableType
 {
+    kCamera,
     kMesh
     // TODO: more types
 };
@@ -62,6 +62,9 @@ public:
         return omi::scene::ComponentType::kRenderable;
     }
 
+    /*!
+     * \brief Returns the type of this renderable component.
+     */
     virtual RenderableType get_renderable_type() const = 0;
 };
 

@@ -6,7 +6,6 @@
 #include <arcanecore/config/Document.hpp>
 #include <arcanecore/config/visitors/Shorthand.hpp>
 
-#include <omicron/api/asset/AssetLibrary.hpp>
 #include <omicron/api/common/Attributes.hpp>
 #include <omicron/api/config/ConfigInline.hpp>
 #include <omicron/api/context/ContextSubsystem.hpp>
@@ -178,13 +177,6 @@ bool startup_routine()
         {
             global::logger->critical
                 << "Failed during startup routine of the ResourceRegistry"
-                << std::endl;
-            return false;
-        }
-        if(!omi::asset::AssetLibrary::instance()->startup_routine())
-        {
-            global::logger->critical
-                << "Failed during startup routine of the AssetLibrary"
                 << std::endl;
             return false;
         }
@@ -403,13 +395,6 @@ bool shutdown_routine()
         {
             global::logger->critical
                 << "Failed during shutdown routine of the SubsystemManager"
-                << std::endl;
-            failure = true;
-        }
-        if(!omi::asset::AssetLibrary::instance()->shutdown_routine())
-        {
-            global::logger->critical
-                << "Failed during shutdown routine of the AssetLibrary"
                 << std::endl;
             failure = true;
         }

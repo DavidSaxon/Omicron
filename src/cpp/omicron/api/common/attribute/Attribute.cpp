@@ -214,7 +214,7 @@ OMI_API_EXPORT bool Attribute::is_pure_mutable() const
     return m_def->m_storage->is_data_pure_mutable();
 }
 
-OMI_API_EXPORT Attribute::Hash Attribute::get_hash() const
+OMI_API_EXPORT Hash Attribute::get_hash() const
 {
     // return null hash?
     if(m_def == nullptr || m_def->m_storage == nullptr)
@@ -469,7 +469,7 @@ OMI_API_EXPORT std::ostream& operator<<(
 
 OMI_API_EXPORT arc::str::UTF8String& operator<<(
         arc::str::UTF8String& s,
-        const omi::Attribute::Hash& h)
+        const omi::Hash& h)
 {
     s << h.part1 << "::" << h.part2;
     return s;
@@ -477,7 +477,7 @@ OMI_API_EXPORT arc::str::UTF8String& operator<<(
 
 OMI_API_EXPORT std::ostream& operator<<(
         std::ostream& s,
-        const omi::Attribute::Hash& h)
+        const omi::Hash& h)
 {
     s << h.part1 << "::" << h.part2;
     return s;

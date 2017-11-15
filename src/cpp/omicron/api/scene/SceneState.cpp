@@ -14,6 +14,7 @@
 #include "omicron/api/scene/SceneGlobals.hpp"
 #include "omicron/api/scene/component/AbstractComponent.hpp"
 #include "omicron/api/scene/component/renderable/AbstractRenderable.hpp"
+#include "omicron/api/scene/component/renderable/Camera.hpp"
 
 
 namespace omi
@@ -56,9 +57,13 @@ private:
     // entities queue to be updated at the end of the current cycle
     std::list<Entity*> m_new_entities;
 
+    // the camera the scene is being rendered through
+    const omi::scene::Camera* m_active_camera;
+    bool m_camera_changed;
+
     // stats
     omi::Int64Attribute m_stat_registered_entity_types;
-    omi::Int64Attribute m_sta_active_entities;
+    omi::Int64Attribute m_stat_active_entities;
 
 public:
 
@@ -66,8 +71,10 @@ public:
 
     SceneStateImpl()
         : m_in_update                   (false)
+        , m_active_camera               (nullptr)
+        , m_camera_changed              (false)
         , m_stat_registered_entity_types(0, false)
-        , m_sta_active_entities         (0, false)
+        , m_stat_active_entities        (0, false)
     {
     }
 
@@ -98,7 +105,7 @@ public:
         );
         omi::report::StatsDatabase::instance()->define_entry(
             "Scene.Active Entities",
-            m_sta_active_entities,
+            m_stat_active_entities,
             "The number of entity instances that are current active within the "
             "Omicron scene."
         );
@@ -156,7 +163,7 @@ public:
     void update()
     {
         // stat the number of active entities
-        m_sta_active_entities.set_at(0, m_entities.size());
+        m_stat_active_entities.set_at(0, m_entities.size());
 
         m_in_update = true;
 
@@ -181,6 +188,15 @@ public:
 
         process_removed_components();
         process_new_components();
+
+        // pass in active camera changes
+        if(m_camera_changed)
+        {
+            render::RenderSubsystem::instance().set_active_camera(
+                m_active_camera
+            );
+            m_camera_changed = false;
+        }
 
         m_in_update = false;
     }
@@ -219,6 +235,17 @@ public:
         }
     }
 
+    const omi::scene::Camera* get_active_camera() const
+    {
+        return m_active_camera;
+    }
+
+    void set_active_camera(const omi::scene::Camera* camera)
+    {
+        m_active_camera = camera;
+        m_camera_changed = true;
+    }
+
 private:
 
     //------------P R I V A T E    M E M B E R    F U N C T I O N S-------------
@@ -236,6 +263,8 @@ private:
                 {
                     case ComponentType::kRenderable:
                     {
+                        // TODO: make sure this isn't the active camera
+
                         AbstractRenderable* renderable =
                             static_cast<AbstractRenderable*>(component);
                         render::RenderSubsystem::instance().remove_renderable(
@@ -280,7 +309,6 @@ private:
                         break;
                     }
                 }
-                delete component;
             }
         }
     }
@@ -329,6 +357,17 @@ OMI_API_EXPORT void SceneState::new_entity(
         const omi::Attribute& data)
 {
     m_impl->new_entity(id, name, data);
+}
+
+OMI_API_EXPORT const omi::scene::Camera* SceneState::get_active_camera() const
+{
+    return m_impl->get_active_camera();
+}
+
+OMI_API_EXPORT void SceneState::set_active_camera(
+        const omi::scene::Camera* camera)
+{
+    return m_impl->set_active_camera(camera);
 }
 
 //------------------------------------------------------------------------------

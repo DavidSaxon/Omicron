@@ -70,7 +70,11 @@
     <ClCompile Include="src\cpp\omicron\api\scene\Entity.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\SceneGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\SceneState.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\AbstractComponent.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\renderable\Camera.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\component\renderable\Mesh.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\AbstractTransform.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\MatrixTransform.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">
     <ClCompile Include="src\cpp\omicron\runtime\Main.cpp" />
@@ -124,7 +128,6 @@
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\Framebuffer.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\ShaderProgram.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\gl\Texture2D.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\image\PNG.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_glfw'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWGlobals.cpp" />
@@ -342,15 +345,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\zlib-1.2.3\include;C:\Dropbox\Development\Omicron\Omicron\ext\libpng-1.2.37\include;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems\omi_deathray;D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\DevIL\include;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems\omi_deathray;D:\Libraries\glew-2.0.0\include;C:\Dropbox\Development\ArcaneCore\ArcaneCore\src\cpp;C:\Dropbox\Development\Omicron\Omicron\src\cpp\builtin_subsystems;C:\Dropbox\Development\Omicron\Omicron\src\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDLL;OMI_PLUGIN_ENABLE_EXPORT;DEATH_API_ENABLE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\zlib-1.2.3\lib;C:\Dropbox\Development\Omicron\Omicron\ext\libpng-1.2.37\lib;D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_thread.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;zlib.lib;libpng.lib;OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Dropbox\Development\Omicron\Omicron\ext\DevIL\lib;C:\Dropbox\Development\Omicron\Omicron\ext\zlib-1.2.3\lib;C:\Dropbox\Development\Omicron\Omicron\ext\libpng-1.2.37\lib;D:\Libraries\glew-2.0.0\lib\Release\Win32;C:\Dropbox\Development\ArcaneCore\ArcaneCore\build\win_x86;C:\Dropbox\Development\Omicron\Omicron\build\win_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>arcanecore_base.lib;arcanecore_io.lib;arcanecore_thread.lib;arcanecore_crypt.lib;arcanecore_log.lib;arcanecore_json.lib;arcanecore_config.lib;arcanecore_collate.lib;omicron_api.lib;DevIL.lib;OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='omi_glfw|Win32'">

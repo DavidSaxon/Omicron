@@ -49,10 +49,10 @@ DEATH_API_EXPORT DeathError death_cam_set_transform(
 DEATH_API_EXPORT DeathError death_cam_set_properties(
         DeathCameraHandle camera,
         DeathFloat focal_length,
-        DeathFloat filmback_origin_x,
-        DeathFloat filmback_origin_y,
-        DeathFloat filmback_width,
-        DeathFloat filmback_height);
+        DeathFloat sensor_width,
+        DeathFloat sensor_height,
+        DeathFloat sensor_offset_x,
+        DeathFloat sensor_offset_y);
 
 //------------------------------------------------------------------------------
 DEATH_API_NO_MANGLE_END;

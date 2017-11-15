@@ -7,14 +7,13 @@
 
 #include <vector>
 
-#include "omicron/api/scene/component/renderable/AbstractRenderable.hpp"
-
 #include "omicron/api/API.hpp"
 #include "omicron/api/res/ResourceId.hpp"
+#include "omicron/api/scene/component/renderable/AbstractRenderable.hpp"
+
 
 namespace omi
 {
-
 namespace scene
 {
 

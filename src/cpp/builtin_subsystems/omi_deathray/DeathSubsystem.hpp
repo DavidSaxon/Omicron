@@ -5,10 +5,13 @@
 #ifndef OMICRON_DEATHRAY_SUBSYSTEM_HPP_
 #define OMICRON_DEATHRAY_SUBSYSTEM_HPP_
 
+#include <unordered_map>
+
 #include <omicron/api/render/RenderSubsystem.hpp>
 
-#include <deathray/api/Camera.h>
 #include <deathray/api/Scene.h>
+
+#include <omi_deathray/renderable/DeathCamera.hpp>
 
 // TODO: MOVE TO SOURCE?
 #include <list>
@@ -66,6 +69,8 @@ public:
     virtual void remove_renderable(
             omi::scene::AbstractRenderable* renderable) override;
 
+    virtual void set_active_camera(const omi::scene::Camera* camera) override;
+
     virtual void render() override;
 
 private:
@@ -76,9 +81,11 @@ private:
 
     // the DeathRay scene
     DeathSceneHandle m_scene;
-    // the DeathRay camera
-    DeathCameraHandle m_camera;
 
+    // the cameras within the scene (keyed by component id)
+    std::unordered_map<omi::scene::ComponentId, DeathCamera*> m_cameras;
+    // the camera that is currently active
+    DeathCamera* m_active_camera;
 
     // TODO: REMOVE ME
     std::list<DeathMesh*> m_meshes;

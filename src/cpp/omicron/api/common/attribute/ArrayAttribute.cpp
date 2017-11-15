@@ -131,7 +131,7 @@ Attribute::Storage* ArrayAttribute::ArrayStorage::as_pure_mutable()
     return new ArrayStorage(pure_data.begin(), pure_data.end());
 }
 
-OMI_API_EXPORT Attribute::Hash ArrayAttribute::ArrayStorage::get_hash(
+OMI_API_EXPORT Hash ArrayAttribute::ArrayStorage::get_hash(
         arc::uint64 seed) const
 {
     // iterate the sub hashes to make sure none have gone out of date

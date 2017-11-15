@@ -18,10 +18,6 @@ set(API_SRC
     ../context/ContextSubsystem.cpp
     ../context/Surface.cpp
 
-    ../asset/AssetGlobals.cpp
-    ../asset/AssetLibrary.cpp
-    ../asset/types/Geometry.cpp
-
     ../render/RenderSubsystem.cpp
 
     ../report/Logging.cpp
@@ -41,7 +37,16 @@ set(API_SRC
     ../scene/Entity.cpp
     ../scene/SceneGlobals.cpp
     ../scene/SceneState.cpp
+    ../scene/component/AbstractComponent.cpp
+    ../scene/component/renderable/Camera.cpp
     ../scene/component/renderable/Mesh.cpp
+    ../scene/component/transform/AbstractTransform.cpp
+    ../scene/component/transform/AxisAngleTransform.cpp
+    ../scene/component/transform/MatrixTransform.cpp
+    ../scene/component/transform/QuaternionTransform.cpp
+    ../scene/component/transform/Scale3Transform.cpp
+    ../scene/component/transform/ScaleTransform.cpp
+    ../scene/component/transform/TranslateTransform.cpp
 )
 
 add_library(omicron_api SHARED ${API_SRC})

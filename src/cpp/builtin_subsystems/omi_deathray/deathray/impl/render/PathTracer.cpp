@@ -13,8 +13,6 @@
 #include <deathray/gl/ShaderProgram.hpp>
 #include <deathray/gl/Texture2D.hpp>
 
-#include <deathray/image/PNG.hpp>
-
 #include "deathray/impl/Camera.hpp"
 #include "deathray/impl/Octree.hpp"
 #include "deathray/impl/Scene.hpp"
@@ -44,6 +42,7 @@ private:
     death::gl::Texture2D m_ibl_texture;
     // the normal map texture
     death::gl::Texture2D m_nmap_texture;
+    death::gl::Texture2D m_nmap2_texture;
     // the test texture
     death::gl::Texture2D m_test_texture;
 
@@ -106,10 +105,14 @@ public:
         m_nmap_texture.bind();
         m_shader_program.set_uniform_1i("u_nmap_texture", 1);
 
-        // pass in test texture data
         glActiveTexture(GL_TEXTURE2);
+        m_nmap2_texture.bind();
+        m_shader_program.set_uniform_1i("u_nmap2_texture", 2);
+
+        // pass in test texture data
+        glActiveTexture(GL_TEXTURE3);
         m_test_texture.bind();
-        m_shader_program.set_uniform_1i("u_test_texture", 2);
+        m_shader_program.set_uniform_1i("u_test_texture", 3);
 
         // draw
         glDrawArrays(GL_TRIANGLES, 0, m_surface_points);
@@ -160,102 +163,32 @@ private:
         arc::io::sys::Path ibl_path;
         ibl_path
             << "res" << "builtin" << "texture" << "ibl" << "oribi.png";
-        std::size_t ibl_width  = 0;
-        std::size_t ibl_height = 0;
-        bool ibl_has_alpha = false;
-        unsigned char* ibl_data = nullptr;
-        death::image::png::load_file(
-            ibl_path,
-            ibl_width,
-            ibl_height,
-            ibl_has_alpha,
-            ibl_data
-        );
+        m_ibl_texture.load_from_file(ibl_path);
 
-        GLint ibl_format = GL_RGB;
-        if(ibl_has_alpha)
-        {
-            ibl_format = GL_RGBA;
-        }
-
-        m_ibl_texture.init(
-            ibl_format,
-            arc::lx::Vector2u(ibl_width, ibl_height),
-            ibl_format,
-            GL_UNSIGNED_BYTE,
-            ibl_data
-        );
-
-        // clean up
-        delete[] ibl_data;
         //----------------------------------------------------------------------
 
         // load normal map data
         arc::io::sys::Path nmap_path;
         nmap_path
             << "res" << "builtin" << "texture" << "normal_map" << "sharp.png";
-        std::size_t nmap_width  = 0;
-        std::size_t nmap_height = 0;
-        bool nmap_has_alpha = false;
-        unsigned char* nmap_data = nullptr;
-        death::image::png::load_file(
-            nmap_path,
-            nmap_width,
-            nmap_height,
-            nmap_has_alpha,
-            nmap_data
-        );
+        m_nmap_texture.load_from_file(nmap_path);
 
-        GLint nmap_format = GL_RGB;
-        if(nmap_has_alpha)
-        {
-            nmap_format = GL_RGBA;
-        }
+        //----------------------------------------------------------------------
 
-        m_nmap_texture.init(
-            nmap_format,
-            arc::lx::Vector2u(nmap_width, nmap_height),
-            nmap_format,
-            GL_UNSIGNED_BYTE,
-            nmap_data
-        );
+        // load normal map data
+        arc::io::sys::Path nmap2_path;
+        nmap2_path
+            << "res" << "builtin" << "texture" << "normal_map" << "brick.png";
+        m_nmap2_texture.load_from_file(nmap2_path);
 
-        // clean up
-        delete[] nmap_data;
         //----------------------------------------------------------------------
 
         // load test data
         arc::io::sys::Path test_path;
         test_path
             << "res" << "builtin" << "texture" << "test" << "space_1.png";
-        std::size_t test_width  = 0;
-        std::size_t test_height = 0;
-        bool test_has_alpha = false;
-        unsigned char* test_data = nullptr;
-        death::image::png::load_file(
-            test_path,
-            test_width,
-            test_height,
-            test_has_alpha,
-            test_data
-        );
+        m_test_texture.load_from_file(test_path);
 
-        GLint test_format = GL_RGB;
-        if(test_has_alpha)
-        {
-            test_format = GL_RGBA;
-        }
-
-        m_test_texture.init(
-            test_format,
-            arc::lx::Vector2u(test_width, test_height),
-            test_format,
-            GL_UNSIGNED_BYTE,
-            test_data
-        );
-
-        // clean up
-        delete[] test_data;
         //----------------------------------------------------------------------
 
         // setup positions

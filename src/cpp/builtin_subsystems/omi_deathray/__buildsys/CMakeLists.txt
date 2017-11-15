@@ -9,6 +9,7 @@ include_directories(
 set(OMI_DEATHRAY_SRC
     ../DeathGlobals.cpp
     ../DeathSubsystem.cpp
+    ../renderable/DeathCamera.cpp
     ../renderable/DeathMesh.cpp
 
     ../deathray/Geometry.cpp
@@ -43,8 +44,6 @@ set(OMI_DEATHRAY_SRC
     ../deathray/gl/Framebuffer.cpp
     ../deathray/gl/ShaderProgram.cpp
     ../deathray/gl/Texture2D.cpp
-
-    ../deathray/image/PNG.cpp
 )
 
 # build the omicron runtime executable
@@ -59,8 +58,8 @@ set_target_properties(omi_deathray
 # link libraries
 target_link_libraries(omi_deathray
     ${GLEW_LIBRARIES}
-    png
-    z
+    m
+    IL
     omicron_api
     arcanecore_collate
     arcanecore_config

@@ -21,6 +21,7 @@ namespace scene
 //                              FORWARD DECLARATIONS
 //------------------------------------------------------------------------------
 
+class Camera;
 class Entity;
 
 /*!
@@ -100,6 +101,19 @@ public:
             const arc::str::UTF8String& id,
             const arc::str::UTF8String& name = "",
             const omi::Attribute& data = omi::Attribute());
+
+    /*!
+     * \brief Returns the camera component that is currently being used to
+     *        render the scene.
+     *
+     * \note This may be null if no active camera has been set.
+     */
+    OMI_API_EXPORT const omi::scene::Camera* get_active_camera() const;
+
+    /*!
+     * \brief Sets the camera component that will be used to render the scene.
+     */
+    OMI_API_EXPORT void set_active_camera(const omi::scene::Camera* camera);
 
 private:
 

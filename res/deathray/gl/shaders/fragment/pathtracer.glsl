@@ -4,6 +4,7 @@ in vec2 frag_image_plane;
 
 uniform sampler2D u_ibl_texture;
 uniform sampler2D u_nmap_texture;
+uniform sampler2D u_nmap2_texture;
 uniform sampler2D u_test_texture;
 
 uniform mat4 u_camera_postion;
@@ -146,11 +147,23 @@ bool check_sphere_3(
     ))
     {
         vec3 near_intersect = ray_origin + (t0 * ray_direction);
+
         vec3 normal = normalize(near_intersect - position);
+        vec2 ray2_n = normalize(normal.xz);
+        vec2 uv = vec2(
+            abs(-1.0 * atan(ray2_n.y - -1.0, ray2_n.x - 0.0)) / 3.1415926,
+            (normal.y + 1.0) / 2.0
+        );
+
+
+
+        normal += texture(u_nmap2_texture, uv).rgb / 2.5;
+        normal = normalize(normal);
 
         out_ray_origin = near_intersect;
         out_ray_direction = reflect(ray_direction, normal);
         contrib = vec3(0.4, 0.96, 0.4);
+        // contrib = texture(u_nmap_texture, uv).rgb;
         return true;
     }
     return false;
@@ -212,7 +225,7 @@ bool check_plane_1(
         vec3 intersect = ray_origin + (ray_direction * t);
 
         normal += vec3(
-            texture(u_nmap_texture, (intersect.xy + 2.0) / 4.0).rg / 10.0,
+            texture(u_nmap_texture, (intersect.xy + 2.0) / 4.0).rg / 16.0,
             0.0
         );
         normal = normalize(normal);
@@ -264,8 +277,9 @@ bool check_plane_1(
         {
             out_ray_origin = intersect;
             out_ray_direction = reflect(ray_direction, normal);
-            contrib =
-                texture(u_test_texture, (intersect.xy + 2.0) / 4.0).rgb * 2.0;
+            contrib = vec3(0.7, 0.7, 0.7);
+            contrib +=
+                texture(u_test_texture, (intersect.xy + 2.0) / 4.0).rgb;
             return true;
         }
     }

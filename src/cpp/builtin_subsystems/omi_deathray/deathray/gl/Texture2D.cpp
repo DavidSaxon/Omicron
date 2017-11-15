@@ -8,6 +8,15 @@
  */
 #include "deathray/gl/Texture2D.hpp"
 
+#include <arcanecore/base/Exceptions.hpp>
+
+// only support image loading in development builds
+#ifndef DEATH_API_MODE_PRODUCTION
+
+#include <IL/il.h>
+
+#endif
+
 
 namespace death
 {
@@ -89,6 +98,82 @@ public:
         apply_filtering();
         apply_wrap();
     }
+
+    // only support image loading in development builds
+    #ifndef DEATH_API_MODE_PRODUCTION
+
+    void load_from_file(const arc::io::sys::Path& file_path)
+    {
+        static bool initialised = false;
+        if(!initialised)
+        {
+            ilInit();
+            initialised = true;
+        }
+
+        ILuint image_id = 0;
+
+        // generate and bind the image
+        ilGenImages(1, &image_id);
+        ilBindImage(image_id);
+
+        // match the image origin to OpenGL's
+        ilEnable(IL_ORIGIN_SET);
+        ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+
+        //load the image
+        ILboolean success = ilLoadImage(file_path.to_native().get_raw());
+
+        // check that the image loading successfully
+        if(!success)
+        {
+            ilBindImage(0);
+            ilDeleteImages(1, &image_id);
+            // TODO: detect error
+            arc::str::UTF8String error_message;
+            error_message << "Failed to open image: " << file_path;
+            throw arc::ex::RuntimeError(error_message);
+        }
+
+        // get the data and ensure it actually contains something
+        void* data = ilGetData();
+        if (!data)
+        {
+            ilBindImage(0);
+            ilDeleteImages(1, &image_id);
+            // TODO: better exception?
+            arc::str::UTF8String error_message;
+            error_message << "Empty image data: " << file_path;
+            throw arc::ex::RuntimeError(error_message);
+        }
+
+        //get the important parameters from the image
+        int width  = ilGetInteger(IL_IMAGE_WIDTH);
+        int height = ilGetInteger(IL_IMAGE_HEIGHT);
+        int type   = ilGetInteger(IL_IMAGE_TYPE);
+        int format = ilGetInteger(IL_IMAGE_FORMAT);
+
+        // set the pixel store parameters
+        glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+        glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+        glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        // create the texture
+        init(
+            format,
+            arc::lx::Vector2u(
+                static_cast<arc::uint32>(width),
+                static_cast<arc::uint32>(height)
+            ),
+            format,
+            type,
+            data
+        );
+    }
+
+    #endif
 
     void release()
     {
@@ -190,6 +275,17 @@ DEATH_API_EXPORT void Texture2D::init(
 {
     m_impl->init(internal_format, resolution, format, data_type, data);
 }
+
+// only support image loading in development builds
+#ifndef DEATH_API_MODE_PRODUCTION
+
+DEATH_API_EXPORT void Texture2D::load_from_file(
+        const arc::io::sys::Path& file_path)
+{
+    m_impl->load_from_file(file_path);
+}
+
+#endif
 
 DEATH_API_EXPORT void Texture2D::release()
 {

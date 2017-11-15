@@ -908,10 +908,10 @@ ARC_TEST_UNIT(hash)
         omi::ArrayAttribute b(data2, true);
 
         ARC_CHECK_EQUAL(a.get_hash(), b.get_hash());
-        omi::Attribute::Hash hash1 = a.get_hash();
+        omi::Hash hash1 = a.get_hash();
         omi::Int32Attribute int_attr(-45);
         a.push_back(int_attr);
-        omi::Attribute::Hash hash2 = a.get_hash();
+        omi::Hash hash2 = a.get_hash();
         ARC_CHECK_NOT_EQUAL(hash1, hash2);
 
         omi::ArrayAttribute sub_array = a.get(2);
@@ -967,8 +967,8 @@ ARC_TEST_UNIT(hash)
         };
 
         omi::ArrayAttribute a(data3, false);
-        omi::Attribute::Hash hash1 = a.get_hash();
-        omi::Attribute::Hash hash2 = a.get_hash();
+        omi::Hash hash1 = a.get_hash();
+        omi::Hash hash2 = a.get_hash();
         ARC_CHECK_EQUAL(hash1, hash2);
 
         a.set(0, omi::BoolAttribute(false));

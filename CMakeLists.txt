@@ -23,6 +23,7 @@ include_directories(
     ${INCLUDE_DIRECTORIES}
     src/cpp
     src/cpp/builtin_subsystems
+    # ext/DevIL/include
     /usr/include/python3.5
     ${GLEW_INCLUDE_DIRS}
     # TODO: eventually replace with proper install paths
@@ -32,6 +33,7 @@ include_directories(
 link_directories(
     ${LINK_DIRECTORIES}
     build/linux_x86/
+    # ext/DevIL/lib
     /usr/lib/python3.5/
     ${OpenGL_LIBRARY_DIRS}
     # TODO: eventually replace with proper library paths

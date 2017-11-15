@@ -8,6 +8,8 @@
 #include <arcanecore/base/Types.hpp>
 #include <arcanecore/base/lang/Restrictors.hpp>
 
+#include "omicron/api/API.hpp"
+
 
 namespace omi
 {
@@ -24,6 +26,7 @@ namespace scene
 enum class ComponentType
 {
     kTrivial,
+    kTransform,
     kRenderable,
     // TODO: more types
 };
@@ -55,21 +58,13 @@ public:
     /*!
      * \brief Super constructor.
      */
-    AbstractComponent()
-        : m_id(0)
-    {
-        static ComponentId g_compontent = 0;
-        ++g_compontent;
-        m_id = g_compontent;
-    }
+    OMI_API_EXPORT AbstractComponent();
 
     //--------------------------------------------------------------------------
     //                                 DESTRUCTOR
     //--------------------------------------------------------------------------
 
-    virtual ~AbstractComponent()
-    {
-    }
+    OMI_API_EXPORT virtual ~AbstractComponent();
 
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
@@ -78,23 +73,50 @@ public:
     /*!
      * \brief Returns the unique id of this component.
      */
-    ComponentId get_id() const
-    {
-        return m_id;
-    }
+    OMI_API_EXPORT ComponentId get_id() const;
 
     /*!
      * \brief Returns the type of this component.
      */
     virtual ComponentType get_component_type() const = 0;
 
+protected:
+
+    //--------------------------------------------------------------------------
+    //                         PROTECTED MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    /*!
+     * \brief Alters this component that another component has become dependent
+     *        on it.
+     */
+    OMI_API_EXPORT void dependent_added(AbstractComponent* dependent) const;
+
+    /*!
+     * \brief Alerts this component that a dependent component is no longer
+     *        dependent on it.
+     */
+    OMI_API_EXPORT void dependent_removed(AbstractComponent* dependent) const;
+
+    /*!
+     * \brief Alerts this component that another component it is dependent has
+     *        been detached from this component.
+     *
+     * \note Does nothing by default but is implemented by component types that
+     *       implement dependencies.
+     */
+    virtual void dependency_removed(AbstractComponent* component)
+    {
+    }
+
 private:
 
     //--------------------------------------------------------------------------
-    //                             PRIVATE ATTRIBUTES
+    //                            COMPILATION FIREWALL
     //--------------------------------------------------------------------------
 
-    ComponentId m_id;
+    class AbstractComponentImpl;
+    AbstractComponentImpl* m_impl;
 };
 
 } // namespace scene
