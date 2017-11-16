@@ -1,5 +1,6 @@
 #include "omi_deathray/DeathSubsystem.hpp"
 
+#include <omicron/api/context/Surface.hpp>
 #include <omicron/api/report/Logging.hpp>
 #include <omicron/api/scene/component/renderable/AbstractRenderable.hpp>
 
@@ -59,7 +60,11 @@ bool DeathSubsystem::firstframe_routine()
     // TODO; why crash??
     // generate the death ray scene
     death_scene_gen(&m_scene);
-    death_scene_set_resolution(m_scene, 1000, 1000);
+    death_scene_set_resolution(
+        m_scene,
+        omi::context::Surface::instance()->get_width(),
+        omi::context::Surface::instance()->get_height()
+    );
 
     // TODO: REMOVE BELOW
     //--------------------------------------------------------------------------
@@ -185,6 +190,13 @@ void DeathSubsystem::set_active_camera(const omi::scene::Camera* camera)
 
 void DeathSubsystem::render()
 {
+    // set resolution
+    death_scene_set_resolution(
+        m_scene,
+        omi::context::Surface::instance()->get_width(),
+        omi::context::Surface::instance()->get_height()
+    );
+
     // // TODO:
     // m_rotation(1) += 0.25F * 0.0174533F;
     // // TODO: testing

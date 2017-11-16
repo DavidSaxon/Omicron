@@ -93,8 +93,12 @@ void GLFWSubsystem::main_loop(EngineCycleFunc* engine_cycle_func)
 
         surface->swap_buffers();
 
-        // TODO:
+        // let the window manager know we're still here
         glfwPollEvents();
+
+        // TODO: REMOVE ME
+        // TODO: REMOVE ME
+        glfwSetCursorPos(surface->get_native(), 500, 500);
 
         arc::uint64 frame_time = arc::clock::get_current_time() - start_time;
 

@@ -13,6 +13,7 @@
 
 #include "omicron/api/API.hpp"
 #include "omicron/api/common/Attributes.hpp"
+#include "omicron/api/context/EventListener.hpp"
 
 
 namespace omi
@@ -34,7 +35,8 @@ class SceneState;
  * Entity implementations must be derived from this base class.
  */
 class Entity
-    : private arc::lang::Noncopyable
+    : public omi::context::EventListener
+    , private arc::lang::Noncopyable
     , private arc::lang::Nonmovable
     , private arc::lang::Noncomparable
 {

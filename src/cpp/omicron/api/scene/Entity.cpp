@@ -134,7 +134,8 @@ public:
 //------------------------------------------------------------------------------
 
 OMI_API_EXPORT Entity::Entity(const arc::str::UTF8String& name)
-    : m_impl(new EntityImpl(name))
+    : omi::context::EventListener()
+    , m_impl                     (new EntityImpl(name))
 {
 }
 

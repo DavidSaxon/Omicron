@@ -3,6 +3,7 @@
 #include <arcanecore/lx/MatrixMath44f.hpp>
 
 #include <omicron/api/GameInterface.hpp>
+#include <omicron/api/context/Surface.hpp>
 #include <omicron/api/res/ResourceId.hpp>
 #include <omicron/api/scene/Entity.hpp>
 #include <omicron/api/scene/SceneState.hpp>
@@ -28,6 +29,8 @@ private:
     //--------------------------------------------------------------------------
     //                             PRIVATE ATTRIBUTES
     //--------------------------------------------------------------------------
+
+    arc::lx::Vector2i m_window_size;
 
     omi::scene::AxisAngleTransform* m_spin;
     omi::scene::AxisAngleTransform* m_tilt;
@@ -79,6 +82,10 @@ public:
 
         // set the active camera
         omi::scene::SceneState::instance().set_active_camera(camera);
+
+        // event subscriptions
+        subscribe_to_event(omi::context::Event::kNameMouseMove);
+        subscribe_to_event(omi::context::Event::kNameKeyPress);
     }
 
     //--------------------------------------------------------------------------
@@ -89,16 +96,57 @@ public:
     {
     }
 
-protected:
+private:
 
     //--------------------------------------------------------------------------
-    //                         PROTECTED MEMBER FUNCTIONS
+    //                          PRIVATE MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
+
+    virtual void on_event(const omi::context::Event& event) override
+    {
+        omi::context::Event::KeyCode key_code;
+
+        // TODO: utility for this
+        if(event.get_name() == omi::context::Event::kNameMouseMove)
+        {
+            // get the mouse position
+            omi::Int32Attribute mouse_pos_attr =
+                event.get_data()[omi::context::Event::kDataMousePosition];
+            if(!mouse_pos_attr.is_valid() || mouse_pos_attr.get_size() != 2)
+            {
+                // TODO:
+                return;
+            }
+
+            // get the mouse position
+            arc::lx::Vector2i mouse_pos(
+                mouse_pos_attr.get_values()[0],
+                mouse_pos_attr.get_values()[1]
+            );
+
+            arc::int32 half_width =
+                omi::context::Surface::instance()->get_width() / 2;
+            arc::int32 half_height =
+                omi::context::Surface::instance()->get_height() / 2;
+
+            // move by the difference
+            m_spin->angle() += (mouse_pos(0) - half_width) * -0.002F;
+            m_tilt->angle() += (mouse_pos(1) - half_height) * -0.002F;
+        }
+        else if(omi::context::Event::key_press(event, key_code))
+        {
+            if(key_code == omi::context::Event::kKeyCodeF)
+            {
+                m_spin->angle() = 0.0F;
+                m_tilt->angle() = 0.0F;
+            }
+        }
+    }
 
     virtual void update() override
     {
         // rotate the camera
-        m_spin->angle() += arc::math::degrees_to_radians(0.25F);
+        // m_spin->angle() += arc::math::degrees_to_radians(0.25F);
     }
 };
 

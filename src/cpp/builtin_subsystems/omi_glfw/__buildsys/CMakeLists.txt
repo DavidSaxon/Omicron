@@ -12,6 +12,7 @@ link_directories(
 
 set(OMI_GFLW_SRC
     ../GLFWGlobals.cpp
+    ../GLFWInput.cpp
     ../GLFWSubsystem.cpp
     ../GLFWSurface.cpp
     ../OmiGLFWRegister.cpp

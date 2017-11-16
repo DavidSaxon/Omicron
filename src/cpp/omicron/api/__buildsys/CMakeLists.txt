@@ -16,6 +16,9 @@ set(API_SRC
     ../config/ConfigGlobals.cpp
 
     ../context/ContextSubsystem.cpp
+    ../context/Event.cpp
+    ../context/EventListener.cpp
+    ../context/EventService.cpp
     ../context/Surface.cpp
 
     ../render/RenderSubsystem.cpp

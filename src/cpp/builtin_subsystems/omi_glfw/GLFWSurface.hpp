@@ -5,6 +5,9 @@
 #ifndef OMICRON_GLFW_SURFACE_HPP_
 #define OMICRON_GLFW_SURFACE_HPP_
 
+#include <arcanecore/lx/Alignment.hpp>
+#include <arcanecore/lx/Vector.hpp>
+
 #include <omicron/api/context/Surface.hpp>
 
 #include <GLFW/glfw3.h>
@@ -21,6 +24,8 @@ class GLFWSurface
 {
 public:
 
+    ARC_LX_ALIGNED_NEW;
+
     //--------------------------------------------------------------------------
     //                                CONSTRUCTOR
     //--------------------------------------------------------------------------
@@ -36,6 +41,19 @@ public:
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
+
+    virtual arc::int32 get_width() const override;
+
+    virtual arc::int32 get_height() const override;
+
+    virtual arc::int32 get_position_x() const override;
+
+    virtual arc::int32 get_position_y() const override;
+
+    /*!
+     * \brief Returns the pointer to the GLFW window object.
+     */
+    GLFWwindow* get_native();
 
     /*!
      * \brief Opens the GLFW window.
@@ -60,6 +78,32 @@ private:
 
     // the GLFW window instance
     GLFWwindow* m_glfw_window;
+
+    // the size of the window (in pixels)
+    arc::lx::Vector2i m_size;
+    // the position of the window (in pixels)
+    arc::lx::Vector2i m_position;
+
+    //--------------------------------------------------------------------------
+    //                          PRIVATE STATIC FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    // The Omicron static Surface instance casted to a GLFWSurface type.
+    static GLFWSurface* glfw_instance();
+
+    // Is called when the window size changes.
+    static void resize_callback(GLFWwindow* window, int width, int height);
+
+    // Is called when the window is moved.
+    static void move_callback(GLFWwindow* window, int pos_x, int pos_y);
+
+    //--------------------------------------------------------------------------
+    //                          PRIVATE MEMBER FUNCTIONS
+    //--------------------------------------------------------------------------
+
+    // connects the callbacks registered on this window to Omicron's event
+    // system
+    void connect_callbacks();
 };
 
 } // namespace omi_glfw

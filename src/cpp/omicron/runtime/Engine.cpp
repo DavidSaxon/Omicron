@@ -1,6 +1,7 @@
 #include "omicron/runtime/Engine.hpp"
 
 #include <omicron/api/context/ContextSubsystem.hpp>
+#include "omicron/api/context/EventListener.hpp"
 #include <omicron/api/render/RenderSubsystem.hpp>
 #include <omicron/api/scene/SceneState.hpp>
 
@@ -18,15 +19,24 @@ namespace runtime
 //------------------------------------------------------------------------------
 
 class Engine::EngineImpl
-    : private arc::lang::Noncopyable
+    : public omi::context::EventListener
+    , private arc::lang::Noncopyable
     , private arc::lang::Nonmovable
     , private arc::lang::Noncomparable
 {
+private:
+
+    //-----------P R I V A T E    M E M B E R    A T T R I B U T E S------------
+
+    // signals that the engine should exit
+    bool m_should_exit;
+
 public:
 
     //--------------------------C O N S T R U C T O R---------------------------
 
     EngineImpl()
+        : m_should_exit(false)
     {
     }
 
@@ -46,6 +56,9 @@ public:
                 << "Engine startup failed. Aborting" << std::endl;
             return -1;
         }
+
+        // subscribe to events
+        subscribe_to_event(omi::context::Event::kNameEngineShutdown);
 
         // start the main loop
         global::logger->info << "Starting main loop" << std::endl;
@@ -82,6 +95,12 @@ private:
             return false;
         }
 
+        // exiting?
+        if(m_should_exit)
+        {
+            return false;
+        }
+
         // TODO: don't update more than 60fps (config based)
 
         // update the scene state
@@ -93,6 +112,14 @@ private:
         // TODO: delay (if frame cap)
 
         return true;
+    }
+
+    virtual void on_event(const omi::context::Event& event) override
+    {
+        if(event.get_name() == omi::context::Event::kNameEngineShutdown)
+        {
+            m_should_exit = true;
+        }
     }
 };
 

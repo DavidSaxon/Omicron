@@ -5,6 +5,7 @@
 #ifndef OMICRON_API_CONTEXT_SURFACE_HPP_
 #define OMICRON_API_CONTEXT_SURFACE_HPP_
 
+#include <arcanecore/base/Types.hpp>
 #include <arcanecore/base/lang/Restrictors.hpp>
 
 #include "omicron/api/API.hpp"
@@ -58,9 +59,25 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    // TODO: get native resolution
+    /*!
+     * \brief Returns the width of this surface (in pixels).
+     */
+    virtual arc::int32 get_width() const = 0;
 
-    // TODO: get position
+    /*!
+     * \brief Returns the height of this window (in pixels).
+     */
+    virtual arc::int32 get_height() const = 0;
+
+    /*!
+     * \brief Returns the x position of the window (in pixels).
+     */
+    virtual arc::int32 get_position_x() const = 0;
+
+    /*!
+     * \brief Returns the y position of the window (in pixels).
+     */
+    virtual arc::int32 get_position_y() const = 0;
 
     // TODO: get context info
 
