@@ -57,9 +57,9 @@ protected:
     //                         PROTECTED MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    OMI_API_EXPORT void subscribe_to_event(const arc::str::UTF8String& name);
+    OMI_API_EXPORT void subscribe_to_event(const arc::str::UTF8String& type);
 
-    OMI_API_EXPORT void unsubsribe_from_event(const arc::str::UTF8String& name);
+    OMI_API_EXPORT void unsubsribe_from_event(const arc::str::UTF8String& type);
 
     OMI_API_EXPORT void unsubsribe_from_all_events();
 

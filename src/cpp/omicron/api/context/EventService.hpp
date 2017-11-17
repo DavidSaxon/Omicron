@@ -58,7 +58,7 @@ public:
 
     /*!
      * \brief Broadcasts the given event to all EventListener who are
-     *        subscribed to events with the same name.
+     *        subscribed to events with the same type.
      */
     OMI_API_EXPORT void broadcast(const omi::context::Event& event);
 
@@ -79,15 +79,15 @@ protected:
      */
     OMI_API_EXPORT void subscribe(
             omi::context::EventListener* listener,
-            const arc::str::UTF8String& name);
+            const arc::str::UTF8String& type);
 
     /*!
      * \brief Unsubscribes the given EventListener from events with the given
-     *        name.
+     *        type.
      */
     OMI_API_EXPORT void unsubscribe(
             omi::context::EventListener* listener,
-            const arc::str::UTF8String& name);
+            const arc::str::UTF8String& type);
 
 private:
 

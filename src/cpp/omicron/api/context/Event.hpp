@@ -31,56 +31,91 @@ public:
     //--------------------------E V E N T    N A M E S--------------------------
 
     /*!
-     * \brief The name of mouse move events.
+     * \brief The type of mouse move events.
      */
-    OMI_API_EXPORT static const arc::str::UTF8String kNameMouseMove;
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeMouseMove;
+    /*!
+     * \brief The type of mouse button press events.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeMouseButtonPress;
+    /*!
+     * \brief The type of mouse button release events.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeMouseButtonRelease;
+    /*!
+     * \brief The type of mouse scroll events.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeMouseScroll;
+    /*!
+     * \brief The type of mouse enter events.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeMouseEnter;
+    /*!
+     * \brief The type of mouse exit events.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeMouseExit;
 
     /*!
-     * \brief The name of key press events.
+     * \brief The type of key press events.
      */
-    OMI_API_EXPORT static const arc::str::UTF8String kNameKeyPress;
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeKeyPress;
     /*!
-     * \brief The name of key release events.
+     * \brief The type of key release events.
      */
-    OMI_API_EXPORT static const arc::str::UTF8String kNameKeyRelease;
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeKeyRelease;
 
     /*!
-     * \brief The name of window resize events.
+     * \brief The type of window resize events.
      */
-    OMI_API_EXPORT static const arc::str::UTF8String kNameWindowResize;
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeWindowResize;
     /*!
-     * \brief The name of window move events.
+     * \brief The type of window move events.
      */
-    OMI_API_EXPORT static const arc::str::UTF8String kNameWindowMove;
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeWindowMove;
 
     /*!
-     * \brief The name of the event which is fired to cause the engine to
+     * \brief The type of the event which is fired to cause the engine to
      *        shutdown.
      */
-    OMI_API_EXPORT static const arc::str::UTF8String kNameEngineShutdown;
+    OMI_API_EXPORT static const arc::str::UTF8String kTypeEngineShutdown;
 
     //---------------------------D A T A    N A M E S---------------------------
 
     /*!
-     * \brief The name of the data attribute that stores the mouse position.
-     */
-    OMI_API_EXPORT static const arc::str::UTF8String kDataMousePosition;
-
-    /*!
-     * \brief The name of the data attribute that stores the key code.
-     */
-    OMI_API_EXPORT static const arc::str::UTF8String kDataKeyCode;
-    /*!
-     * \brief The name of the data attribute that stores the modifiers bit flag.
+     * \brief The type of the data attribute that stores the modifiers bit flag.
      */
     OMI_API_EXPORT static const arc::str::UTF8String kDataModifiers;
 
     /*!
-     * \brief The name of the data attribute that stores the window size.
+     * \brief The type of the data attribute that stores the mouse position.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kDataMousePosition;
+    /*!
+     * \brief The type of the data attribute that stores the mouse button.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kDataMouseButton;
+    /*!
+     * \brief The type of the data attribute that the stores the mouse x scroll
+     *        amount.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kDataMouseScrollAmountX;
+    /*!
+     * \brief The type of the data attribute that the stores the mouse y scroll
+     *        amount.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kDataMouseScrollAmountY;
+
+    /*!
+     * \brief The type of the data attribute that stores the key code.
+     */
+    OMI_API_EXPORT static const arc::str::UTF8String kDataKeyCode;
+
+    /*!
+     * \brief The type of the data attribute that stores the window size.
      */
     OMI_API_EXPORT static const arc::str::UTF8String kDataWindowSize;
     /*!
-     * \brief The name of the data attribute that stores the window position.
+     * \brief The type of the data attribute that stores the window position.
      */
     OMI_API_EXPORT static const arc::str::UTF8String kDataWindowPosition;
 
@@ -98,7 +133,25 @@ public:
     };
 
     /*!
-     * \brief The various key codes that can be triggered by key events.
+     * \brief THe various mouse buttons.
+     */
+    enum MouseButton
+    {
+        kMouse1      = 0,
+        kMouse2      = 1,
+        kMouse3      = 2,
+        kMouse4      = 3,
+        kMouse5      = 4,
+        kMouse6      = 5,
+        kMouse7      = 6,
+        kMouse8      = 7,
+        kMouseLeft   = kMouse1,
+        kMouseRight  = kMouse2,
+        kMouseMiddle = kMouse3,
+    };
+
+    /*!
+     * \brief The various key codes.
      */
     enum KeyCode
     {
@@ -230,11 +283,11 @@ public:
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Constructs a new event with a name and a map of data describing
+     * \brief Constructs a new event with a type and a map of data describing
      *        the event.
      */
     OMI_API_EXPORT Event(
-            const arc::str::UTF8String& name,
+            const arc::str::UTF8String& type,
             const omi::MapAttribute& data);
 
     /*!
@@ -283,14 +336,119 @@ public:
 
     /*!
      * \brief Utility function that returns true if the given event is a valid
+     *        mouse move event.
+     *
+     * If the event is a valid mouse move, the x and y position are returned
+     * via the parameters.
+     */
+    OMI_API_EXPORT static bool mouse_move(
+            const omi::context::Event& event,
+            arc::int32& position_x,
+            arc::int32& position_y);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        mouse button press event.
+     *
+     * If the event is a mouse button press, the button is returned via the
+     *  parameter.
+     */
+    OMI_API_EXPORT static bool mouse_button_press(
+            const omi::context::Event& event,
+            omi::context::Event::MouseButton& button);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        key press event.
+     *
+     * If the event is a valid mouse button press, the button and modifiers are
+     * returned via the parameters.
+     */
+    OMI_API_EXPORT static bool mouse_button_press(
+            const omi::context::Event& event,
+            omi::context::Event::MouseButton& button,
+            omi::context::Event::Modifier& modifiers);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        mouse button release event.
+     *
+     * If the event is a mouse button release, the button is returned via the
+     *  parameter.
+     */
+    OMI_API_EXPORT static bool mouse_button_release(
+            const omi::context::Event& event,
+            omi::context::Event::MouseButton& button);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        key release event.
+     *
+     * If the event is a valid mouse button release, the button and modifiers
+     * are returned via the parameters.
+     */
+    OMI_API_EXPORT static bool mouse_button_release(
+            const omi::context::Event& event,
+            omi::context::Event::MouseButton& button,
+            omi::context::Event::Modifier& modifiers);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        mouse scroll event.
+     *
+     * If the event is a valid mouse scroll, the x and y amounts are returned
+     * via the parameters.
+     */
+    OMI_API_EXPORT static bool mouse_scroll(
+            const omi::context::Event& event,
+            arc::int32& amount_x,
+            arc::int32& amount_y);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
      *        key press event.
      *
      * If the event is a valid key press, the KeyCode is returned via the
-     * key_code parameter.
+     * parameter.
      */
     OMI_API_EXPORT static bool key_press(
             const omi::context::Event& event,
             omi::context::Event::KeyCode& key_code);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        key press event.
+     *
+     * If the event is a valid key press, the KeyCode and modifiers are returned
+     * via the parameters.
+     */
+    OMI_API_EXPORT static bool key_press(
+            const omi::context::Event& event,
+            omi::context::Event::KeyCode& key_code,
+            omi::context::Event::Modifier& modifiers);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        key release event.
+     *
+     * If the event is a valid key release, the KeyCode is returned via the
+     * parameter.
+     */
+    OMI_API_EXPORT static bool key_release(
+            const omi::context::Event& event,
+            omi::context::Event::KeyCode& key_code);
+
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        key release event.
+     *
+     * If the event is a valid key release, the KeyCode and modifiers are
+     * returned via the parameters.
+     */
+    OMI_API_EXPORT static bool key_release(
+            const omi::context::Event& event,
+            omi::context::Event::KeyCode& key_code,
+            omi::context::Event::Modifier& modifiers);
 
     /*!
      * \brief Utility function that returns true if the given event is a valid
@@ -304,14 +462,26 @@ public:
             arc::int32& width,
             arc::int32& height);
 
+    /*!
+     * \brief Utility function that returns true if the given event is a valid
+     *        window move event.
+     *
+     * If the event is a valid window move, the new x and y positions are
+     * returned via the parameters.
+     */
+    OMI_API_EXPORT static bool window_move(
+            const omi::context::Event& event,
+            arc::int32& position_x,
+            arc::int32& position_y);
+
     //--------------------------------------------------------------------------
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
     /*!
-     * \brief Returns the name of this event.
+     * \brief Returns the type of this event.
      */
-    OMI_API_EXPORT const arc::str::UTF8String& get_name() const;
+    OMI_API_EXPORT const arc::str::UTF8String& get_type() const;
 
     /*!
      * \brief Returns the data describing this event.
@@ -324,7 +494,7 @@ private:
     //                          PRIVATE MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
-    arc::str::UTF8String m_name;
+    arc::str::UTF8String m_type;
     MapAttribute m_data;
 };
 

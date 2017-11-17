@@ -84,8 +84,9 @@ public:
         omi::scene::SceneState::instance().set_active_camera(camera);
 
         // event subscriptions
-        subscribe_to_event(omi::context::Event::kNameMouseMove);
-        subscribe_to_event(omi::context::Event::kNameKeyPress);
+        subscribe_to_event(omi::context::Event::kTypeMouseMove);
+        subscribe_to_event(omi::context::Event::kTypeMouseScroll);
+        subscribe_to_event(omi::context::Event::kTypeKeyPress);
     }
 
     //--------------------------------------------------------------------------
@@ -104,10 +105,12 @@ private:
 
     virtual void on_event(const omi::context::Event& event) override
     {
+        arc::int32 scroll_amount_x = 0;
+        arc::int32 scroll_amount_y = 0;
         omi::context::Event::KeyCode key_code;
 
         // TODO: utility for this
-        if(event.get_name() == omi::context::Event::kNameMouseMove)
+        if(event.get_type() == omi::context::Event::kTypeMouseMove)
         {
             // get the mouse position
             omi::Int32Attribute mouse_pos_attr =
@@ -132,6 +135,14 @@ private:
             // move by the difference
             m_spin->angle() += (mouse_pos(0) - half_width) * -0.002F;
             m_tilt->angle() += (mouse_pos(1) - half_height) * -0.002F;
+        }
+        else if(omi::context::Event::mouse_scroll(
+            event,
+            scroll_amount_x,
+            scroll_amount_y
+        ))
+        {
+            m_zoom->translation()(2) -= scroll_amount_y * 0.1F;
         }
         else if(omi::context::Event::key_press(event, key_code))
         {

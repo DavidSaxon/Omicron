@@ -109,50 +109,50 @@ public:
 
         m_views.reserve(4);
         m_views.push_back(new death::View(
-            // arc::lx::AABB2f(
-            //     arc::lx::Vector2f(0.0F, 0.5F),
-            //     arc::lx::Vector2f(0.5F, 1.0F)
-            // ),
             arc::lx::AABB2f(
-                arc::lx::Vector2f(0.0F, 0.0F),
-                arc::lx::Vector2f(1.0F, 1.0F)
+                arc::lx::Vector2f(0.0F, 0.5F),
+                arc::lx::Vector2f(0.5F, 1.0F)
             ),
+            // arc::lx::AABB2f(
+            //     arc::lx::Vector2f(0.0F, 0.0F),
+            //     arc::lx::Vector2f(1.0F, 1.0F)
+            // ),
             death::View::kRenderModePathTracer,
             arc::lx::Vector3f(0.0F, 0.0F, 0.0F)
         ));
-        // m_views.push_back(new death::View(
-        //     arc::lx::AABB2f(
-        //         arc::lx::Vector2f(0.5F, 0.5F),
-        //         arc::lx::Vector2f(1.0F, 1.0F)
-        //     ),
-        //     static_cast<death::View::RenderMode>(
-        //         death::View::kRenderModeGeometric |
-        //         death::View::kRenderModeBound
-        //     ),
-        //     arc::lx::Vector3f(0.1F, 0.1F, 0.1F)
-        // ));
-        // m_views.push_back(new death::View(
-        //     arc::lx::AABB2f(
-        //         arc::lx::Vector2f(0.0F, 0.0F),
-        //         arc::lx::Vector2f(0.5F, 0.5F)
-        //     ),
-        //     static_cast<death::View::RenderMode>(
-        //         death::View::kRenderModeGeometric |
-        //         death::View::kRenderModeOctree
-        //     ),
-        //     arc::lx::Vector3f(0.85F, 0.85F, 0.85F)
-        // ));
-        // m_views.push_back(new death::View(
-        //     arc::lx::AABB2f(
-        //         arc::lx::Vector2f(0.5F, 0.0F),
-        //         arc::lx::Vector2f(1.0F, 0.5F)
-        //     ),
-        //     static_cast<death::View::RenderMode>(
-        //         death::View::kRenderModeCell |
-        //         death::View::kRenderModeOctree
-        //     ),
-        //     arc::lx::Vector3f(0.6F, 0.6F, 0.6F)
-        // ));
+        m_views.push_back(new death::View(
+            arc::lx::AABB2f(
+                arc::lx::Vector2f(0.5F, 0.5F),
+                arc::lx::Vector2f(1.0F, 1.0F)
+            ),
+            static_cast<death::View::RenderMode>(
+                death::View::kRenderModeGeometric |
+                death::View::kRenderModeBound
+            ),
+            arc::lx::Vector3f(0.1F, 0.1F, 0.1F)
+        ));
+        m_views.push_back(new death::View(
+            arc::lx::AABB2f(
+                arc::lx::Vector2f(0.0F, 0.0F),
+                arc::lx::Vector2f(0.5F, 0.5F)
+            ),
+            static_cast<death::View::RenderMode>(
+                death::View::kRenderModeGeometric |
+                death::View::kRenderModeOctree
+            ),
+            arc::lx::Vector3f(0.85F, 0.85F, 0.85F)
+        ));
+        m_views.push_back(new death::View(
+            arc::lx::AABB2f(
+                arc::lx::Vector2f(0.5F, 0.0F),
+                arc::lx::Vector2f(1.0F, 0.5F)
+            ),
+            static_cast<death::View::RenderMode>(
+                death::View::kRenderModeCell |
+                death::View::kRenderModeOctree
+            ),
+            arc::lx::Vector3f(0.6F, 0.6F, 0.6F)
+        ));
     }
 
     //---------------------------D E S T R U C T O R----------------------------

@@ -15,6 +15,8 @@ namespace omi_glfw
 GLFWSurface::GLFWSurface()
     : omi::context::Surface()
     , m_glfw_window        (nullptr)
+    , m_hide_cursor        (false)
+    , m_lock_mouse         (false)
 {
 }
 
@@ -24,6 +26,10 @@ GLFWSurface::GLFWSurface()
 
 GLFWSurface::~GLFWSurface()
 {
+    if(m_glfw_window != nullptr)
+    {
+        glfwDestroyWindow(m_glfw_window);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -50,6 +56,31 @@ arc::int32 GLFWSurface::get_position_y() const
     return m_position(1);
 }
 
+void GLFWSurface::hide_cursor(bool state)
+{
+    m_hide_cursor = state;
+
+    // no window yet?
+    if(m_glfw_window == nullptr)
+    {
+        return;
+    }
+
+    if(state)
+    {
+        glfwSetInputMode(m_glfw_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    else
+    {
+        glfwSetInputMode(m_glfw_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+}
+
+void GLFWSurface::lock_mouse(bool state)
+{
+    m_lock_mouse = true;
+}
+
 GLFWwindow* GLFWSurface::get_native()
 {
     return m_glfw_window;
@@ -73,10 +104,12 @@ bool GLFWSurface::open()
         return false;
     }
 
-    // TODO: might need to be exposed
     glfwMakeContextCurrent(m_glfw_window);
 
     connect_callbacks();
+
+    // set the cursor state
+    hide_cursor(m_hide_cursor);
 
     // trigger the window callbacks
     resize_callback(m_glfw_window, m_size(0), m_size(1));
@@ -93,6 +126,14 @@ bool GLFWSurface::should_close()
 void GLFWSurface::swap_buffers()
 {
     glfwSwapBuffers(m_glfw_window);
+}
+
+void GLFWSurface::cycle_end()
+{
+    if(m_lock_mouse)
+    {
+        glfwSetCursorPos(m_glfw_window, m_size(0) / 2, m_size(1) / 2);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -125,7 +166,7 @@ void GLFWSurface::resize_callback(GLFWwindow* window, int width, int height)
     };
     // construct and broadcast the event to the engine
     omi::context::Event event(
-        omi::context::Event::kNameWindowResize,
+        omi::context::Event::kTypeWindowResize,
         omi::MapAttribute(data)
     );
     omi::context::EventService::instance().broadcast(event);
@@ -152,7 +193,7 @@ void GLFWSurface::move_callback(GLFWwindow* window, int pos_x, int pos_y)
     };
     // construct and broadcast the event to the engine
     omi::context::Event event(
-        omi::context::Event::kNameWindowMove,
+        omi::context::Event::kTypeWindowMove,
         omi::MapAttribute(data)
     );
     omi::context::EventService::instance().broadcast(event);
@@ -173,7 +214,22 @@ void GLFWSurface::connect_callbacks()
         m_glfw_window,
         &omi_glfw::input::mouse_move_callback
     );
-    glfwSetKeyCallback(m_glfw_window, &omi_glfw::input::key_callback);
+    glfwSetMouseButtonCallback(
+        m_glfw_window,
+        &omi_glfw::input::mouse_button_callback
+    );
+    glfwSetScrollCallback(
+        m_glfw_window,
+        &omi_glfw::input::mouse_scroll_callback
+    );
+    glfwSetCursorEnterCallback(
+        m_glfw_window,
+        &omi_glfw::input::mouse_enter_callback
+    );
+    glfwSetKeyCallback(
+        m_glfw_window,
+        &omi_glfw::input::key_callback
+    );
 
 }
 

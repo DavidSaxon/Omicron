@@ -24,7 +24,7 @@ private:
 
     //-------------------P R I V A T E    A T T R I B U T E S-------------------
 
-    // mapping from event names to the listeners that are subscribed to them
+    // mapping from event type to the listeners that are subscribed to them
     std::unordered_map<
         arc::str::UTF8String,
         std::unordered_set<EventListener*>
@@ -49,7 +49,7 @@ public:
     void broadcast(const omi::context::Event& event)
     {
         // anything subscribed to this event?
-        auto f_subscriber = m_subscribers.find(event.get_name());
+        auto f_subscriber = m_subscribers.find(event.get_type());
         if(f_subscriber != m_subscribers.end())
         {
             for(EventListener* listener : f_subscriber->second)
@@ -62,20 +62,20 @@ public:
     void broadcast_shutdown()
     {
         broadcast(omi::context::Event(
-            omi::context::Event::kNameEngineShutdown,
+            omi::context::Event::kTypeEngineShutdown,
             omi::MapAttribute()
         ));
     }
 
     void subscribe(
             omi::context::EventListener* listener,
-            const arc::str::UTF8String& name)
+            const arc::str::UTF8String& type)
     {
-        auto f_subscriber = m_subscribers.find(name);
+        auto f_subscriber = m_subscribers.find(type);
         if(f_subscriber == m_subscribers.end())
         {
-            m_subscribers.emplace(name, std::unordered_set<EventListener*>());
-            f_subscriber = m_subscribers.find(name);
+            m_subscribers.emplace(type, std::unordered_set<EventListener*>());
+            f_subscriber = m_subscribers.find(type);
         }
 
         // is the listener already subscribed?
@@ -91,9 +91,9 @@ public:
 
     void unsubscribe(
             omi::context::EventListener* listener,
-            const arc::str::UTF8String& name)
+            const arc::str::UTF8String& type)
     {
-        auto f_subscriber = m_subscribers.find(name);
+        auto f_subscriber = m_subscribers.find(type);
         if(f_subscriber == m_subscribers.end())
         {
             return;
@@ -140,16 +140,16 @@ OMI_API_EXPORT void EventService::broadcast_shutdown()
 
 OMI_API_EXPORT void EventService::subscribe(
         omi::context::EventListener* listener,
-        const arc::str::UTF8String& name)
+        const arc::str::UTF8String& type)
 {
-    m_impl->subscribe(listener, name);
+    m_impl->subscribe(listener, type);
 }
 
 OMI_API_EXPORT void EventService::unsubscribe(
         omi::context::EventListener* listener,
-        const arc::str::UTF8String& name)
+        const arc::str::UTF8String& type)
 {
-    m_impl->unsubscribe(listener, name);
+    m_impl->unsubscribe(listener, type);
 }
 
 //------------------------------------------------------------------------------

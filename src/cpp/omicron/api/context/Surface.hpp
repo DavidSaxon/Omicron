@@ -89,6 +89,17 @@ public:
 
     // TODO: set_position
 
+    /*!
+     * \brief Sets whether the cursor is hidden or not.
+     */
+    virtual void hide_cursor(bool state) = 0;
+
+    /*!
+     * \brief Forces the cursor to return to the centre of the window at the end
+     *        of each cycle.
+     */
+    virtual void lock_mouse(bool state) = 0;
+
 protected:
 
     //--------------------------------------------------------------------------

@@ -50,10 +50,10 @@
     <ClCompile Include="src\cpp\omicron\api\common\attribute\StringAttribute.cpp" />
     <ClCompile Include="src\cpp\omicron\api\config\ConfigGlobals.cpp" />
     <ClCompile Include="src\cpp\omicron\api\context\ContextSubsystem.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\context\Event.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\context\EventListener.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\context\EventService.cpp" />
     <ClCompile Include="src\cpp\omicron\api\context\Surface.cpp" />
-    <ClCompile Include="src\cpp\omicron\api\asset\AssetGlobals.cpp" />
-    <ClCompile Include="src\cpp\omicron\api\asset\AssetLibrary.cpp" />
-    <ClCompile Include="src\cpp\omicron\api\asset\types\Geometry.cpp" />
     <ClCompile Include="src\cpp\omicron\api\render\RenderSubsystem.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\ReportBoot.cpp" />
     <ClCompile Include="src\cpp\omicron\api\report\Logging.cpp" />
@@ -74,7 +74,12 @@
     <ClCompile Include="src\cpp\omicron\api\scene\component\renderable\Camera.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\component\renderable\Mesh.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\component\transform\AbstractTransform.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\AxisAngleTransform.cpp" />
     <ClCompile Include="src\cpp\omicron\api\scene\component\transform\MatrixTransform.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\QuaternionTransform.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\Scale3Transform.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\ScaleTransform.cpp" />
+    <ClCompile Include="src\cpp\omicron\api\scene\component\transform\TranslateTransform.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omicron_runtime'">
     <ClCompile Include="src\cpp\omicron\runtime\Main.cpp" />
@@ -97,6 +102,7 @@
   <ItemGroup Condition="'$(Configuration)'=='omi_deathray'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\DeathGlobals.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\DeathSubsystem.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\renderable\DeathCamera.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\renderable\DeathMesh.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\Geometry.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\Renderer.cpp" />
@@ -131,6 +137,7 @@
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='omi_glfw'">
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWGlobals.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWInput.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWSubsystem.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\GLFWSurface.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_glfw\OmiGLFWRegister.cpp" />
@@ -144,6 +151,7 @@
   <ItemGroup Condition="'$(Configuration)'=='hellbound'">
     <ClCompile Include="src\cpp\hellbound\GameRegistration.cpp" />
     <ClCompile Include="src\cpp\hellbound\HellboundGlobals.cpp" />
+    <ClCompile Include="src\cpp\hellbound\entities\GameManager.cpp" />
     <ClCompile Include="src\cpp\hellbound\entities\prototype\Enemy.cpp" />
     <ClCompile Include="src\cpp\hellbound\entities\prototype\ProtoEntity.cpp" />
     <ClCompile Include="src\cpp\hellbound\scripts\Startup.cpp" />

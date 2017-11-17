@@ -58,7 +58,7 @@ public:
         }
 
         // subscribe to events
-        subscribe_to_event(omi::context::Event::kNameEngineShutdown);
+        subscribe_to_event(omi::context::Event::kTypeEngineShutdown);
 
         // start the main loop
         global::logger->info << "Starting main loop" << std::endl;
@@ -116,7 +116,7 @@ private:
 
     virtual void on_event(const omi::context::Event& event) override
     {
-        if(event.get_name() == omi::context::Event::kNameEngineShutdown)
+        if(event.get_type() == omi::context::Event::kTypeEngineShutdown)
         {
             m_should_exit = true;
         }

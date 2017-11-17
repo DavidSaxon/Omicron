@@ -50,6 +50,10 @@ public:
 
     virtual arc::int32 get_position_y() const override;
 
+    virtual void hide_cursor(bool state) override;
+
+    virtual void lock_mouse(bool state) override;
+
     /*!
      * \brief Returns the pointer to the GLFW window object.
      */
@@ -70,6 +74,11 @@ public:
      */
     void swap_buffers();
 
+    /*!
+     * \brief Is called as the update cycle is ending.
+     */
+    void cycle_end();
+
 private:
 
     //--------------------------------------------------------------------------
@@ -83,6 +92,11 @@ private:
     arc::lx::Vector2i m_size;
     // the position of the window (in pixels)
     arc::lx::Vector2i m_position;
+
+    // whether the cursor is currently hidden or not
+    bool m_hide_cursor;
+    // whether the mouse is currently locked or not
+    bool m_lock_mouse;
 
     //--------------------------------------------------------------------------
     //                          PRIVATE STATIC FUNCTIONS

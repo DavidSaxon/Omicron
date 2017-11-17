@@ -1,5 +1,6 @@
 #include "omicron/api/GameInterface.hpp"
 
+#include <omicron/api/context/Surface.hpp>
 #include <omicron/api/report/Logging.hpp>
 #include <omicron/api/res/ResourceRegistry.hpp>
 #include <omicron/api/scene/SceneState.hpp>
@@ -20,7 +21,9 @@ bool startup_routine()
 
     try
     {
-        // TODO: setup surface
+        // we want the mouse hidden and locked to the centre of the window
+        omi::context::Surface::instance()->hide_cursor(true);
+        omi::context::Surface::instance()->lock_mouse(true);
     }
     catch(const std::exception& exc)
     {

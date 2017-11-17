@@ -96,9 +96,8 @@ void GLFWSubsystem::main_loop(EngineCycleFunc* engine_cycle_func)
         // let the window manager know we're still here
         glfwPollEvents();
 
-        // TODO: REMOVE ME
-        // TODO: REMOVE ME
-        glfwSetCursorPos(surface->get_native(), 500, 500);
+        // finialise the surface
+        surface->cycle_end();
 
         arc::uint64 frame_time = arc::clock::get_current_time() - start_time;
 
@@ -106,6 +105,8 @@ void GLFWSubsystem::main_loop(EngineCycleFunc* engine_cycle_func)
         // global::logger->notice
         //     << "Frame time: " << frame_time << std::endl;
     }
+
+    // TODO: close the window
 }
 
 } // namespace omi_glfw

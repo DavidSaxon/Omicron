@@ -24,7 +24,7 @@ public:
         : omi::scene::Entity(name)
     {
         // event subscriptions
-        subscribe_to_event(omi::context::Event::kNameKeyPress);
+        subscribe_to_event(omi::context::Event::kTypeKeyPress);
     }
 
     //--------------------------------------------------------------------------
