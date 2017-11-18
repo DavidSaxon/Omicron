@@ -61,8 +61,6 @@ public:
 
     DeathError execute(death::Scene* scene)
     {
-        DEATH_LOG_DEBUG("Executing prefabrication pipeline");
-
         // TODO: this could be threaded if threading is enabled
         // iterate over all spatial entities in the scene and prefabricate them
         for(death::Spatial* spatial : scene->get_spatials())

@@ -12,6 +12,8 @@
 
 #include <GL/glew.h>
 
+#include "deathray/gl/ErrorState.hpp"
+
 #include "deathray/impl/Globals.hpp"
 #include "deathray/impl/Scene.hpp"
 #include "deathray/impl/render/View.hpp"
@@ -64,7 +66,7 @@ public:
 
     DeathError execute(death::Scene* scene)
     {
-        DEATH_LOG_DEBUG("Executing render pipeline");
+        death::gl::error::check_state("before RenderPipeline execute");
 
         // let the scene clean up its graphics state objects
         scene->graphics_state_cleanup();
@@ -86,6 +88,8 @@ public:
         {
             view->render(scene);
         }
+
+        death::gl::error::check_state("after RenderPipeline execute");
 
         return kDeathSuccess;
     }

@@ -268,8 +268,6 @@ public:
 
     void graphics_state_cleanup()
     {
-        DEATH_LOG_DEBUG("Cleaning up scene (" << this << ") graphics state.");
-
         for(death::Octree* octree : m_octree_cleanup)
         {
             delete octree;

@@ -12,7 +12,8 @@
 
 #include <GL/glew.h>
 
-#include <deathray/gl/ShaderProgram.hpp>
+#include "deathray/gl/ErrorState.hpp"
+#include "deathray/gl/ShaderProgram.hpp"
 
 #include "deathray/impl/Camera.hpp"
 #include "deathray/impl/Geometric.hpp"
@@ -20,9 +21,6 @@
 #include "deathray/impl/Scene.hpp"
 #include "deathray/impl/Spatial.hpp"
 #include "deathray/impl/debug/GLGeometry.hpp"
-
-// TODO: REMOVE ME
-#include <iostream>
 
 
 namespace death
@@ -62,6 +60,8 @@ public:
 
     void render(death::Scene* scene)
     {
+        death::gl::error::check_state("before GeometryRenderer");
+
         // perform setup once
         static_setup();
 
@@ -116,6 +116,8 @@ public:
         }
 
         m_shader_program.unbind();
+
+        death::gl::error::check_state("after GeometryRenderer");
     }
 
 private:

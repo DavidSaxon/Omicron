@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "deathray/impl/Globals.hpp"
+
 
 namespace death
 {
@@ -59,16 +61,13 @@ DEATH_API_EXPORT arc::str::UTF8String errorcode_to_string(GLenum error_code)
 
 DEATH_API_EXPORT void check_state(const arc::str::UTF8String& action)
 {
-    // TODO: better place to log to
     GLenum err;
     while((err = glGetError()) != GL_NO_ERROR)
     {
-        std::cout << "Encountered GL error";
-        if(!action.is_empty())
-        {
-            std::cout << "while " << action;
-        }
-        std::cout << ": " << errorcode_to_string(err) << std::endl;
+        DEATH_LOG_ERROR(
+            "Encountered GL error " << action << ": "
+            << errorcode_to_string(err)
+        );
     }
 }
 

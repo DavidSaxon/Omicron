@@ -11,7 +11,6 @@
 #include <GL/glew.h>
 
 #include "deathray/impl/Globals.hpp"
-#include "deathray/impl/debug/DebugPipeline.hpp"
 #include "deathray/impl/prefab/PrefabricationPipeline.hpp"
 #include "deathray/impl/render/RenderPipeline.hpp"
 
@@ -75,13 +74,6 @@ public:
             }
             setup_once = false;
         }
-
-        // execute the debug pipeline if DeathRay is not in production mode
-        #ifndef DEATH_API_MODE_PRODUCTION
-            DebugPipeline::instance().lock();
-            DebugPipeline::instance().execute(scene);
-            DebugPipeline::instance().unlock();
-        #endif
 
         // execute the render pipeline
         RenderPipeline::instance().lock();

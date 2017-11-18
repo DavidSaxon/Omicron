@@ -14,9 +14,10 @@
 
 #include <GL/glew.h>
 
-#include <deathray/gl/Framebuffer.hpp>
-#include <deathray/gl/ShaderProgram.hpp>
-#include <deathray/gl/Texture2D.hpp>
+#include "deathray/gl/ErrorState.hpp"
+#include "deathray/gl/Framebuffer.hpp"
+#include "deathray/gl/ShaderProgram.hpp"
+#include "deathray/gl/Texture2D.hpp"
 
 #include "deathray/impl/Scene.hpp"
 #include "deathray/impl/render/BoundRenderer.hpp"
@@ -155,6 +156,8 @@ public:
 
     void render(death::Scene* scene)
     {
+        death::gl::error::check_state("before View render setup");
+
         // build the viewport surface (if required)
         build_viewport_surface();
 
@@ -222,6 +225,8 @@ public:
         // clear the frame buffer to start rendering
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        death::gl::error::check_state("before view render setup");
+
         // handle the various render modes
         if(m_render_modes & kRenderModePathTracer)
         {
@@ -244,6 +249,8 @@ public:
             death::OctreeRenderer::instance().render(scene);
         }
 
+        death::gl::error::check_state("before view render modes");
+
         // TODO: control with something
         // death::OrientationRenderer::instance().render(scene);
 
@@ -261,11 +268,13 @@ public:
         // pass in the colour texture
         glActiveTexture(GL_TEXTURE0);
         m_colour_component.bind();
-        g_shader_program->set_uniform_1u("u_texture", 0);
+        g_shader_program->set_uniform_1i("u_texture", 0);
 
         glDrawArrays(GL_TRIANGLES, 0, m_number_of_points);
         g_shader_program->unbind();
         glBindVertexArray(0);
+
+        death::gl::error::check_state("after view render");
     }
 
 private:

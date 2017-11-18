@@ -27,10 +27,8 @@ namespace error
 DEATH_API_EXPORT arc::str::UTF8String errorcode_to_string(GLenum error_code);
 
 /*!
- * \brief Checks the graphics state for any GL errors and reports them
- *
- * \oaram action The action that was being performed before this error check
- *               (will be include)
+ * \brief Checks the graphics state for any GL errors and reports them to the
+ *        error logger.
  */
 DEATH_API_EXPORT void check_state(const arc::str::UTF8String& action = "");
 

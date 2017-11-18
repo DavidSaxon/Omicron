@@ -20,7 +20,7 @@
 //------------------------------------------------------------------------------
 
 // TODO: REMOVE ME
-#define DEATH_DISABLE_LOGGING
+// #define DEATH_DISABLE_LOGGING
 
 /*!
  * \brief Macro that defines whether logging should be performed or not.

@@ -6,6 +6,7 @@
 #include <arcanecore/io/sys/FileReader.hpp>
 
 #include "deathray/gl/ErrorState.hpp"
+#include "deathray/impl/Globals.hpp"
 
 
 namespace death
@@ -98,11 +99,12 @@ public:
                 nullptr,
                 &gl_error_message[0]
             );
-            arc::str::UTF8String error_message;
-            error_message
-                << "Failed to compile " << shader_type_to_string(shader_type)
-                << " shader with error: " << (&gl_error_message[0]);
-            throw arc::ex::ParseError(error_message);
+
+            DEATH_LOG_ERROR(
+                "Failed to compile " << shader_type_to_string(shader_type)
+                << " shader with error: " << (&gl_error_message[0])
+            );
+            return;
         }
 
         m_compiled_shaders.push_back(shader_id);
@@ -148,11 +150,12 @@ public:
                 nullptr,
                 &gl_error_message[0]
             );
-            arc::str::UTF8String error_message;
-            error_message
-                << "Failed to link shader program with error: "
-                << (&gl_error_message[0]);
-            throw arc::ex::GLError(error_message);
+
+            DEATH_LOG_ERROR(
+                "Failed to link shader program with error: "
+                << (&gl_error_message[0])
+            );
+            return;
         }
     }
 

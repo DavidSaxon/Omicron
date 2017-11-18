@@ -10,7 +10,8 @@
 
 #include <GL/glew.h>
 
-#include <deathray/gl/ShaderProgram.hpp>
+#include "deathray/gl/ErrorState.hpp"
+#include "deathray/gl/ShaderProgram.hpp"
 
 #include "deathray/impl/Camera.hpp"
 #include "deathray/impl/Octree.hpp"
@@ -68,6 +69,8 @@ public:
 
     void render(death::Scene* scene)
     {
+        death::gl::error::check_state("before BoundRenderer");
+
         // perform setup once
         static_setup();
 
@@ -103,6 +106,8 @@ public:
         // unbind
         m_shader_program.unbind();
         glBindVertexArray(0);
+
+        death::gl::error::check_state("after BoundRenderer");
     }
 
 private:

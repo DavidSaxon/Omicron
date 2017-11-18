@@ -25,7 +25,6 @@ set(OMI_DEATHRAY_SRC
     ../deathray/impl/Scene.cpp
     ../deathray/impl/Spatial.cpp
     ../deathray/impl/VBO.cpp
-    ../deathray/impl/debug/DebugPipeline.cpp
     ../deathray/impl/debug/GLCells.cpp
     ../deathray/impl/debug/GLGeometry.cpp
     ../deathray/impl/debug/GLOctree.cpp
