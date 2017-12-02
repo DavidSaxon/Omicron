@@ -70,8 +70,6 @@ public:
             GLenum data_type,
             const GLvoid* data);
 
-    // TODO: subimage
-
     // only support image loading in development builds
     #ifndef DEATH_API_MODE_PRODUCTION
 
@@ -88,6 +86,24 @@ public:
      */
     DEATH_API_EXPORT void release();
 
+    /*!
+     * \brief Updates a region of the texture with new data.
+     *
+     * \param offset The offset (in texels) of the region of the texture to
+     *               update.
+     * \param size The width and height (in texels) or the region of the texture
+     *              to update.
+     * \param format The format of the input data (e.g. GL_RGBA).
+     * \param data_type The type that the input type is expressed in (e.g.
+     *                  GL_UNSIGNED_BYTE).
+     * \param The input data.
+     */
+    DEATH_API_EXPORT void update(
+            const arc::lx::Vector2u& offset,
+            const arc::lx::Vector2u& size,
+            GLenum format,
+            GLenum data_type,
+            const GLvoid* data);
     /*!
      * \brief Sets the minimize and magnify filtering that will be used by this
      *        texture.

@@ -75,7 +75,7 @@ public:
         static_setup();
 
         // set state
-        glDisable(GL_DEPTH_TEST);
+        // glDisable(GL_DEPTH_TEST);
         glLineWidth(2.0F);
 
         // get the rotation from the camera
@@ -91,18 +91,16 @@ public:
         );
 
         arc::lx::Matrix44f mvp_matrix = arc::lx::Matrix44f::Identity();
-        mvp_matrix *= camera->get_projection_matrix();
-        mvp_matrix *= camera->get_transform().inverse();
-        //     arc::lx::translate_44f(arc::lx::Vector3f(-0.8F, -0.8F, 0.0F));
-        // // rotate
-        // mvp_matrix *=
-        //     arc::lx::rotate_euler_44f(arc::lx::Vector3f(roll, pitch, yaw));
+        mvp_matrix *=
+            arc::lx::translate_44f(arc::lx::Vector3f(-0.8F, -0.8F, 0.0F));
+        // rotate
+        mvp_matrix *=
+            arc::lx::rotate_euler_44f(arc::lx::Vector3f(roll, pitch, yaw));
 
         // bind
         glBindVertexArray(m_vao);
         m_shader_program.bind();
 
-        // TODO: just extract rotation
         m_shader_program.set_uniform_44f("u_mvp_matrix", mvp_matrix);
 
         glDrawArrays(GL_LINES, 0, m_number_of_points);

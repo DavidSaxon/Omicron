@@ -94,7 +94,8 @@ public:
             // set transform
             m_shader_program.set_uniform_44f(
                 "u_mvp_matrix",
-                mvp_matrix * octree->get_offset()
+                // mvp_matrix * octree->get_offset()
+                mvp_matrix
             );
 
             gl_octree->draw();

@@ -122,6 +122,17 @@ public:
     virtual void set_active_camera(const omi::scene::Camera* camera) = 0;
 
     /*!
+     * \brief Tells this rendering subsystem which component should be used as
+     *        the camera to render the the debug perspective of the scene. This
+     *        can be null.
+     *
+     * \note If not null, this camera component will have already been passed to
+     *       this subsystem via add_renderable. And will always be set to null
+     *       if the component is removed.
+     */
+    virtual void set_debug_camera(const omi::scene::Camera* camera) = 0;
+
+    /*!
      * \brief Requests that a frame be rendered.
      */
     virtual void render() = 0;

@@ -50,6 +50,11 @@ DEATH_API_EXPORT DeathError death_scene_set_camera(
         DeathSceneHandle scene,
         DeathCameraHandle camera);
 
+// TODO: REMOVE FROM API
+DEATH_API_EXPORT DeathError death_scene_set_debug_camera(
+        DeathSceneHandle scene,
+        DeathCameraHandle camera);
+
 // TODO: DOC
 DEATH_API_EXPORT DeathError death_scene_add_spatial(
         DeathSceneHandle scene,

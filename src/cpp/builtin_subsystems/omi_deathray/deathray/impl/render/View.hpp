@@ -45,12 +45,14 @@ public:
      */
     enum RenderMode
     {
-        kRenderModeNone       = 0UL,
-        kRenderModePathTracer = 1UL << 0,
-        kRenderModeBound      = 1UL << 1,
-        kRenderModeGeometric  = 1UL << 2,
-        kRenderModeOctree     = 1UL << 3,
-        kRenderModeCell       = 1UL << 4
+        kRenderModeNone          = 0UL,
+        kRenderModeGPUPathTracer = 1UL << 0,
+        kRenderModeCPUPathTracer = 1UL << 1,
+        kRenderModeBound         = 1UL << 2,
+        kRenderModeGeometric     = 1UL << 3,
+        kRenderModeOctree        = 1UL << 4,
+        kRenderModeCell          = 1UL << 5,
+        kRenderModeRay           = 1UL << 6
     };
 
     //--------------------------------------------------------------------------

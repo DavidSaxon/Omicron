@@ -48,6 +48,8 @@ private:
 
     // the explicitly set camera to be used by this view
     death::Camera* m_camera;
+    // the explicitly set debug camera to be used by this view
+    death::Camera* m_debug_camera;
     // the default camera that will be used by this scene
     death::Camera m_default_camera;
 
@@ -71,6 +73,7 @@ public:
         : m_self          (self)
         , m_handle        (handle)
         , m_camera        (nullptr)
+        , m_debug_camera  (nullptr)
         , m_default_camera(nullptr)
     {
         // ensure logging is setup
@@ -117,7 +120,7 @@ public:
             //     arc::lx::Vector2f(0.0F, 0.0F),
             //     arc::lx::Vector2f(1.0F, 1.0F)
             // ),
-            death::View::kRenderModePathTracer,
+            death::View::kRenderModeGPUPathTracer,
             arc::lx::Vector3f(0.0F, 0.0F, 0.0F)
         ));
         m_views.push_back(new death::View(
@@ -136,9 +139,12 @@ public:
                 arc::lx::Vector2f(0.0F, 0.0F),
                 arc::lx::Vector2f(0.5F, 0.5F)
             ),
+            // static_cast<death::View::RenderMode>(
+            //     death::View::kRenderModeGeometric |
+            //     death::View::kRenderModeOctree
+            // ),
             static_cast<death::View::RenderMode>(
-                death::View::kRenderModeGeometric |
-                death::View::kRenderModeOctree
+                death::View::kRenderModeCPUPathTracer
             ),
             arc::lx::Vector3f(0.85F, 0.85F, 0.85F)
         ));
@@ -148,9 +154,14 @@ public:
                 arc::lx::Vector2f(1.0F, 0.5F)
             ),
             static_cast<death::View::RenderMode>(
-                death::View::kRenderModeCell |
-                death::View::kRenderModeOctree
+                death::View::kRenderModeGeometric |
+                death::View::kRenderModeOctree    |
+                death::View::kRenderModeRay
             ),
+            // static_cast<death::View::RenderMode>(
+            //     death::View::kRenderModeCell |
+            //     death::View::kRenderModeOctree
+            // ),
             arc::lx::Vector3f(0.6F, 0.6F, 0.6F)
         ));
     }
@@ -201,6 +212,21 @@ public:
     DeathError set_camera(death::Camera* camera)
     {
         m_camera = camera;
+        return kDeathSuccess;
+    }
+
+    death::Camera* get_debug_camera()
+    {
+        if(m_debug_camera != nullptr)
+        {
+            return m_debug_camera;
+        }
+        return &m_default_camera;
+    }
+
+    DeathError set_debug_camera(death::Camera* camera)
+    {
+        m_debug_camera = camera;
         return kDeathSuccess;
     }
 
@@ -318,6 +344,16 @@ DeathError Scene::set_camera(death::Camera* camera)
     return m_impl->set_camera(camera);
 }
 
+death::Camera* Scene::get_debug_camera()
+{
+    return m_impl->get_debug_camera();
+}
+
+DeathError Scene::set_debug_camera(death::Camera* camera)
+{
+    return m_impl->set_debug_camera(camera);
+}
+
 const std::unordered_set<death::Spatial*> Scene::get_spatials() const
 {
     return m_impl->get_spatials();
@@ -418,6 +454,17 @@ DEATH_API_EXPORT DeathError death_scene_set_camera(
         return kDeathErrorNullHandle;
     }
     return scene->impl->set_camera(camera->impl);
+}
+
+DEATH_API_EXPORT DeathError death_scene_set_debug_camera(
+        DeathSceneHandle scene,
+        DeathCameraHandle camera)
+{
+    if(scene == nullptr)
+    {
+        return kDeathErrorNullHandle;
+    }
+    return scene->impl->set_debug_camera(camera->impl);
 }
 
 DEATH_API_EXPORT DeathError death_scene_add_spatial(

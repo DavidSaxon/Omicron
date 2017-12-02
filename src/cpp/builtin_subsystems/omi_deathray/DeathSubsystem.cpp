@@ -19,6 +19,7 @@ namespace omi_death
 DeathSubsystem::DeathSubsystem()
     : omi::render::RenderSubsystem()
     , m_active_camera             (nullptr)
+    , m_debug_camera              (nullptr)
     // TODO: REMOVE ME
     , m_projection_matrix(arc::lx::Matrix44f::Identity())
     , m_view_matrix      (arc::lx::Matrix44f::Identity())
@@ -188,6 +189,29 @@ void DeathSubsystem::set_active_camera(const omi::scene::Camera* camera)
     m_active_camera = f_camera->second;
 }
 
+void DeathSubsystem::set_debug_camera(const omi::scene::Camera* camera)
+{
+    if(camera == nullptr)
+    {
+        m_debug_camera = nullptr;
+        return;
+    }
+
+    // find the wrapper object we've created
+    auto f_camera = m_cameras.find(camera->get_id());
+    if(f_camera == m_cameras.end())
+    {
+        global::logger->warning
+            << "Attempted to set debug camera with: " << camera->get_id()
+            << " but a component with this id is not managed by this subsystem."
+            << std::endl;
+        m_debug_camera = nullptr;
+        return;
+    }
+
+    m_debug_camera = f_camera->second;
+}
+
 void DeathSubsystem::render()
 {
     // set resolution
@@ -213,6 +237,11 @@ void DeathSubsystem::render()
     if(m_active_camera != nullptr)
     {
         m_active_camera->apply();
+    }
+    // apply the debug camera
+    if(m_debug_camera != nullptr)
+    {
+        m_debug_camera->apply_debug();
     }
 
     death_scene_render(m_scene);

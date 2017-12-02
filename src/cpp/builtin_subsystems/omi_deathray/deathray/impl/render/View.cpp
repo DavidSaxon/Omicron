@@ -21,10 +21,12 @@
 
 #include "deathray/impl/Scene.hpp"
 #include "deathray/impl/render/BoundRenderer.hpp"
+#include "deathray/impl/render/CPUPathTracer.hpp"
 #include "deathray/impl/render/CellRenderer.hpp"
+#include "deathray/impl/render/GPUPathTracer.hpp"
 #include "deathray/impl/render/GeometryRenderer.hpp"
 #include "deathray/impl/render/OrientationRenderer.hpp"
-#include "deathray/impl/render/PathTracer.hpp"
+#include "deathray/impl/render/RayRenderer.hpp"
 #include "deathray/impl/render/OctreeRenderer.hpp"
 
 
@@ -228,9 +230,13 @@ public:
         death::gl::error::check_state("before view render setup");
 
         // handle the various render modes
-        if(m_render_modes & kRenderModePathTracer)
+        if(m_render_modes & kRenderModeGPUPathTracer)
         {
-            death::PathTracer::instance().render(scene);
+            death::GPUPathTracer::instance().render(scene);
+        }
+        if(m_render_modes & kRenderModeCPUPathTracer)
+        {
+            death::CPUPathTracer::instance().render(scene);
         }
         if(m_render_modes & kRenderModeGeometric)
         {
@@ -248,11 +254,15 @@ public:
         {
             death::OctreeRenderer::instance().render(scene);
         }
+        if(m_render_modes & kRenderModeRay)
+        {
+            death::RayRenderer::instance().render(scene);
+        }
 
         death::gl::error::check_state("before view render modes");
 
         // TODO: control with something
-        // death::OrientationRenderer::instance().render(scene);
+        death::OrientationRenderer::instance().render(scene);
 
         m_framebuffer.unbind();
 

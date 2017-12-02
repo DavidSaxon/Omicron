@@ -184,6 +184,28 @@ public:
         }
     }
 
+    void update(
+            const arc::lx::Vector2u& offset,
+            const arc::lx::Vector2u& size,
+            GLenum format,
+            GLenum data_type,
+            const GLvoid* data)
+    {
+        bind();
+        glTexSubImage2D(
+            GL_TEXTURE_2D,
+            0,
+            offset(0),
+            offset(1),
+            size(0),
+            size(1),
+            format,
+            data_type,
+            data
+        );
+        unbind();
+    }
+
     void set_filtering(GLenum min_filter, GLenum mag_filter)
     {
         m_min_filter = min_filter;
@@ -290,6 +312,16 @@ DEATH_API_EXPORT void Texture2D::load_from_file(
 DEATH_API_EXPORT void Texture2D::release()
 {
     m_impl->release();
+}
+
+DEATH_API_EXPORT void Texture2D::update(
+            const arc::lx::Vector2u& offset,
+            const arc::lx::Vector2u& size,
+            GLenum format,
+            GLenum data_type,
+            const GLvoid* data)
+{
+    m_impl->update(offset, size, format, data_type, data);
 }
 
 DEATH_API_EXPORT void Texture2D::set_filtering(

@@ -25,16 +25,22 @@ set(OMI_DEATHRAY_SRC
     ../deathray/impl/Scene.cpp
     ../deathray/impl/Spatial.cpp
     ../deathray/impl/VBO.cpp
+    ../deathray/impl/acceleration/GPUOctree.cpp
     ../deathray/impl/debug/GLCells.cpp
     ../deathray/impl/debug/GLGeometry.cpp
     ../deathray/impl/debug/GLOctree.cpp
+    ../deathray/impl/pathtracer/cpu/CPUIntersections.cpp
+    ../deathray/impl/pathtracer/cpu/CPULightPath.cpp
+    ../deathray/impl/pathtracer/cpu/CPURayHierarchy.cpp
     ../deathray/impl/prefab/PrefabricationPipeline.cpp
     ../deathray/impl/render/BoundRenderer.cpp
+    ../deathray/impl/render/CPUPathTracer.cpp
     ../deathray/impl/render/CellRenderer.cpp
+    ../deathray/impl/render/GPUPathTracer.cpp
     ../deathray/impl/render/GeometryRenderer.cpp
     ../deathray/impl/render/OctreeRenderer.cpp
     ../deathray/impl/render/OrientationRenderer.cpp
-    ../deathray/impl/render/PathTracer.cpp
+    ../deathray/impl/render/RayRenderer.cpp
     ../deathray/impl/render/RenderPipeline.cpp
     ../deathray/impl/render/View.cpp
     ../deathray/impl/util/DataUtil.cpp

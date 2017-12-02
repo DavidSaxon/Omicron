@@ -116,7 +116,7 @@
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Scene.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\Spatial.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\VBO.cpp" />
-    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\DebugPipeline.cpp" />
+    <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\acceleration\GPUOctree.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\GLCells.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\GLGeometry.cpp" />
     <ClCompile Include="src\cpp\builtin_subsystems\omi_deathray\deathray\impl\debug\GLOctree.cpp" />

@@ -115,6 +115,20 @@ public:
      */
     OMI_API_EXPORT void set_active_camera(const omi::scene::Camera* camera);
 
+    /*!
+     * \brief Returns camera component that is being used for the debug
+     *        perspective of the scene.
+     *
+     * \note This may be null if no debug camera has been set.
+     */
+    OMI_API_EXPORT const omi::scene::Camera* get_debug_camera() const;
+
+    /*!
+     * \brief Sets the camera component that will be used for the debug
+     *        perspective of the scene.
+     */
+    OMI_API_EXPORT void set_debug_camera(const omi::scene::Camera* camera);
+
 private:
 
     //--------------------------------------------------------------------------

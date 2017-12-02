@@ -103,7 +103,7 @@ void GLFWSubsystem::main_loop(EngineCycleFunc* engine_cycle_func)
 
         // TODO:
         // global::logger->notice
-        //     << "Frame time: " << frame_time << std::endl;
+            // << "Frame time: " << frame_time << std::endl;
     }
 
     // TODO: close the window

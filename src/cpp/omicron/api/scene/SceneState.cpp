@@ -61,6 +61,10 @@ private:
     const omi::scene::Camera* m_active_camera;
     bool m_camera_changed;
 
+    // the camera being used to render the debug perspective of the scene
+    const omi::scene::Camera* m_debug_camera;
+    bool m_debug_camera_changed;
+
     // stats
     omi::Int64Attribute m_stat_registered_entity_types;
     omi::Int64Attribute m_stat_active_entities;
@@ -73,6 +77,8 @@ public:
         : m_in_update                   (false)
         , m_active_camera               (nullptr)
         , m_camera_changed              (false)
+        , m_debug_camera                (nullptr)
+        , m_debug_camera_changed        (false)
         , m_stat_registered_entity_types(0, false)
         , m_stat_active_entities        (0, false)
     {
@@ -197,6 +203,14 @@ public:
             );
             m_camera_changed = false;
         }
+        // pass in debug camera changes
+        if(m_debug_camera_changed)
+        {
+            render::RenderSubsystem::instance().set_debug_camera(
+                m_debug_camera
+            );
+            m_debug_camera_changed = false;
+        }
 
         m_in_update = false;
     }
@@ -244,6 +258,17 @@ public:
     {
         m_active_camera = camera;
         m_camera_changed = true;
+    }
+
+    const omi::scene::Camera* get_debug_camera() const
+    {
+        return m_debug_camera;
+    }
+
+    void set_debug_camera(const omi::scene::Camera* camera)
+    {
+        m_debug_camera = camera;
+        m_debug_camera_changed = true;
     }
 
 private:
@@ -368,6 +393,17 @@ OMI_API_EXPORT void SceneState::set_active_camera(
         const omi::scene::Camera* camera)
 {
     return m_impl->set_active_camera(camera);
+}
+
+OMI_API_EXPORT const omi::scene::Camera* SceneState::get_debug_camera() const
+{
+    return m_impl->get_debug_camera();
+}
+
+OMI_API_EXPORT void SceneState::set_debug_camera(
+        const omi::scene::Camera* camera)
+{
+    m_impl->set_debug_camera(camera);
 }
 
 //------------------------------------------------------------------------------

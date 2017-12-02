@@ -25,6 +25,8 @@ namespace death
 
 class GLCells;
 class GLOctree;
+class GPUOctree;
+class Octant;
 class Spatial;
 
 
@@ -75,11 +77,25 @@ public:
     const arc::lx::Matrix44f& get_offset() const;
 
     /*!
+     * \brief Returns the root Octant of this Octree.
+     */
+    death::Octant* get_root();
+
+    /*!
+     * \brief Returns the GPU data for this Octree.
+     *
+     * \note Of the GPUOctree doesn't exist (or is out-of-date) it is created
+     *       by this function. However if this Octree has no valid data, null is
+     *       returned.
+     */
+    death::GPUOctree* get_gpu_data();
+
+    /*!
      * \brief Returns the debug GLOctree for this OCtree.
      *
      * \note If the GLOctree doesn't exist (or is out-of-date) it is created
-     *       by this function. However if this geometric has no valid data, null
-     *       is returned.
+     *       by this function. However if this Octree has no valid data, null is
+     *       returned.
      */
     death::GLOctree* get_debug_octree();
 
@@ -87,8 +103,8 @@ public:
      * \brief Returns the debug GLCells for this OCtree.
      *
      * \note If the GLCells doesn't exist (or is out-of-date) it is created
-     *       by this function. However if this geometric has no valid data, null
-     *       is returned.
+     *       by this function. However if this Octree has no valid data, null is
+     *       returned.
      */
     death::GLCells* get_debug_cells();
 

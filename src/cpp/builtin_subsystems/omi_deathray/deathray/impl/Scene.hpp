@@ -78,6 +78,17 @@ public:
     DeathError set_camera(death::Camera* camera);
 
     /*!
+     * \brief Returns the camera being used to render the debug perspective of
+     *        this scene.
+     */
+    death::Camera* get_debug_camera();
+
+    /*!
+     * \brief Implementation of the death_scene_set_debug_camera function.
+     */
+    DeathError set_debug_camera(death::Camera* camera);
+
+    /*!
      * \brief Return the set of spatial entities within this scene.
      */
     const std::unordered_set<death::Spatial*> get_spatials() const;

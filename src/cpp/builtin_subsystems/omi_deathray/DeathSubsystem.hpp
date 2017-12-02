@@ -71,6 +71,8 @@ public:
 
     virtual void set_active_camera(const omi::scene::Camera* camera) override;
 
+    virtual void set_debug_camera(const omi::scene::Camera* camera) override;
+
     virtual void render() override;
 
 private:
@@ -86,6 +88,8 @@ private:
     std::unordered_map<omi::scene::ComponentId, DeathCamera*> m_cameras;
     // the camera that is currently active
     DeathCamera* m_active_camera;
+    // the debug camera
+    DeathCamera* m_debug_camera;
 
     // TODO: REMOVE ME
     std::list<DeathMesh*> m_meshes;

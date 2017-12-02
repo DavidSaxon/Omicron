@@ -51,6 +51,11 @@ public:
      */
     void apply();
 
+    /*!
+     * \brief Applies this camera to the scene as the debug camera.
+     */
+    void apply_debug();
+
 private:
 
     //--------------------------------------------------------------------------

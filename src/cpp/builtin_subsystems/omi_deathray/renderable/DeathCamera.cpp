@@ -91,6 +91,40 @@ public:
         // attach the camera to the scene
         death_scene_set_camera(m_scene, m_camera);
     }
+
+    void apply_debug()
+    {
+        // does the camera need updating?
+        omi::Hash new_hash = m_component->get_hash();
+        if(new_hash != m_hash)
+        {
+            m_hash = new_hash;
+            death_cam_set_properties(
+                m_camera,
+                m_component->get_focal_length(),
+                m_component->get_sensor_size()(0),
+                m_component->get_sensor_size()(1),
+                m_component->get_sensor_offset()(0),
+                m_component->get_sensor_offset()(1)
+            );
+        }
+
+        arc::lx::Matrix44f matrix = arc::lx::Matrix44f::Identity();
+        const omi::scene::AbstractTransform* transform =
+            m_component->get_transform();
+        if(transform != nullptr)
+        {
+            matrix = transform->eval();
+        }
+
+        death_cam_set_transform(
+            m_camera,
+            &matrix(0, 0)
+        );
+
+        // attach the camera to the scene
+        death_scene_set_debug_camera(m_scene, m_camera);
+    }
 };
 
 //------------------------------------------------------------------------------
@@ -118,6 +152,11 @@ DeathCamera::~DeathCamera()
 void DeathCamera::apply()
 {
     m_impl->apply();
+}
+
+void DeathCamera::apply_debug()
+{
+    m_impl->apply_debug();
 }
 
 } // namespace omi_death

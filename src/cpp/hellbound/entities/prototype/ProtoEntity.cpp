@@ -30,11 +30,17 @@ private:
     //                             PRIVATE ATTRIBUTES
     //--------------------------------------------------------------------------
 
+    bool m_debug_control;
+
     arc::lx::Vector2i m_window_size;
 
     omi::scene::AxisAngleTransform* m_spin;
     omi::scene::AxisAngleTransform* m_tilt;
     omi::scene::TranslateTransform* m_zoom;
+
+    omi::scene::AxisAngleTransform* m_debug_spin;
+    omi::scene::AxisAngleTransform* m_debug_tilt;
+    omi::scene::TranslateTransform* m_debug_zoom;
 
 public:
 
@@ -48,6 +54,7 @@ public:
             const arc::str::UTF8String& name,
             const omi::Attribute& data)
         : omi::scene::Entity(name)
+        , m_debug_control   (false)
         , m_spin(new omi::scene::AxisAngleTransform(
             0.0F,
             arc::lx::Vector3f(0.0, 1.0F, 0.0F)
@@ -61,15 +68,34 @@ public:
             arc::lx::Vector3f(0.0F, 0.0F, 3.0F),
             m_tilt
         ))
+        , m_debug_spin(new omi::scene::AxisAngleTransform(
+            0.0F,
+            arc::lx::Vector3f(0.0, 1.0F, 0.0F)
+        ))
+        , m_debug_tilt(new omi::scene::AxisAngleTransform(
+            arc::math::degrees_to_radians(-15.0F),
+            arc::lx::Vector3f(1.0, 0.0F, 0.0F),
+            m_debug_spin
+        ))
+        , m_debug_zoom(new omi::scene::TranslateTransform(
+            arc::lx::Vector3f(0.0F, 0.0F, 6.0F),
+            m_debug_tilt
+        ))
     {
         add_component(m_spin);
         add_component(m_tilt);
         add_component(m_zoom);
+        add_component(m_debug_spin);
+        add_component(m_debug_tilt);
+        add_component(m_debug_zoom);
+
+        //-----------------------------SCENE CAMERA-----------------------------
 
         // TODO:
         omi::scene::Camera* camera = new omi::scene::Camera(
             23.9276F,
-            arc::lx::Vector2f(28.2478F, 14.9273F),
+            // arc::lx::Vector2f(28.2478F, 14.9273F),
+            arc::lx::Vector2f(20.0F, 20.0F),
             arc::lx::Vector2f(0.0F, 0.0F),
             0.01F,
             10000.0F,
@@ -82,6 +108,23 @@ public:
 
         // set the active camera
         omi::scene::SceneState::instance().set_active_camera(camera);
+
+        //-----------------------------DEBUG CAMERA-----------------------------
+
+        // TODO:
+        omi::scene::Camera* debug_camera = new omi::scene::Camera(
+            23.9276F,
+            // arc::lx::Vector2f(28.2478F, 14.9273F),
+            arc::lx::Vector2f(20.0F, 20.0F),
+            arc::lx::Vector2f(0.0F, 0.0F),
+            0.01F,
+            10000.0F,
+            m_debug_zoom
+        );
+        add_component(debug_camera);
+
+        // set the active camera
+        omi::scene::SceneState::instance().set_debug_camera(debug_camera);
 
         // event subscriptions
         subscribe_to_event(omi::context::Event::kTypeMouseMove);
@@ -109,6 +152,7 @@ private:
         arc::int32 scroll_amount_y = 0;
         omi::context::Event::KeyCode key_code;
 
+
         // TODO: utility for this
         if(event.get_type() == omi::context::Event::kTypeMouseMove)
         {
@@ -133,8 +177,16 @@ private:
                 omi::context::Surface::instance()->get_height() / 2;
 
             // move by the difference
-            m_spin->angle() += (mouse_pos(0) - half_width) * -0.002F;
-            m_tilt->angle() += (mouse_pos(1) - half_height) * -0.002F;
+            if(!m_debug_control)
+            {
+                m_spin->angle() += (mouse_pos(0) - half_width) * -0.002F;
+                m_tilt->angle() += (mouse_pos(1) - half_height) * -0.002F;
+            }
+            else
+            {
+                m_debug_spin->angle() += (mouse_pos(0) - half_width) * -0.002F;
+                m_debug_tilt->angle() += (mouse_pos(1) - half_height) * -0.002F;
+            }
         }
         else if(omi::context::Event::mouse_scroll(
             event,
@@ -142,14 +194,20 @@ private:
             scroll_amount_y
         ))
         {
-            m_zoom->translation()(2) -= scroll_amount_y * 0.1F;
+            if(!m_debug_control)
+            {
+                m_zoom->translation()(2) -= scroll_amount_y * 0.1F;
+            }
+            else
+            {
+                m_debug_zoom->translation()(2) -= scroll_amount_y * 0.1F;
+            }
         }
         else if(omi::context::Event::key_press(event, key_code))
         {
-            if(key_code == omi::context::Event::kKeyCodeF)
+            if(key_code == omi::context::Event::kKeyCodeX)
             {
-                m_spin->angle() = 0.0F;
-                m_tilt->angle() = 0.0F;
+                m_debug_control = !m_debug_control;
             }
         }
     }

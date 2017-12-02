@@ -18,6 +18,7 @@
 #include "deathray/impl/Octant.hpp"
 #include "deathray/impl/Spatial.hpp"
 #include "deathray/impl/VBO.hpp"
+#include "deathray/impl/acceleration/GPUOctree.hpp"
 #include "deathray/impl/debug/GLCells.hpp"
 #include "deathray/impl/debug/GLOctree.hpp"
 
@@ -50,6 +51,9 @@ private:
 
     //-------------------P R I V A T E    A T T R I B U T E S-------------------
 
+    // The Octree instance wrapping this object
+    death::Octree* m_self;
+
     // The spatial this Octree is built for
     death::Spatial* m_spatial;
 
@@ -71,6 +75,9 @@ private:
     // position
     arc::lx::Matrix44f m_offset;
 
+    // the GPU data
+    death::GPUOctree* m_gpu_data;
+
     // the debug gl octree
     death::GLOctree* m_debug_octree;
     // the debug gl cell
@@ -82,14 +89,16 @@ public:
 
     //--------------------------C O N S T R U C T O R---------------------------
 
-    OctreeImpl(death::Spatial* spatial)
-        : m_spatial     (spatial)
+    OctreeImpl(death::Octree* self, death::Spatial* spatial)
+        : m_self        (self)
+        , m_spatial     (spatial)
         , m_root        (nullptr)
         , m_empty       (true)
         , m_root_size   (0.0F)
         , m_depth       (0)
         , m_offset_trans(0.0F, 0.0F, 0.0F)
         , m_offset      (arc::lx::Matrix44f::Identity())
+        , m_gpu_data    (nullptr)
         , m_debug_octree(nullptr)
         , m_debug_cells (nullptr)
     {
@@ -102,6 +111,11 @@ public:
     ~OctreeImpl()
     {
         // TODO: need a graphics state queue for this
+        if(m_gpu_data != nullptr)
+        {
+            delete m_gpu_data;
+            m_gpu_data = nullptr;
+        }
         if(m_debug_octree != nullptr)
         {
             delete m_debug_octree;
@@ -134,6 +148,29 @@ public:
     const arc::lx::Matrix44f& get_offset() const
     {
         return m_offset;
+    }
+
+    death::Octant* get_root()
+    {
+        return m_root.get();
+    }
+
+    death::GPUOctree* get_gpu_data()
+    {
+        // already exists?
+        if(m_gpu_data != nullptr)
+        {
+            return m_gpu_data;
+        }
+        // empty?
+        if(m_empty)
+        {
+            return nullptr;
+        }
+
+        // build
+        m_gpu_data = new GPUOctree(m_self);
+        return m_gpu_data;
     }
 
     death::GLOctree* get_debug_octree()
@@ -328,7 +365,7 @@ private:
 //------------------------------------------------------------------------------
 
 Octree::Octree(death::Spatial* spatial)
-    : m_impl(new OctreeImpl(spatial))
+    : m_impl(new OctreeImpl(this, spatial))
 {
 }
 
@@ -363,6 +400,16 @@ float Octree::get_root_size() const
 const arc::lx::Matrix44f& Octree::get_offset() const
 {
     return m_impl->get_offset();
+}
+
+death::Octant* Octree::get_root()
+{
+    return m_impl->get_root();
+}
+
+death::GPUOctree* Octree::get_gpu_data()
+{
+    return m_impl->get_gpu_data();
 }
 
 death::GLOctree* Octree::get_debug_octree()
