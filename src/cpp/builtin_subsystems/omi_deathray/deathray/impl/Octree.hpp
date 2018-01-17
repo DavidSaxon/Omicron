@@ -26,6 +26,7 @@ namespace death
 class GLCells;
 class GLOctree;
 class GPUOctree;
+class PackedOctree;
 class Octant;
 class Spatial;
 
@@ -81,6 +82,16 @@ public:
      */
     death::Octant* get_root();
 
+    /*!
+     * \brief Returns the packed data for this Octree.
+     *
+     * \note Of the PackedOctree doesn't exist (or is out-of-date) it is created
+     *       by this function. However if this Octree has no valid data, null is
+     *       returned.
+     */
+    death::PackedOctree* get_packed_data();
+
+    // TODO: REMOVE ME
     /*!
      * \brief Returns the GPU data for this Octree.
      *

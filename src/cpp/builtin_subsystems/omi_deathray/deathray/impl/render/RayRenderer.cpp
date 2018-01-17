@@ -91,6 +91,126 @@ public:
         }
 
         {
+            arc::lx::Vector2f plane_position(0.0F, 1.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 2.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 3.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 4.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 5.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 6.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 7.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 8.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 9.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
+            arc::lx::Vector2f plane_position(0.0F, 10.0F);
+            death::cpu::LightPath path(
+                camera->get_focal_length(),
+                plane_position
+            );
+            death::cpu::RayHierarchy* ray_hierarchy =
+                new death::cpu::RayHierarchy();
+            path.trace(scene, ray_hierarchy, true);
+            rays.push_back(ray_hierarchy);
+        }
+
+        {
             arc::lx::Vector2f plane_position(-10.0F, -10.0F);
             death::cpu::LightPath path(
                 camera->get_focal_length(),

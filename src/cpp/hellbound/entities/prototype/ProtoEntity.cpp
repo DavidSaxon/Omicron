@@ -65,7 +65,7 @@ public:
             m_spin
         ))
         , m_zoom(new omi::scene::TranslateTransform(
-            arc::lx::Vector3f(0.0F, 0.0F, 3.0F),
+            arc::lx::Vector3f(0.0F, 0.0F, 6.0F),
             m_tilt
         ))
         , m_debug_spin(new omi::scene::AxisAngleTransform(

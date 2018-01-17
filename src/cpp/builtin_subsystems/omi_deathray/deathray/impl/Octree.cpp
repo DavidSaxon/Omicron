@@ -19,6 +19,7 @@
 #include "deathray/impl/Spatial.hpp"
 #include "deathray/impl/VBO.hpp"
 #include "deathray/impl/acceleration/GPUOctree.hpp"
+#include "deathray/impl/data/PackedOctree.hpp"
 #include "deathray/impl/debug/GLCells.hpp"
 #include "deathray/impl/debug/GLOctree.hpp"
 
@@ -75,6 +76,9 @@ private:
     // position
     arc::lx::Matrix44f m_offset;
 
+    // the packed data
+    death::PackedOctree* m_packed;
+
     // the GPU data
     death::GPUOctree* m_gpu_data;
 
@@ -98,6 +102,7 @@ public:
         , m_depth       (0)
         , m_offset_trans(0.0F, 0.0F, 0.0F)
         , m_offset      (arc::lx::Matrix44f::Identity())
+        , m_packed      (nullptr)
         , m_gpu_data    (nullptr)
         , m_debug_octree(nullptr)
         , m_debug_cells (nullptr)
@@ -111,6 +116,11 @@ public:
     ~OctreeImpl()
     {
         // TODO: need a graphics state queue for this
+        if(m_packed != nullptr)
+        {
+            delete m_packed;
+            m_packed = nullptr;
+        }
         if(m_gpu_data != nullptr)
         {
             delete m_gpu_data;
@@ -153,6 +163,24 @@ public:
     death::Octant* get_root()
     {
         return m_root.get();
+    }
+
+    death::PackedOctree* get_packed_data()
+    {
+        // already exists?
+        if(m_packed != nullptr)
+        {
+            return m_packed;
+        }
+        // empty?
+        if(m_empty)
+        {
+            return nullptr;
+        }
+
+        // build
+        m_packed = new PackedOctree(m_self);
+        return m_packed;
     }
 
     death::GPUOctree* get_gpu_data()
@@ -405,6 +433,11 @@ const arc::lx::Matrix44f& Octree::get_offset() const
 death::Octant* Octree::get_root()
 {
     return m_impl->get_root();
+}
+
+death::PackedOctree* Octree::get_packed_data()
+{
+    return m_impl->get_packed_data();
 }
 
 death::GPUOctree* Octree::get_gpu_data()

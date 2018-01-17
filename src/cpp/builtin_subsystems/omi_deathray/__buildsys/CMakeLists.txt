@@ -26,6 +26,7 @@ set(OMI_DEATHRAY_SRC
     ../deathray/impl/Spatial.cpp
     ../deathray/impl/VBO.cpp
     ../deathray/impl/acceleration/GPUOctree.cpp
+    ../deathray/impl/data/PackedOctree.cpp
     ../deathray/impl/debug/GLCells.cpp
     ../deathray/impl/debug/GLGeometry.cpp
     ../deathray/impl/debug/GLOctree.cpp

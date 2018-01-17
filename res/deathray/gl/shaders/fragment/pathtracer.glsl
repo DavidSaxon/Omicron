@@ -227,7 +227,7 @@ bool check_plane_1(
     vec3 position = vec3(0.0, 0, -0.01);
     // TODO: should be y up
     // vec3 normal = vec3(0.0, -1.0, 0.0);
-    vec3 normal = vec3(0.0, 0.0, -1.0);
+    vec3 normal = vec3(0.0, 0.0, 1.0);
     float t = 0.0;
 
     if(ray_plane_intersection(
@@ -241,7 +241,7 @@ bool check_plane_1(
         vec3 intersect = ray_origin + (ray_direction * t);
 
         normal += vec3(
-            texture(u_nmap_texture, (intersect.xy + 2.0) / 4.0).rg / 16.0,
+            texture(u_nmap_texture, (intersect.xy + 2.0) / 4.0).rg / 12.0,
             0.0
         );
         normal = normalize(normal);
@@ -268,7 +268,7 @@ bool check_plane_1(
     // backface
     t = 0.0;
     position.z *= 1.01;
-    normal = vec3(0.0, 0.0, 1.0);
+    normal = vec3(0.0, 0.0, -1.0);
     if(ray_plane_intersection(
         ray_origin,
         ray_direction,
@@ -1280,24 +1280,24 @@ void main()
 
     vec3 colour = vec3(1.0, 1.0, 1.0);
 
-    // for(uint i = 0U; i < 5U; ++i)
-    // {
-    //     // if(!environment_trace(ray_origin, ray_direction, colour))
-    //     // {
-    //     //     break;
-    //     // }
-
-    //     if(!octree_trace(ray_origin, ray_direction, colour))
-    //     {
-    //         break;
-    //     }
-    // }
-
-    if(octree_trace(ray_origin, ray_direction, colour))
+    for(uint i = 0U; i < 5U; ++i)
     {
-        out_colour = vec4(colour, 1.0);
-        return;
+        if(!environment_trace(ray_origin, ray_direction, colour))
+        {
+            break;
+        }
+
+        // if(!octree_trace(ray_origin, ray_direction, colour))
+        // {
+        //     break;
+        // }
     }
+
+    // if(octree_trace(ray_origin, ray_direction, colour))
+    // {
+    //     out_colour = vec4(colour, 1.0);
+    //     return;
+    // }
 
     // // TODO: needs to be looped for bounces
     // vec3 sphere_ray_origin = vec3(0.0, 0.0, 0.0);

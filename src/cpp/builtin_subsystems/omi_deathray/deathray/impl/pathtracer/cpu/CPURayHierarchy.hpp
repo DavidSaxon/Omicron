@@ -9,6 +9,8 @@
 #ifndef DEATHRAY_IMPL_PATHTRACER_CPU_RAYHIERARCHY_HPP_
 #define DEATHRAY_IMPL_PATHTRACER_CPU_RAYHIERARCHY_HPP_
 
+#include <vector>
+
 #include <arcanecore/base/lang/Restrictors.hpp>
 #include <arcanecore/lx/Alignment.hpp>
 #include <arcanecore/lx/Vector.hpp>

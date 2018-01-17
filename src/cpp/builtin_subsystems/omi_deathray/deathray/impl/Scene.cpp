@@ -154,7 +154,7 @@ public:
                 arc::lx::Vector2f(1.0F, 0.5F)
             ),
             static_cast<death::View::RenderMode>(
-                death::View::kRenderModeGeometric |
+                death::View::kRenderModeCell |
                 death::View::kRenderModeOctree    |
                 death::View::kRenderModeRay
             ),

@@ -91,11 +91,11 @@ public:
              half_root_size,  half_root_size, -half_root_size,
              half_root_size,  half_root_size,  half_root_size
         };
-        // extend_with_octant(
-        //     root,
-        //     arc::lx::Vector3f(0.0F, 0.0F, 0.0F),
-        //     positions
-        // );
+        extend_with_octant(
+            root,
+            arc::lx::Vector3f(0.0F, 0.0F, 0.0F),
+            positions
+        );
         m_number_of_points = positions.size() / 3;
 
         GLuint position_buffer = 0;

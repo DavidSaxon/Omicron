@@ -12,9 +12,6 @@
 #include <arcanecore/lx/Alignment.hpp>
 #include <arcanecore/lx/MatrixMath44f.hpp>
 
-// TODO: REMOVE ME
-#include <iostream>
-
 
 namespace death
 {
@@ -114,9 +111,6 @@ public:
         // float fov = 90.0F;
         float fov = 2.0F * std::atan2(sensor_size(0), focal_length * 2.0F);
         fov = arc::math::radians_to_degrees(fov);
-
-        // TODO: REMOVE ME
-        std::cout << "calced fov: " << fov << std::endl;
 
         float aspect = sensor_size(1) / sensor_size(0);
         float z_near  = 0.0001F;
